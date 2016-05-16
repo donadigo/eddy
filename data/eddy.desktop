@@ -1,0 +1,17 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Eddy
+Comment=Simple debian package installer
+GenericName=eddy
+Exec=eddy
+Icon=eddy
+Terminal=false
+Categories=GTK;Utility;
+Actions=AboutDialog;
+X-GNOME-Gettext-Domain=eddy
+X-GNOME-UsesNotifications=true
+
+[Desktop Action AboutDialog]
+Exec=eddy --about
+Name=About Eddy
