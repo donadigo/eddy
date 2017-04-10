@@ -52,7 +52,7 @@ namespace Eddy {
         public async void install (AptTransaction transaction, string? next_tid) {
             transaction.property_changed.connect (handle_property_change);
             transaction.finished.connect ((state) => {
-            
+                Idle.add (install.callback);
             });
 
             if (next_tid != null) {
