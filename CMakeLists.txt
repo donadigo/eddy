@@ -24,6 +24,7 @@ configure_file (${CMAKE_SOURCE_DIR}/src/config.vala.cmake ${CMAKE_SOURCE_DIR}/sr
 
 # Definitions
 add_definitions ("-DGETTEXT_PACKAGE=\"${GETTEXT_PACKAGE}\"")
+add_definitions (-DI_KNOW_THE_PACKAGEKIT_GLIB2_API_IS_SUBJECT_TO_CHANGE)
 
 # Hide C compiler warnings
 add_definitions (-w)
@@ -45,10 +46,11 @@ set (DEPS_PACKAGES
     gtk+-3.0
     granite
     gio-2.0
+    packagekit-glib2
 )
 
 find_package(PkgConfig)
-pkg_check_modules(DEPS REQUIRED granite gtk+-3.0 gio-2.0)
+pkg_check_modules(DEPS REQUIRED ${DEPS_PACKAGES})
 
 add_definitions(${DEPS_CFLAGS})
 link_libraries(${DEPS_LIBRARIES})
@@ -62,6 +64,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Eddy.vala
     src/EddyWindow.vala
     src/config.vala
+    src/AptProxy.vala
     src/Constants.vala
     src/DebianPackage.vala
     src/DetailedView.vala
@@ -71,7 +74,6 @@ vala_precompile(VALA_C ${EXEC_NAME}
 PACKAGES
     ${DEPS_PACKAGES}
 OPTIONS
-    --vapidir=${CMAKE_SOURCE_DIR}/vapi
     ${GLOBAL_VALAC_OPTIONS}
 )
 

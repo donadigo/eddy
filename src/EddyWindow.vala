@@ -19,19 +19,25 @@ namespace Eddy {
 
         private PackageListView list_view;
         private DetailedView detailed_view;
+        private ProgressView progress_view;
 
-        public EddyWindow () {
+        private Gtk.HeaderBar header_bar;
+
+        construct {
             stack = new Gtk.Stack ();
-            stack.margin = 24;
+            stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
 
             list_view = new PackageListView ();
             list_view.show_package_details.connect (on_show_package_details);
+            list_view.install.connect ((packages) => install.begin (packages));
 
             detailed_view = new DetailedView ();
+            progress_view = new ProgressView ();
 
             open_button = new Gtk.Button.from_icon_name ("document-open", Gtk.IconSize.LARGE_TOOLBAR);
             open_button.tooltip_text = _("Open…");
-            open_button.clicked.connect (on_open_button_clicked);
+            open_button.clicked.connect (show_open_dialog);
+            open_button.visible = false;
 
             back_button = new Gtk.Button.from_icon_name ("go-previous-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
             back_button.no_show_all = true;
@@ -39,39 +45,57 @@ namespace Eddy {
             back_button.clicked.connect (on_back_button_clicked);
 
             set_default_size (650, 550);
+            set_size_request (700, 600);
 
-            var header_bar = new Gtk.HeaderBar ();
+            header_bar = new Gtk.HeaderBar ();
+            header_bar.set_title (Constants.APP_NAME);
             header_bar.show_close_button = true;
+            header_bar.pack_start (back_button);
             header_bar.pack_start (open_button);
-            header_bar.pack_start (back_button);            
             set_titlebar (header_bar);
 
-            var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 24);
+            var welcome_view = new Granite.Widgets.Welcome (_("Install some apps"), _("Drag and drop .deb files or open them to begin installation."));
+            int open_index = welcome_view.append ("document-open", _("Open"), _("Browse to open a single file"));
+            welcome_view.activated.connect ((index) => {
+                if (index != open_index) {
+                    return;
+                }
 
-            var welcome_label = new Gtk.Label ("<b>" + _("Drag &amp; Drop .deb files to begin installation.") + "</b>");
-            welcome_label.get_style_context ().add_class ("h3");
-            welcome_label.use_markup = true;
-            welcome_label.halign = Gtk.Align.CENTER;
-            welcome_label.vexpand = true;
+                show_open_dialog ();
+            });
 
-            var debian_image = new Gtk.Image.from_icon_name ("application-x-deb", Gtk.IconSize.DND);
-            debian_image.pixel_size = 256;
-            debian_image.vexpand = true;
-
-            main_box.add (welcome_label);
-            main_box.add (debian_image);
-
-            stack.add_named (main_box, Constants.MAIN_VIEW_ID);
+            stack.add_named (welcome_view, Constants.WELCOME_VIEW_ID);
             stack.add_named (list_view, Constants.LIST_VIEW_ID);
             stack.add_named (detailed_view, Constants.DETAILED_VIEW_ID);
+            stack.add_named (progress_view, Constants.PROGRESS_VIEW_ID);
 
             add (stack);
 
             Granite.Widgets.Utils.set_color_primary (this, Constants.BRAND_COLOR);
-            Gtk.drag_dest_set (this, Gtk.DestDefaults.ALL, Constants.DRAG_TARGETS, Gdk.DragAction.COPY);
+            Gtk.drag_dest_set (this, Gtk.DestDefaults.MOTION | Gtk.DestDefaults.DROP, Constants.DRAG_TARGETS, Gdk.DragAction.COPY);
 
             destroy.connect (Gtk.main_quit);
             drag_data_received.connect (on_drag_data_received);
+        }
+
+        private async void install (Gee.ArrayList<DebianPackage> packages) {
+            string? next_tid = null;
+            foreach (var package in packages) {
+                string tid = yield package.prepare_transaction ();
+                if (tid == null) {
+                    // Handle this
+                    continue;
+                }
+
+                var transaction = AptProxy.get_transaction (tid);
+                if (transaction == null) {
+                    // This also
+                    return;
+                }
+
+                package.install.begin (transaction, next_tid);
+                next_tid = tid;
+            }
         }
 
         private void open_uris (string[] uris) {
@@ -84,14 +108,22 @@ namespace Eddy {
                     return;
                 }
 
-                var package = new DebianPackage (file);
-                if (!package.valid) {
-                    show_package_not_valid_error ();
+                string filename = file.get_path ();
+                if (list_view.contains_filename (filename)) {
                     return;
                 }
 
-                list_view.add_package (package);
-                stack.visible_child_name = Constants.LIST_VIEW_ID;
+                var package = new DebianPackage (filename);
+                package.populate_data.begin ((obj, res) => {
+                    package.populate_data.end (res);
+                    if (!package.valid) {
+                        show_package_not_valid_error ();
+                        return;
+                    }
+
+                    list_view.add_package (package);
+                    stack.visible_child_name = Constants.LIST_VIEW_ID;
+                });
             }
         }
 
@@ -103,7 +135,7 @@ namespace Eddy {
 
         }
 
-        private void on_open_button_clicked () {
+        private void show_open_dialog () {
             var debian_filter = new Gtk.FileFilter ();
             debian_filter.set_filter_name (_("Debian Packages"));
             foreach (string mime_type in Constants.SUPPORTED_MIMETYPES) {
@@ -126,13 +158,9 @@ namespace Eddy {
 
             chooser.response.connect ((response) => {
                 if (response == -3) {
-                    var _uris = chooser.get_uris ();
                     string[] uris = {};
-                    int i = 0;
-
-                    foreach (unowned string uri in _uris) {
-                        uris[i] = uri;
-                        i++;
+                    foreach (unowned string uri in chooser.get_uris ()) {
+                        uris += uri;
                     }
 
                     open_uris (uris);
@@ -140,6 +168,7 @@ namespace Eddy {
             });
 
             chooser.run ();
+            chooser.destroy ();
         }
 
         private void on_back_button_clicked () {
@@ -149,7 +178,7 @@ namespace Eddy {
         }
 
         private void on_show_package_details (DebianPackage package) {
-            detailed_view.set_current_package (package);
+            detailed_view.set_package (package);
 
             back_button.visible = true;
             open_button.sensitive = false;
@@ -158,7 +187,6 @@ namespace Eddy {
 
         private void on_drag_data_received (Gdk.DragContext drag_context, int x, int y,
                                             Gtk.SelectionData data, uint info, uint time) {
-
             open_uris (data.get_uris ());
             Gtk.drag_finish (drag_context, true, false, time);
         }

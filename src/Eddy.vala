@@ -34,7 +34,6 @@ namespace Eddy {
             about_license_type = Gtk.License.GPL_3_0;
         }
 
-
         public static App get_default () {
             if (instance == null) {
                 instance = new App ();
@@ -45,16 +44,27 @@ namespace Eddy {
 
         public static int main (string[] args) {
             Gtk.init (ref args);
-
             return App.get_default ().run (args);
         }
 
         public override void activate () {
-            if (check_dependencies ()) {
-                var window = new EddyWindow ();
-                window.show_all ();                
-            } else {
+            bool error_set = false;
+
+            if (!FileUtils.test (Constants.DPKG_DEB_BINARY, FileTest.IS_EXECUTABLE)) {
                 show_dependencies_error ();
+                error_set = true;
+                return;
+            }
+
+            /*if (!AptProxy.connect ()) {
+                show_apt_service_error ();
+                error_set = true;
+                return;
+            }*/
+
+            if (!error_set) {
+                var window = new EddyWindow ();
+                window.show_all ();
             }
 
             Gtk.main ();
@@ -64,8 +74,8 @@ namespace Eddy {
 
         }
 
-        private bool check_dependencies () {
-            return FileUtils.test (Constants.DPKG_DEB_BINARY, FileTest.IS_EXECUTABLE);
+        private void show_apt_service_error () {
+
         }
     }
 }

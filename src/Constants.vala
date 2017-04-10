@@ -13,15 +13,16 @@
 
 namespace Eddy.Constants {
     public const string APP_NAME = "Eddy";
-    public const string EXEC_NAME = "eddy";
+    public const string EXEC_NAME = "github.donadigo.eddy";
     public const string DESKTOP_NAME = EXEC_NAME + ".desktop";
-    public const Gdk.RGBA BRAND_COLOR = { 0.75686, 0.08627, 0.08627, 1 };
+    public const Gdk.RGBA BRAND_COLOR = { 0.92, 0.33, 0.32, 1 };
 
     public const Gtk.TargetEntry[] DRAG_TARGETS = {{ "text/uri-list", 0, 0 }};
     public const string DPKG_DEB_BINARY = "/usr/bin/dpkg-deb";
     public const string[] SUPPORTED_MIMETYPES = { "application/vnd.debian.binary-package" };
 
-    public const string MAIN_VIEW_ID = "main-view";
+    public const string WELCOME_VIEW_ID = "welcome-view";
     public const string LIST_VIEW_ID = "list-view";
     public const string DETAILED_VIEW_ID = "detailed-view";
+    public const string PROGRESS_VIEW_ID = "progress-view";
 }
