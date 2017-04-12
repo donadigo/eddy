@@ -1,27 +1,37 @@
-/***
-  Copyright (C) 2015-2016 Adam Bieńkowski <donadigos159gmail.com>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-***/
+/*-
+ * Copyright (c) 2017 Adam Bieńkowski
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authored by: Adam Bieńkowski <donadigos159@gmail.com>
+ */
 
 namespace Eddy {
     public class PackageListView : Gtk.Box {
         public signal void show_package_details (DebianPackage package);
         public signal void install (Gee.ArrayList<DebianPackage> packages);
 
+        public bool installing {
+            set {
+                install_button.sensitive = !value;
+            }
+        }
+
         private Gtk.ListBox list_box;
         private Gtk.Label installed_size_label;
 
         private Gtk.Button install_button;
-        private Gtk.Button select_all_button;
-        private Gtk.Button deselect_all_button;
 
         construct {
             orientation = Gtk.Orientation.VERTICAL;
@@ -33,20 +43,10 @@ namespace Eddy {
             install_button.clicked.connect (on_install_button_clicked);
             install_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 
-            select_all_button = new Gtk.Button.with_label (_("Select all"));
-            select_all_button.clicked.connect (on_select_all_button_clicked);
-            select_all_button.sensitive = false;
-
-            deselect_all_button = new Gtk.Button.with_label (_("Deselect all"));
-            deselect_all_button.clicked.connect (on_deselect_all_button_clicked);
-            deselect_all_button.sensitive = false;
-
             var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
             button_box.margin = 12;
             button_box.add (installed_size_label);
             button_box.pack_end (install_button, false, false);
-            button_box.pack_end (select_all_button, false, false);
-            button_box.pack_end (deselect_all_button, false, false);
 
             var button_row = new Gtk.ListBoxRow ();
             button_row.add (button_box);
@@ -70,7 +70,9 @@ namespace Eddy {
 
         public void add_package (DebianPackage package) {
             var row = new PackageRow (package);
+            row.can_remove = get_package_rows ().size > 0;
             row.changed.connect (update);
+            row.removed.connect (on_row_removed);
             list_box.insert (row, 1);
 
             update ();
@@ -88,18 +90,17 @@ namespace Eddy {
         }
 
         private void update () {
-            update_packages_size ();
+            var rows = get_package_rows ();
 
-            int selected = 0;
-            foreach (PackageRow row in get_package_rows ()) {
-                if (row.get_selected ()) {
-                    selected++;
-                }
+            uint size = rows.size;
+            uint total_installed_size = 0;
+            foreach (var row in rows) {
+                row.can_remove = size > 1;
+                total_installed_size += row.package.installed_size;
             }
 
-            install_button.sensitive = selected > 0;
-            select_all_button.sensitive = get_package_rows ().size > selected;
-            deselect_all_button.sensitive = selected > 0;
+            installed_size_label.label = _("Total installed size: %s".printf (format_size (total_installed_size)));
+            install_button.sensitive = size > 0;
         }
 
         private Gee.ArrayList<PackageRow> get_package_rows () {
@@ -113,38 +114,18 @@ namespace Eddy {
             return rows;
         }
 
-        private void update_packages_size () {
-            uint total_installed_size = 0;
-            foreach (var row in get_package_rows ()) {
-                if (row.get_selected ()) {
-                    total_installed_size += row.package.installed_size;
-                }
-            }
-
-            installed_size_label.label = _("Total installed size: %s".printf (format_size (total_installed_size)));
+        private void on_row_removed (PackageRow row) {
+            row.destroy ();
+            update ();
         }
 
         private void on_install_button_clicked () {
             var packages = new Gee.ArrayList<DebianPackage> ();
             foreach (PackageRow row in get_package_rows ()) {
-                if (row.get_selected ()) {
-                    packages.add (row.package);
-                }
+                packages.add (row.package);
             }
 
             install (packages);
-        }
-
-        private void on_select_all_button_clicked () {
-            foreach (PackageRow row in get_package_rows ()) {
-                row.set_selected (true);
-            }
-        }
-
-        private void on_deselect_all_button_clicked () {
-            foreach (PackageRow row in get_package_rows ()) {
-                row.set_selected (false);
-            }            
         }
 
         private void on_row_activated (Gtk.ListBoxRow row) {

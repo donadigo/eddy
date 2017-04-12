@@ -1,15 +1,21 @@
-/***
-  Copyright (C) 2015-2016 Adam Bieńkowski <donadigos159gmail.com>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-***/
+/*-
+ * Copyright (c) 2017 Adam Bieńkowski
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authored by: Adam Bieńkowski <donadigos159@gmail.com>
+ */
 
 namespace Eddy {
     [DBus (name = "org.debian.apt")]
@@ -20,9 +26,39 @@ namespace Eddy {
         public abstract async void fix_incomplete_install () throws IOError;
     }
 
+    public class TransactionError {
+        public string codename;
+        public string description;
+
+        public TransactionError (string codename, string description) {
+            this.codename = codename;
+            this.description = description;
+        }
+
+        public string get_text () {
+            int idx = description.last_index_of_char ('\n');
+            if (idx != -1) {
+                return description.slice (0, idx);
+            }
+
+            return description;
+        }
+    }
+
+    public class TransactionResult {
+        public DebianPackage package;
+        public TransactionError? error;
+
+        public TransactionResult (DebianPackage package, TransactionError? error) {
+            this.package = package;
+            this.error = error;
+        }
+    }
+
     [DBus (name = "org.debian.apt.transaction")]
     public interface AptTransaction : Object {
         public abstract bool paused { owned get; }
+        public abstract bool allow_unauthenticated { get; set; }
         public abstract int32 progress { owned get; }
         public abstract string status { owned get; }
         public abstract string exit_state { owned get; }

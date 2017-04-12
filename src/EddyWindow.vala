@@ -1,15 +1,21 @@
-/***
-  Copyright (C) 2015-2016 Adam Bieńkowski <donadigos159gmail.com>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-***/
+/*-
+ * Copyright (c) 2017 Adam Bieńkowski
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authored by: Adam Bieńkowski <donadigos159@gmail.com>
+ */
 
 namespace Eddy {
     public class EddyWindow : Gtk.Window {
@@ -79,45 +85,73 @@ namespace Eddy {
         }
 
         private async void install (Gee.ArrayList<DebianPackage> packages) {
-            string? next_tid = null;
-            foreach (var package in packages) {
-                string tid = yield package.prepare_transaction ();
-                if (tid == null) {
-                    // Handle this
-                    continue;
+            list_view.installing = true;
+            var results = yield DebianPackageInstaller.install_packages (packages);
+            list_view.installing = false;
+
+            var errors = new Gee.HashMap<string, TransactionError> ();
+            foreach (var result in results) {
+                var error = result.error;
+                if (error != null) {
+                    errors[result.package.name] = error;
+                }
+            }
+
+            uint size = errors.size;
+            if (size > 0) {
+                var builder = new StringBuilder ();
+
+                uint i = 1;
+                errors.@foreach ((entry) => {
+                    string description = entry.value.get_text ();
+                    builder.append ("%s: %s".printf (entry.key, description));
+                    if (i < size) {
+                        builder.append_c ('\n');
+                    }
+
+                    i++;
+                    return true;
+                });
+
+                string title;
+                if (size == results.size) {
+                    title = _("Installation failed");
+                } else {
+                    title = _("Installation partially failed");
                 }
 
-                var transaction = AptProxy.get_transaction (tid);
-                if (transaction == null) {
-                    // This also
-                    return;
-                }
-
-                package.install.begin (transaction, next_tid);
-                next_tid = tid;
+                var dialog = new MessageDialog (title, builder.str, "dialog-error");
+                dialog.add_button (_("Close"), 0);
+                dialog.show_all ();
+                dialog.run ();
+                dialog.destroy ();
             }
         }
 
         private void open_uris (string[] uris) {
+            string[] errors = {};
             foreach (string uri in uris) {
-                string path = Uri.unescape_string (uri.replace ("file://", "").replace ("file:/", ""));
-                var file = File.new_for_path (path);
-                var file_info = file.query_info ("*", FileQueryInfoFlags.NONE);
-                if (!(file_info.get_content_type () in Constants.SUPPORTED_MIMETYPES)) {
-                    show_content_type_error ();
-                    return;
+                var file = File.new_for_uri (uri);
+                try {
+                    var file_info = file.query_info (FileAttribute.STANDARD_CONTENT_TYPE, FileQueryInfoFlags.NONE);
+                    if (!(file_info.get_content_type () in Constants.SUPPORTED_MIMETYPES)) {
+                        errors += _("%s is not a debian package").printf (file.get_basename ());
+                        continue;
+                    }
+                } catch (Error e) {
+                    warning (e.message);
+                    continue;                
                 }
 
                 string filename = file.get_path ();
                 if (list_view.contains_filename (filename)) {
-                    return;
+                    continue;
                 }
 
                 var package = new DebianPackage (filename);
                 package.populate_data.begin ((obj, res) => {
-                    package.populate_data.end (res);
                     if (!package.valid) {
-                        show_package_not_valid_error ();
+                        errors += _("%s is not valid").printf (file.get_basename ());
                         return;
                     }
 
@@ -125,14 +159,20 @@ namespace Eddy {
                     stack.visible_child_name = Constants.LIST_VIEW_ID;
                 });
             }
-        }
 
-        private void show_content_type_error () {
+            if (errors.length > 0) {
+                var builder = new StringBuilder ();
+                foreach (string error in errors) {
+                    builder.append (error);
+                    builder.append_c ('\n');
+                }
 
-        }
-
-        private void show_package_not_valid_error () {
-
+                var dialog = new MessageDialog (_("Some packages could not be added"), builder.str, "dialog-warning");
+                dialog.add_button (_("Close"), 0);
+                dialog.show_all ();
+                dialog.run ();
+                dialog.destroy ();
+            }
         }
 
         private void show_open_dialog () {
@@ -157,18 +197,21 @@ namespace Eddy {
             chooser.add_filter (all_filter);
 
             chooser.response.connect ((response) => {
-                if (response == -3) {
+                if (response == Gtk.ResponseType.ACCEPT) {
                     string[] uris = {};
                     foreach (unowned string uri in chooser.get_uris ()) {
                         uris += uri;
                     }
 
+                    chooser.destroy ();
                     open_uris (uris);
+                } else {
+                    chooser.destroy ();
                 }
             });
 
             chooser.run ();
-            chooser.destroy ();
+
         }
 
         private void on_back_button_clicked () {

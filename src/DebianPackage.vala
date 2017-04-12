@@ -1,19 +1,25 @@
-/***
-  Copyright (C) 2015-2016 Adam Bieńkowski <donadigos159gmail.com>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-***/
+/*-
+ * Copyright (c) 2017 Adam Bieńkowski
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authored by: Adam Bieńkowski <donadigos159@gmail.com>
+ */
 
 namespace Eddy {
     public class DebianPackage : Object {
-        public signal void finished (string state);
+        public signal void finished ();
 
         public string filename { public get; construct; }
         public string name { public get; private set; }
@@ -25,6 +31,16 @@ namespace Eddy {
 
         public bool valid { public get; private set; default = true; }
 
+        public string install_status { public get; private set; }
+        public string install_exit_state { public get; private set; }
+        public uint install_progress { public get; public set; }
+
+        private TransactionError? error = null;     
+
+        construct {
+            finished.connect (reset);
+        }
+
         public DebianPackage (string filename) {
             Object (filename: filename);
         }
@@ -33,35 +49,41 @@ namespace Eddy {
             return package.filename == filename;
         }
 
-        public async string? prepare_transaction () {
+        public async TransactionResult install () {
+            var transaction = yield prepare_transaction ();
+
+            transaction.property_changed.connect (handle_property_change);
+            transaction.finished.connect ((status) => {
+                Idle.add (install.callback);
+            });
+
+            try {
+                transaction.run.begin ();   
+            } catch (Error e) {
+                warning (e.message);
+            }
+
+            yield;
+
+            var result = new TransactionResult (this, error);
+            finished ();
+            return result;
+        }
+
+        private async AptTransaction? prepare_transaction () {
             try {
                 var service = AptProxy.get_service ();
                 if (service == null) {
                     return null;
                 }
 
-                string transaction_path = yield service.install_file (filename, true);
-                return transaction_path;
+                string tid = yield service.install_file (filename, true);
+                return AptProxy.get_transaction (tid);
             } catch (IOError e) {
                 warning (e.message);
             }
 
-            return null;
-        }
-
-        public async void install (AptTransaction transaction, string? next_tid) {
-            transaction.property_changed.connect (handle_property_change);
-            transaction.finished.connect ((state) => {
-                Idle.add (install.callback);
-            });
-
-            if (next_tid != null) {
-                transaction.run_after (next_tid);
-            } else {
-                transaction.run ();   
-            }
-
-            yield;
+            return null;            
         }
 
         public async void populate_data () {
@@ -121,11 +143,105 @@ namespace Eddy {
             }            
         }
 
+        public unowned string? get_status_title () {
+            switch (install_status) {
+                case "status-setting-up":
+                    return _("Setting up");
+                case "status-query":
+                    return _("Querying");
+                case "status-waiting":
+                    return _("Waiting");
+                case "status-waiting-medium":
+                    return _("Waiting for medium");
+                case "status-waiting-config-file-prompt":
+                    return _("Waiting for file configuration");
+                case "status-waiting-lock":
+                    return _("Waiting for package manager lock");
+                case "status-running":
+                    return _("Running");
+                case "status-loading-cache":
+                    return _("Loading cache");
+                case "status-downloading-repo":
+                    return _("Downloading information about available packages");
+                case "status-downloading":
+                    return _("Downloading files");
+                case "status-committing":
+                    return _("Installing");
+                case "status-cleaning-up":
+                    return _("Cleaning up");
+                case "status-resolving-dep":
+                    return _("Resolving conflicts");
+                case "status-finished":
+                    return _("Finished");
+                case "status-cancelling":
+                    return _("Cancelling");
+                case "status-authenticating":
+                    return _("Waiting for authentication");
+                default:
+                    break;
+            }
+
+            return null;
+        }
+
+        public unowned string? get_exit_state_title () {
+            switch (install_exit_state) {
+                case "exit-success":
+                    return _("Finished");
+                case "exit-cancelled":
+                    return _("Cancelled");
+                case "exit-failed":
+                    return _("Failed");
+                case "exit-previous-failed":
+                    return _("Previous failed");
+                case "exit-unfinished":
+                    return _("Unfinished");
+            }
+
+            return null;
+        }
+
+        private void reset () {
+            install_progress = 0;
+            error = null;
+        }
+
         private void handle_property_change (string key, Variant val) {
             switch (key) {
                 case "Status":
+                    if (!val.is_of_type (VariantType.STRING)) {
+                        break;
+                    }
+
+                    install_status = val.get_string ();
+                    break;
+                case "ExitState":
+                    if (!val.is_of_type (VariantType.STRING)) {
+                        break;
+                    }
+
+                    install_exit_state = val.get_string ();
                     break;
                 case "Progress":
+                    if (!val.is_of_type (VariantType.INT32)) {
+                        break;
+                    }
+
+                    install_progress = val.get_int32 ();
+                    break;
+                case "Error":
+                    if (!val.is_of_type (VariantType.TUPLE) || val.n_children () < 2) {
+                        break;
+                    }                    
+
+                    var codename = val.get_child_value (0);
+                    var description = val.get_child_value (1);
+
+                    if (!codename.is_of_type (VariantType.STRING) || !description.is_of_type (VariantType.STRING)) {
+                        break;
+                    }
+
+                    error = new TransactionError (codename.get_string (), description.get_string ());
                     break;
             }
         }
