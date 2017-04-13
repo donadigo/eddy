@@ -22,7 +22,6 @@ namespace Eddy {
         private const string WELCOME_VIEW_ID = "welcome-view";
         private const string LIST_VIEW_ID = "list-view";
         private const string DETAILED_VIEW_ID = "detailed-view";
-        private const string PROGRESS_VIEW_ID = "progress-view";
 
         private Gtk.Stack stack;
 
@@ -33,7 +32,6 @@ namespace Eddy {
 
         private PackageListView list_view;
         private DetailedView detailed_view;
-        private ProgressView progress_view;
 
         private Gtk.HeaderBar header_bar;
 
@@ -50,7 +48,6 @@ namespace Eddy {
             list_view.install.connect ((packages) => install.begin (packages));
 
             detailed_view = new DetailedView ();
-            progress_view = new ProgressView ();
 
             open_button = new Gtk.Button.from_icon_name ("document-open", Gtk.IconSize.LARGE_TOOLBAR);
             open_button.tooltip_text = _("Open…");
@@ -83,7 +80,6 @@ namespace Eddy {
             stack.add_named (welcome_view, WELCOME_VIEW_ID);
             stack.add_named (list_view, LIST_VIEW_ID);
             stack.add_named (detailed_view, DETAILED_VIEW_ID);
-            stack.add_named (progress_view, PROGRESS_VIEW_ID);
 
             add (stack);
 
