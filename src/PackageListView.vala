@@ -19,6 +19,7 @@
 
 namespace Eddy {
     public class PackageListView : Gtk.Box {
+        public signal void no_packages ();
         public signal void show_package_details (DebianPackage package);
         public signal void install (Gee.ArrayList<DebianPackage> packages);
 
@@ -70,7 +71,6 @@ namespace Eddy {
 
         public void add_package (DebianPackage package) {
             var row = new PackageRow (package);
-            row.can_remove = get_package_rows ().size > 0;
             row.changed.connect (update);
             row.removed.connect (on_row_removed);
             list_box.insert (row, 1);
@@ -93,9 +93,12 @@ namespace Eddy {
             var rows = get_package_rows ();
 
             uint size = rows.size;
+            if (size == 0) {
+                no_packages ();
+            }
+
             uint total_installed_size = 0;
             foreach (var row in rows) {
-                row.can_remove = size > 1;
                 total_installed_size += row.package.installed_size;
             }
 

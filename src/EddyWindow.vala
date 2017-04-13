@@ -19,8 +19,16 @@
 
 namespace Eddy {
     public class EddyWindow : Gtk.Window {
+        private const string WELCOME_VIEW_ID = "welcome-view";
+        private const string LIST_VIEW_ID = "list-view";
+        private const string DETAILED_VIEW_ID = "detailed-view";
+        private const string PROGRESS_VIEW_ID = "progress-view";
+
         private Gtk.Stack stack;
+
+        private Gtk.Revealer open_button_revealer;
         private Gtk.Button open_button;
+
         private Gtk.Button back_button;
 
         private PackageListView list_view;
@@ -29,11 +37,15 @@ namespace Eddy {
 
         private Gtk.HeaderBar header_bar;
 
+        private int open_index;
+        private int open_dowloads_index;
+
         construct {
             stack = new Gtk.Stack ();
             stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
 
             list_view = new PackageListView ();
+            list_view.no_packages.connect (on_no_packages);
             list_view.show_package_details.connect (on_show_package_details);
             list_view.install.connect ((packages) => install.begin (packages));
 
@@ -43,12 +55,15 @@ namespace Eddy {
             open_button = new Gtk.Button.from_icon_name ("document-open", Gtk.IconSize.LARGE_TOOLBAR);
             open_button.tooltip_text = _("Open…");
             open_button.clicked.connect (show_open_dialog);
-            open_button.visible = false;
+
+            open_button_revealer = new Gtk.Revealer ();
+            open_button_revealer.transition_type = Gtk.RevealerTransitionType.CROSSFADE;
+            open_button_revealer.add (open_button);
 
             back_button = new Gtk.Button.from_icon_name ("go-previous-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-            back_button.no_show_all = true;
             back_button.tooltip_text = _("Go back");
             back_button.clicked.connect (on_back_button_clicked);
+            set_widget_visible (back_button, false);
 
             set_default_size (650, 550);
             set_size_request (700, 600);
@@ -57,23 +72,18 @@ namespace Eddy {
             header_bar.set_title (Constants.APP_NAME);
             header_bar.show_close_button = true;
             header_bar.pack_start (back_button);
-            header_bar.pack_start (open_button);
+            header_bar.pack_start (open_button_revealer);
             set_titlebar (header_bar);
 
             var welcome_view = new Granite.Widgets.Welcome (_("Install some apps"), _("Drag and drop .deb files or open them to begin installation."));
-            int open_index = welcome_view.append ("document-open", _("Open"), _("Browse to open a single file"));
-            welcome_view.activated.connect ((index) => {
-                if (index != open_index) {
-                    return;
-                }
+            open_index = welcome_view.append ("document-open", _("Open"), _("Browse to open a single file"));
+            open_dowloads_index = welcome_view.append ("folder-download", _("Load from Downloads"), _("Load debian files from your Downloads folder"));
+            welcome_view.activated.connect (on_welcome_view_activated);
 
-                show_open_dialog ();
-            });
-
-            stack.add_named (welcome_view, Constants.WELCOME_VIEW_ID);
-            stack.add_named (list_view, Constants.LIST_VIEW_ID);
-            stack.add_named (detailed_view, Constants.DETAILED_VIEW_ID);
-            stack.add_named (progress_view, Constants.PROGRESS_VIEW_ID);
+            stack.add_named (welcome_view, WELCOME_VIEW_ID);
+            stack.add_named (list_view, LIST_VIEW_ID);
+            stack.add_named (detailed_view, DETAILED_VIEW_ID);
+            stack.add_named (progress_view, PROGRESS_VIEW_ID);
 
             add (stack);
 
@@ -82,6 +92,11 @@ namespace Eddy {
 
             destroy.connect (Gtk.main_quit);
             drag_data_received.connect (on_drag_data_received);
+        }
+
+        private static void set_widget_visible (Gtk.Widget widget, bool visible) {
+            widget.no_show_all = !visible;
+            widget.visible = visible;
         }
 
         private async void install (Gee.ArrayList<DebianPackage> packages) {
@@ -115,9 +130,9 @@ namespace Eddy {
 
                 string title;
                 if (size == results.size) {
-                    title = _("Installation failed");
+                    title = _("Installation Failed");
                 } else {
-                    title = _("Installation partially failed");
+                    title = _("Installation Partially Failed");
                 }
 
                 var dialog = new MessageDialog (title, builder.str, "dialog-error");
@@ -128,19 +143,50 @@ namespace Eddy {
             }
         }
 
-        private void open_uris (string[] uris) {
+        private string[] open_folder (string path) {
+            var file = File.new_for_path (path);
+            var enumerator = file.enumerate_children ("%s,%s".printf (FileAttribute.STANDARD_NAME, FileAttribute.STANDARD_CONTENT_TYPE), FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
+
+            string[] uris = {};
+            FileInfo? info = null;
+            while ((info = enumerator.next_file (null)) != null) {
+                if (info.get_file_type () == FileType.DIRECTORY) {
+                    var subdir = file.resolve_relative_path (info.get_name ());
+                    string[] suburis = open_folder (subdir.get_path ());
+                    foreach (string uri in suburis) {
+                        uris += uri;
+                    }
+                } else if (info.get_content_type () in Constants.SUPPORTED_MIMETYPES) {          
+                    try {
+                        var subfile = file.resolve_relative_path (info.get_name ());
+                        string? uri = Filename.to_uri (subfile.get_path (), null);
+                        if (uri != null) {
+                            uris += uri;
+                        }
+                    } catch (ConvertError e) {
+                        warning (e.message);
+                    }
+                }
+            }
+
+            return uris;
+        }
+
+        private void open_uris (string[] uris, bool validate = true) {
             string[] errors = {};
             foreach (string uri in uris) {
                 var file = File.new_for_uri (uri);
-                try {
-                    var file_info = file.query_info (FileAttribute.STANDARD_CONTENT_TYPE, FileQueryInfoFlags.NONE);
-                    if (!(file_info.get_content_type () in Constants.SUPPORTED_MIMETYPES)) {
-                        errors += _("%s is not a debian package").printf (file.get_basename ());
-                        continue;
+                if (validate) {
+                    try {
+                        var info = file.query_info (FileAttribute.STANDARD_CONTENT_TYPE, FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
+                        if (!(info.get_content_type () in Constants.SUPPORTED_MIMETYPES)) {
+                            errors += _("%s is not a debian package").printf (file.get_basename ());
+                            continue;
+                        }
+                    } catch (Error e) {
+                        warning (e.message);
+                        continue;                
                     }
-                } catch (Error e) {
-                    warning (e.message);
-                    continue;                
                 }
 
                 string filename = file.get_path ();
@@ -150,14 +196,18 @@ namespace Eddy {
 
                 var package = new DebianPackage (filename);
                 package.populate_data.begin ((obj, res) => {
-                    if (!package.valid) {
+                    if (validate && !package.valid) {
                         errors += _("%s is not valid").printf (file.get_basename ());
                         return;
                     }
 
                     list_view.add_package (package);
-                    stack.visible_child_name = Constants.LIST_VIEW_ID;
                 });
+            }
+
+            if (errors.length < uris.length) {
+                open_button_revealer.reveal_child = true;
+                stack.visible_child_name = LIST_VIEW_ID;
             }
 
             if (errors.length > 0) {
@@ -167,7 +217,7 @@ namespace Eddy {
                     builder.append_c ('\n');
                 }
 
-                var dialog = new MessageDialog (_("Some packages could not be added"), builder.str, "dialog-warning");
+                var dialog = new MessageDialog (_("Some Packages Could Not Be Added"), builder.str, "dialog-warning");
                 dialog.add_button (_("Close"), 0);
                 dialog.show_all ();
                 dialog.run ();
@@ -186,7 +236,7 @@ namespace Eddy {
             all_filter.set_filter_name (_("All Files"));
             all_filter.add_pattern ("*");
 
-            var chooser = new Gtk.FileChooserDialog ("Select your favorite file",
+            var chooser = new Gtk.FileChooserDialog ("Select debian packages to install",
                             this,
                             Gtk.FileChooserAction.OPEN,
                             _("Cancel"),
@@ -211,21 +261,37 @@ namespace Eddy {
             });
 
             chooser.run ();
+        }
 
+        private void on_no_packages () {
+            open_button_revealer.reveal_child = false;
+            stack.visible_child_name = WELCOME_VIEW_ID;
         }
 
         private void on_back_button_clicked () {
-            back_button.visible = false;
+            set_widget_visible (back_button, false);
+
             open_button.sensitive = true;     
-            stack.visible_child_name = Constants.LIST_VIEW_ID;       
+            stack.visible_child_name = LIST_VIEW_ID;       
         }
 
         private void on_show_package_details (DebianPackage package) {
             detailed_view.set_package (package);
 
-            back_button.visible = true;
+            set_widget_visible (back_button, true);
+
             open_button.sensitive = false;
-            stack.visible_child_name = Constants.DETAILED_VIEW_ID;
+            stack.visible_child_name = DETAILED_VIEW_ID;
+        }
+
+        private void on_welcome_view_activated (int index) {
+            if (index == open_index) {
+                show_open_dialog ();
+            } else if (index == open_dowloads_index) {
+                string path = Environment.get_user_special_dir (UserDirectory.DOWNLOAD);
+                string[] uris = open_folder (path);
+                open_uris (uris, false);
+            }
         }
 
         private void on_drag_data_received (Gdk.DragContext drag_context, int x, int y,

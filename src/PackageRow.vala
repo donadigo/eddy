@@ -19,19 +19,12 @@
 
 namespace Eddy {
     public class PackageRow : Gtk.ListBoxRow {
+        private const int PROGRESS_BAR_HEIGHT = 5;
+
         public signal void changed ();
         public signal void removed ();
-        public DebianPackage package { get; construct; }
-        public bool can_remove { 
-            set {
-                remove_button.no_show_all = !value;
-                remove_button.visible = value;
-            }
 
-            get {
-                return remove_button.visible;
-            }
-        }
+        public DebianPackage package { get; construct; }
 
         private Gtk.Box main_box;
         private Gtk.Stack stack;
@@ -100,7 +93,7 @@ namespace Eddy {
                 return false;
             });
 
-            draw.connect (on_event_box_draw);
+            draw.connect (on_draw);
             package.finished.connect (() => update_status_label (true));
             package.notify["install-status"].connect (() => update_status_label (false));
             package.notify["install-progress"].connect (update_progress);
@@ -133,13 +126,13 @@ namespace Eddy {
             queue_draw ();
         }
 
-        private bool on_event_box_draw (Gtk.Widget widget, Cairo.Context context) {
+        private bool on_draw (Cairo.Context context) {
             uint install_progress = package.install_progress;
             if (install_progress > 0) {
                 int width = get_allocated_width ();
                 int height = get_allocated_height ();
                 context.set_source_rgba (Constants.BRAND_COLOR.red, Constants.BRAND_COLOR.green, Constants.BRAND_COLOR.blue, 0.7);
-                context.rectangle (0, 0, width * install_progress / 100, height);
+                context.rectangle (0, height - PROGRESS_BAR_HEIGHT, width * install_progress / 100, PROGRESS_BAR_HEIGHT);
                 context.fill ();
                 get_style_context ().set_state (Gtk.StateFlags.NORMAL);
             }
