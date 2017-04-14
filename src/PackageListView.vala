@@ -20,14 +20,13 @@
 namespace Eddy {
     public class PackageListView : Gtk.Box {
         public signal void no_packages ();
-        public signal void show_package_details (DebianPackage package);
-        public signal void install (Gee.ArrayList<DebianPackage> packages);
+        public signal void install ();
 
-        public bool installing {
-            set {
-                install_button.sensitive = !value;
-            }
-        }
+        public signal void added (DebianPackage package);
+        public signal void show_package_details (DebianPackage package);
+        public signal void removed (DebianPackage package);
+
+        public bool installing { get; set; }
 
         private Gtk.ListBox list_box;
         private Gtk.Label installed_size_label;
@@ -41,7 +40,7 @@ namespace Eddy {
             installed_size_label = new Gtk.Label ("");
 
             install_button = new Gtk.Button.with_label (_("Install"));
-            install_button.clicked.connect (on_install_button_clicked);
+            install_button.clicked.connect (() => install ());
             install_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 
             var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
@@ -66,6 +65,7 @@ namespace Eddy {
             scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
             scrolled.add (main_box);
 
+            bind_property ("installing", install_button, "sensitive", BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
             add (scrolled);
         }
 
@@ -76,6 +76,7 @@ namespace Eddy {
             list_box.insert (row, 1);
 
             update ();
+            added (package);
             show_all ();
         }
 
@@ -103,7 +104,7 @@ namespace Eddy {
             }
 
             installed_size_label.label = _("Total installed size: %s".printf (format_size (total_installed_size)));
-            install_button.sensitive = size > 0;
+            install_button.sensitive = !installing && size > 0;
         }
 
         private Gee.ArrayList<PackageRow> get_package_rows () {
@@ -120,15 +121,7 @@ namespace Eddy {
         private void on_row_removed (PackageRow row) {
             row.destroy ();
             update ();
-        }
-
-        private void on_install_button_clicked () {
-            var packages = new Gee.ArrayList<DebianPackage> ();
-            foreach (PackageRow row in get_package_rows ()) {
-                packages.add (row.package);
-            }
-
-            install (packages);
+            removed (row.package);
         }
 
         private void on_row_activated (Gtk.ListBoxRow row) {

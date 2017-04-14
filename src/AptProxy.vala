@@ -21,6 +21,7 @@ namespace Eddy {
     [DBus (name = "org.debian.apt")]
     public interface AptService : Object {
         public abstract async string install_packages (string[] packages) throws IOError;
+        public abstract async string remove_packages (string[] packages) throws IOError;
         public abstract async string install_file (string path, bool force) throws IOError;
         public abstract async void fix_broken_depends () throws IOError;
         public abstract async void fix_incomplete_install () throws IOError;
@@ -57,6 +58,7 @@ namespace Eddy {
 
     [DBus (name = "org.debian.apt.transaction")]
     public interface AptTransaction : Object {
+        public abstract bool cancellable { owned get; }
         public abstract bool paused { owned get; }
         public abstract bool allow_unauthenticated { get; set; }
         public abstract int32 progress { owned get; }

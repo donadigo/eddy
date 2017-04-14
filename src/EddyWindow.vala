@@ -18,10 +18,17 @@
  */
 
 namespace Eddy {
+    public static void set_widget_visible (Gtk.Widget widget, bool visible) {
+        widget.no_show_all = !visible;
+        widget.visible = visible;
+    }
+
     public class EddyWindow : Gtk.Window {
         private const string WELCOME_VIEW_ID = "welcome-view";
         private const string LIST_VIEW_ID = "list-view";
         private const string DETAILED_VIEW_ID = "detailed-view";
+
+        private DebianPackageInstaller installer;
 
         private Gtk.Stack stack;
 
@@ -39,13 +46,17 @@ namespace Eddy {
         private int open_dowloads_index;
 
         construct {
+            installer = new DebianPackageInstaller ();
+
             stack = new Gtk.Stack ();
             stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
 
             list_view = new PackageListView ();
             list_view.no_packages.connect (on_no_packages);
             list_view.show_package_details.connect (on_show_package_details);
-            list_view.install.connect ((packages) => install.begin (packages));
+            list_view.install.connect ((packages) => install.begin ());
+            list_view.added.connect ((package) => installer.add_package (package));
+            list_view.removed.connect ((package) => installer.remove_package (package));
 
             detailed_view = new DetailedView ();
 
@@ -90,14 +101,9 @@ namespace Eddy {
             drag_data_received.connect (on_drag_data_received);
         }
 
-        private static void set_widget_visible (Gtk.Widget widget, bool visible) {
-            widget.no_show_all = !visible;
-            widget.visible = visible;
-        }
-
-        private async void install (Gee.ArrayList<DebianPackage> packages) {
+        private async void install () {
             list_view.installing = true;
-            var results = yield DebianPackageInstaller.install_packages (packages);
+            var results = yield installer.install ();
             list_view.installing = false;
 
             var errors = new Gee.HashMap<string, TransactionError> ();

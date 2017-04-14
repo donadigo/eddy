@@ -20,16 +20,31 @@
 namespace Eddy {
     public class DebianPackageInstaller : Object {
         private const string PK_ACTION_INSTALL_FILE = "org.debian.apt.install-file";
+        private Queue<DebianPackage> queue;
 
-        public static async Gee.ArrayList<TransactionResult> install_packages (Gee.ArrayList<DebianPackage> packages) {
-            var results = new Gee.ArrayList<TransactionResult> ();     
+        construct {
+            queue = new Queue<DebianPackage> ();
+        }
 
+        public void add_package (DebianPackage package) {
+            queue.push_tail (package);
+        }
+
+        public void remove_package (DebianPackage package) {
+            if (queue.index (package) != -1) {
+                queue.remove (package);
+            }
+        }
+
+        public async Gee.ArrayList<TransactionResult> install () {
+            var results = new Gee.ArrayList<TransactionResult> ();
             bool success = yield preauthenticate ();
             if (!success) {
                 return results;
             }
 
-            foreach (var package in packages) {
+            DebianPackage? package = null;
+            while ((package = queue.pop_tail ()) != null) {
                 var result = yield package.install ();
                 results.add (result);
             }
@@ -39,7 +54,7 @@ namespace Eddy {
 
         private async static bool preauthenticate () {
             var bus = yield Bus.@get (BusType.SYSTEM);
-            unowned string unique_name = bus.get_unique_name ();
+            unowned string? unique_name = bus.get_unique_name ();
             if (unique_name == null) {
                 return true;
             }

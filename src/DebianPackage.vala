@@ -33,8 +33,10 @@ namespace Eddy {
 
         public string install_status { public get; private set; }
         public string install_exit_state { public get; private set; }
-        public uint install_progress { public get; public set; }
+        public uint install_progress { public get; private set; }
+        public bool install_cancellable { public get; private set; }
 
+        private Cancellable? cancellable = null;
         private TransactionError? error = null;     
 
         construct {
@@ -50,11 +52,35 @@ namespace Eddy {
         }
 
         public async TransactionResult install () {
-            var transaction = yield prepare_transaction ();
+            var transaction = yield prepare_install_transaction ();
+            if (transaction == null) {
+                error = new TransactionError ("no-transaction", _("could not create a transaction"));
+                var result = new TransactionResult (this, error);
+                install_exit_state = "exit-failed";
+                finished ();
+                return result;
+            }
 
-            transaction.property_changed.connect (handle_property_change);
-            transaction.finished.connect ((status) => {
-                Idle.add (install.callback);
+            install_cancellable = transaction.cancellable;
+
+            ulong property_changed_id = 0;
+            property_changed_id = transaction.property_changed.connect (handle_property_change);
+
+            ulong finished_id = 0;
+            finished_id = transaction.finished.connect (() => {
+                if (property_changed_id != 0) {
+                    transaction.disconnect (property_changed_id);
+                }
+
+                if (finished_id != 0) {
+                    transaction.disconnect (finished_id);
+                    Idle.add (install.callback);
+                }
+            });
+
+            cancellable = new Cancellable ();
+            cancellable.cancelled.connect (() => {
+                transaction.cancel.begin ();
             });
 
             try {
@@ -70,20 +96,26 @@ namespace Eddy {
             return result;
         }
 
-        private async AptTransaction? prepare_transaction () {
+        public void cancel () {
+            if (cancellable != null) {
+                cancellable.cancel ();
+            }
+        }
+
+        private async AptTransaction? prepare_install_transaction () {
             try {
                 var service = AptProxy.get_service ();
                 if (service == null) {
                     return null;
                 }
 
-                string tid = yield service.install_file (filename, true);
+                string tid = yield service.install_file (filename, false);
                 return AptProxy.get_transaction (tid);
             } catch (IOError e) {
                 warning (e.message);
             }
 
-            return null;            
+            return null;
         }
 
         public async void populate_data () {
@@ -143,7 +175,7 @@ namespace Eddy {
             }            
         }
 
-        public unowned string? get_status_title () {
+        public unowned string get_status_title () {
             switch (install_status) {
                 case "status-setting-up":
                     return _("Setting up");
@@ -177,14 +209,12 @@ namespace Eddy {
                     return _("Cancelling");
                 case "status-authenticating":
                     return _("Waiting for authentication");
-                default:
-                    break;
             }
 
-            return null;
+            return _("Unknown");
         }
 
-        public unowned string? get_exit_state_title () {
+        public unowned string get_exit_state_title () {
             switch (install_exit_state) {
                 case "exit-success":
                     return _("Finished");
@@ -198,11 +228,12 @@ namespace Eddy {
                     return _("Unfinished");
             }
 
-            return null;
+            return _("Unknown");
         }
 
         private void reset () {
             install_progress = 0;
+            install_cancellable = false;
             error = null;
         }
 
@@ -242,6 +273,13 @@ namespace Eddy {
                     }
 
                     error = new TransactionError (codename.get_string (), description.get_string ());
+                    break;
+                case "Cancellable":
+                    if (!val.is_of_type (VariantType.BOOLEAN)) {
+                        break;
+                    }
+
+                    install_cancellable = val.get_boolean ();
                     break;
             }
         }
