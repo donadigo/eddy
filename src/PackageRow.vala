@@ -50,7 +50,7 @@ namespace Eddy {
             vertical_box.add (summary_label);
             vertical_box.add (name_label);
 
-            status_label = new Gtk.Label (_("Unknown"));
+            status_label = new Gtk.Label (null);
             state_icon = new Gtk.Image ();
 
             remove_button = new Gtk.Button.from_icon_name ("edit-delete-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
@@ -81,7 +81,7 @@ namespace Eddy {
                 return false;
             });
 
-            package.finished.connect (() => update_state_icon ());
+            package.finished.connect (update_state_icon);
             package.notify["install-status"].connect (update_status);
             package.notify["install-progress"].connect (update_progress);
             package.notify["installing"].connect (update_visibility);
@@ -89,6 +89,7 @@ namespace Eddy {
             draw.connect (on_draw);
             update_visibility ();
             update_state_icon ();
+            update_status ();
             add (event_box);
         }
 
