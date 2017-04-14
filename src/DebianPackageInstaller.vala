@@ -27,7 +27,7 @@ namespace Eddy {
         }
 
         public void add_package (DebianPackage package) {
-            queue.push_tail (package);
+            queue.push_head (package);
         }
 
         public void remove_package (DebianPackage package) {
@@ -43,8 +43,8 @@ namespace Eddy {
                 return results;
             }
 
-            DebianPackage? package = null;
-            while ((package = queue.pop_tail ()) != null) {
+            for (int i = 0; i < queue.get_length (); i++) {
+                var package = queue.peek_nth (i);
                 var result = yield package.install ();
                 results.add (result);
             }

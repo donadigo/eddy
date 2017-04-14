@@ -106,6 +106,10 @@ namespace Eddy {
             var results = yield installer.install ();
             list_view.installing = false;
 
+            process_results (results);
+        }
+
+        private void process_results (Gee.ArrayList<TransactionResult> results) {
             var errors = new Gee.HashMap<string, TransactionError> ();
             foreach (var result in results) {
                 var error = result.error;
@@ -114,15 +118,15 @@ namespace Eddy {
                 }
             }
 
-            uint size = errors.size;
-            if (size > 0) {
+            uint errors_size = errors.size;
+            if (errors_size > 0) {
                 var builder = new StringBuilder ();
 
                 uint i = 1;
                 errors.@foreach ((entry) => {
                     string description = entry.value.get_text ();
                     builder.append ("%s: %s".printf (entry.key, description));
-                    if (i < size) {
+                    if (i < errors_size) {
                         builder.append_c ('\n');
                     }
 
@@ -131,7 +135,7 @@ namespace Eddy {
                 });
 
                 string title;
-                if (size == results.size) {
+                if (errors_size == results.size) {
                     title = _("Installation Failed");
                 } else {
                     title = _("Installation Partially Failed");
@@ -142,6 +146,27 @@ namespace Eddy {
                 dialog.show_all ();
                 dialog.run ();
                 dialog.destroy ();
+            } else if (results.size > 0) {
+                var app = get_application ();
+                if (app == null) {
+                    return;
+                }
+
+                var win = get_window ();
+                if (win != null && (win.get_state () & Gdk.WindowState.FOCUSED) != 0) {
+                    return;
+                }
+
+                var notification = new Notification (_("Installation succeeded"));
+                if (results.size == 1) {
+                    var result = results[0];
+                    notification.set_body (_("%s has been successfully installed").printf (result.package.name));
+                } else {
+                    notification.set_body (_("All packages have been successfully installed"));
+                }
+
+                notification.set_icon (new ThemedIcon ("eddy"));
+                app.send_notification ("installed", notification);
             }
         }
 

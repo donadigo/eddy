@@ -60,6 +60,7 @@ namespace Eddy {
                 show_apt_service_error ();
             } else {
                 var window = new EddyWindow ();
+                add_window (window);
                 window.show_all ();
             }
 

@@ -33,8 +33,9 @@ namespace Eddy {
 
         public string install_status { public get; private set; }
         public string install_exit_state { public get; private set; }
-        public uint install_progress { public get; private set; }
-        public bool install_cancellable { public get; private set; }
+        public uint install_progress { public get; private set; default = 0; }
+        public bool install_cancellable { public get; private set; default = true; }
+        public bool installing { public get; private set; default = false; }
 
         private Cancellable? cancellable = null;
         private TransactionError? error = null;     
@@ -52,6 +53,8 @@ namespace Eddy {
         }
 
         public async TransactionResult install () {
+            installing = true;
+
             var transaction = yield prepare_install_transaction ();
             if (transaction == null) {
                 error = new TransactionError ("no-transaction", _("could not create a transaction"));
@@ -170,12 +173,12 @@ namespace Eddy {
                     description = _("Description not available.");    
                 }
             } catch (Error e) {
-                warning ("%s\n", e.message);
+                warning (e.message);
                 valid = false;
             }            
         }
 
-        public unowned string get_status_title () {
+        public unowned string? get_status_title () {
             switch (install_status) {
                 case "status-setting-up":
                     return _("Setting up");
@@ -214,6 +217,19 @@ namespace Eddy {
             return _("Unknown");
         }
 
+        public unowned string? get_exit_state_icon () {
+            switch (install_exit_state) {
+                case "exit-success":
+                    return "process-completed-symbolic";
+                case "exit-failed":
+                case "exit-previous-failed":
+                case "exit-unfinished":
+                    return "dialog-error-symbolic";
+            }
+
+            return null;
+        }
+
         public unowned string get_exit_state_title () {
             switch (install_exit_state) {
                 case "exit-success":
@@ -233,8 +249,10 @@ namespace Eddy {
 
         private void reset () {
             install_progress = 0;
-            install_cancellable = false;
+            install_cancellable = true;
+            installing = false;
             error = null;
+            cancellable = null;
         }
 
         private void handle_property_change (string key, Variant val) {

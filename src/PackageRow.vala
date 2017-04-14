@@ -28,13 +28,10 @@ namespace Eddy {
         public DebianPackage package { get; construct; }
 
         private Gtk.Box main_box;
-        private Gtk.Stack stack;
 
-        private Gtk.Grid button_container;
         private Gtk.Button remove_button;
-
-        private Gtk.Grid status_container;
         private Gtk.Label status_label;
+        private Gtk.Image state_icon;
 
         construct {
             main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
@@ -53,9 +50,12 @@ namespace Eddy {
             vertical_box.add (summary_label);
             vertical_box.add (name_label);
 
+            status_label = new Gtk.Label (_("Unknown"));
+            state_icon = new Gtk.Image ();
+
             remove_button = new Gtk.Button.from_icon_name ("edit-delete-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            remove_button.tooltip_text = _("Remove");
             remove_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-            remove_button.opacity = 0;
             remove_button.show_all ();
             remove_button.clicked.connect (() => removed ());
             remove_button.enter_notify_event.connect (() => {
@@ -63,27 +63,11 @@ namespace Eddy {
                 return false;
             });
 
-            button_container = new Gtk.Grid ();
-            button_container.halign = Gtk.Align.CENTER;
-            button_container.valign = Gtk.Align.CENTER;
-            button_container.add (remove_button);
-
-            status_label = new Gtk.Label (_("Unknown"));
-
-            status_container = new Gtk.Grid ();
-            status_container.halign = Gtk.Align.CENTER;
-            status_container.valign = Gtk.Align.CENTER;
-            status_container.add (status_label);
-
-            stack = new Gtk.Stack ();
-            stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
-            stack.add (button_container);
-            stack.add (status_container);
-            stack.visible_child = button_container;
-
             main_box.add (package_image);
             main_box.add (vertical_box);
-            main_box.pack_end (stack, false, false);
+            main_box.pack_end (status_label, false, false);
+            main_box.pack_end (state_icon, false, false);
+            main_box.pack_end (remove_button, false, false);
 
             var event_box = new Gtk.EventBox ();
             event_box.add (main_box);
@@ -97,11 +81,14 @@ namespace Eddy {
                 return false;
             });
 
-            package.finished.connect (() => update_status (true));
-            package.notify["install-status"].connect (() => update_status (false));
+            package.finished.connect (() => update_state_icon ());
+            package.notify["install-status"].connect (update_status);
             package.notify["install-progress"].connect (update_progress);
-            
+            package.notify["installing"].connect (update_visibility);
+
             draw.connect (on_draw);
+            update_visibility ();
+            update_state_icon ();
             add (event_box);
         }
 
@@ -109,25 +96,28 @@ namespace Eddy {
             Object (package: package);
         }
 
-        private void update_status (bool finished) {
-            stack.visible_child = status_container;
+        private void update_status () {
+            status_label.label = package.get_status_title ();
+        }
 
-            unowned string? title;
-            if (finished) {
-                title = package.get_exit_state_title ();
-                Timeout.add (FINISHED_HIDE_STATUS_TIMEOUT, () => {
-                    stack.visible_child = button_container;
-                    return false;
-                });
+        private void update_visibility () {
+            bool installing = package.installing;
+            set_widget_visible (remove_button, !installing);
+            set_widget_visible (status_label, installing);
+        }
+
+        private void update_state_icon () {
+            unowned string exit_state = package.get_exit_state_title ();
+            unowned string? icon = package.get_exit_state_icon ();
+
+            if (icon != null) {
+                state_icon.set_from_icon_name (icon, Gtk.IconSize.SMALL_TOOLBAR);
+                set_widget_visible (state_icon, true);
             } else {
-                title = package.get_status_title ();
+                set_widget_visible (state_icon, false);
             }
 
-            bool visible = title != null;
-
-            status_label.visible = visible;
-            status_label.no_show_all = !visible;
-            status_label.label = title;
+            state_icon.tooltip_text = exit_state;
         }
 
         private void update_progress () {
