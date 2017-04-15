@@ -20,18 +20,31 @@
 namespace Eddy {
     public class PackageRow : Gtk.ListBoxRow {
         private const int PROGRESS_BAR_HEIGHT = 5;
-        private const int FINISHED_HIDE_STATUS_TIMEOUT = 2500;
 
         public signal void changed ();
+        public signal void action_clicked ();
         public signal void removed ();
 
         public DebianPackage package { get; construct; }
+        public bool show_action_button {
+            set {
+                set_widget_visible (action_button, value);
+            }
+        }
 
         private Gtk.Box main_box;
+
+        private Gtk.Button action_button;
 
         private Gtk.Button remove_button;
         private Gtk.Label status_label;
         private Gtk.Image state_icon;
+
+        private static Gtk.SizeGroup size_group;
+
+        static construct {
+            size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.HORIZONTAL);
+        }
 
         construct {
             main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
@@ -53,8 +66,15 @@ namespace Eddy {
             status_label = new Gtk.Label (null);
             state_icon = new Gtk.Image ();
 
+            action_button = new Gtk.Button.with_label (null);
+            action_button.clicked.connect (() => action_clicked ());
+            action_button.valign = Gtk.Align.CENTER;
+            action_button.halign = Gtk.Align.CENTER;
+            size_group.add_widget (action_button);
+
             remove_button = new Gtk.Button.from_icon_name ("edit-delete-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-            remove_button.tooltip_text = _("Remove");
+            remove_button.tooltip_text = _("Remove from list");
+            remove_button.opacity = 0;
             remove_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
             remove_button.show_all ();
             remove_button.clicked.connect (() => removed ());
@@ -66,6 +86,7 @@ namespace Eddy {
             main_box.add (package_image);
             main_box.add (vertical_box);
             main_box.pack_end (status_label, false, false);
+            main_box.pack_end (action_button, false, false);
             main_box.pack_end (state_icon, false, false);
             main_box.pack_end (remove_button, false, false);
 
@@ -81,15 +102,18 @@ namespace Eddy {
                 return false;
             });
 
-            package.finished.connect (update_state_icon);
-            package.notify["install-status"].connect (update_status);
-            package.notify["install-progress"].connect (update_progress);
-            package.notify["installing"].connect (update_visibility);
+            package.finished.connect (update_visibility);
+            package.notify["status"].connect (update_status);
+            package.notify["progress"].connect (update_progress);
+            package.notify["exit-state"].connect (update_state_icon);
+            package.notify["has-transaction"].connect (update_visibility);
+            package.notify["is-installed"].connect (update_action_button);
 
             draw.connect (on_draw);
             update_visibility ();
             update_state_icon ();
             update_status ();
+            update_action_button ();
             add (event_box);
         }
 
@@ -102,9 +126,22 @@ namespace Eddy {
         }
 
         private void update_visibility () {
-            bool installing = package.installing;
-            set_widget_visible (remove_button, !installing);
-            set_widget_visible (status_label, installing);
+            bool running = package.has_transaction;
+            set_widget_visible (remove_button, !running);
+            set_widget_visible (action_button, !running);
+            set_widget_visible (state_icon, !running);
+            set_widget_visible (status_label, running);
+        }
+
+        private void update_action_button () {
+            bool installed = package.is_installed;
+            if (installed) {
+                action_button.label = _("Uninstall");
+                action_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+            } else {
+                action_button.label = _("Install");
+                action_button.get_style_context ().remove_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+            }
         }
 
         private void update_state_icon () {
@@ -144,7 +181,7 @@ namespace Eddy {
         }
 
         private bool on_draw (Cairo.Context context) {
-            uint progress = package.install_progress;
+            uint progress = package.progress;
             if (progress > 0) {
                 int width = get_allocated_width ();
                 int height = get_allocated_height ();

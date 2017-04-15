@@ -48,6 +48,7 @@ namespace Eddy {
 
     public class TransactionResult {
         public DebianPackage package;
+        public bool action_is_install;
         public TransactionError? error;
 
         public TransactionResult (DebianPackage package, TransactionError? error) {

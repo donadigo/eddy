@@ -19,14 +19,14 @@
 
 namespace Eddy {
     public class PackageListView : Gtk.Box {
-        public signal void no_packages ();
-        public signal void install ();
+        public signal void install_all ();
+        public signal void perform_default_action (DebianPackage package);
 
         public signal void added (DebianPackage package);
         public signal void show_package_details (DebianPackage package);
         public signal void removed (DebianPackage package);
 
-        public bool installing { get; set; }
+        public bool working { get; set; }
 
         private Gtk.ListBox list_box;
         private Gtk.Label installed_size_label;
@@ -40,7 +40,7 @@ namespace Eddy {
             installed_size_label = new Gtk.Label ("");
 
             install_button = new Gtk.Button.with_label (_("Install"));
-            install_button.clicked.connect (() => install ());
+            install_button.clicked.connect (() => install_all ());
             install_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 
             var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
@@ -65,13 +65,15 @@ namespace Eddy {
             scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
             scrolled.add (main_box);
 
-            bind_property ("installing", install_button, "sensitive", BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
+            notify["working"].connect (update);
+            // bind_property ("installing", install_button, "sensitive", BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
             add (scrolled);
         }
 
         public void add_package (DebianPackage package) {
             var row = new PackageRow (package);
-            row.changed.connect (update);
+            row.action_clicked.connect (() => perform_default_action (row.package));
+            //row.changed.connect (update);
             row.removed.connect (on_row_removed);
             list_box.insert (row, 1);
 
@@ -90,24 +92,7 @@ namespace Eddy {
             return false;
         }
 
-        private void update () {
-            var rows = get_package_rows ();
-
-            uint size = rows.size;
-            if (size == 0) {
-                no_packages ();
-            }
-
-            uint total_installed_size = 0;
-            foreach (var row in rows) {
-                total_installed_size += row.package.installed_size;
-            }
-
-            installed_size_label.label = _("Total installed size: %s".printf (format_size (total_installed_size)));
-            install_button.sensitive = !installing && size > 0;
-        }
-
-        private Gee.ArrayList<PackageRow> get_package_rows () {
+        public Gee.ArrayList<PackageRow> get_package_rows () {
             var rows = new Gee.ArrayList<PackageRow> ();
             foreach (var child in list_box.get_children ()) {
                 if (child is PackageRow) {
@@ -116,6 +101,30 @@ namespace Eddy {
             }
 
             return rows;
+        }
+
+        public void update () {
+            var rows = get_package_rows ();
+
+            bool has_installed = false;
+            uint total_package_installed_size = 0;
+            foreach (var row in rows) {
+                var package = row.package;
+                total_package_installed_size += package.installed_size;
+                if (!has_installed && package.is_installed) {
+                    has_installed = true;
+                }
+            }
+
+            set_widget_visible (install_button, !has_installed);
+            foreach (var row in rows) {
+                if (!row.package.has_transaction) {
+                    row.show_action_button = has_installed;
+                }
+            }
+
+            installed_size_label.label = _("Total installed size: %s".printf (format_size (total_package_installed_size)));
+            install_button.sensitive = !working && rows.size > 0;
         }
 
         private void on_row_removed (PackageRow row) {
