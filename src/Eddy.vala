@@ -22,14 +22,14 @@ namespace Eddy {
         private static App? instance = null;
 
         construct {
-            application_id = "net.launchpad.eddy";
+            application_id = "com.github.donadigo.eddy";
             program_name = Constants.APP_NAME;
             app_years = "2015-2017";
             exec_name = Constants.EXEC_NAME;
             app_launcher = Constants.DESKTOP_NAME;
 
             build_version = Constants.VERSION;
-            app_icon = "eddy";
+            app_icon = "com.github.donadigo.eddy";
             main_url = "https://github.com/donadigo/eddy";
             bug_url = "https://github.com/donadigo/eddy/issues";
             help_url = "https://github.com/donadigo/eddy";

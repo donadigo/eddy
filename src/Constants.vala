@@ -20,8 +20,8 @@
 namespace Eddy.Constants {
     public const string APP_NAME = "Eddy";
     public const string EXEC_NAME = "eddy";
-    public const string DESKTOP_NAME = "eddy.desktop";
-    public const Gdk.RGBA BRAND_COLOR = { 0.92, 0.33, 0.32, 1 };
+    public const string DESKTOP_NAME = "com.github.donadigo.eddy.desktop";
+    public const Gdk.RGBA BRAND_COLOR = { 0.9, 0.2, 0.3, 1 };
 
     public const Gtk.TargetEntry[] DRAG_TARGETS = {{ "text/uri-list", 0, 0 }};
     public const string DPKG_DEB_BINARY = "/usr/bin/dpkg-deb";
