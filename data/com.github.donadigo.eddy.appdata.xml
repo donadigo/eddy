@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2017 Adam Bieńkowski (https://github.com/donadigo/eddy) -->
+<component type="desktop">
+  <id>com.github.donadigo.eddy.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <name>Eddy</name>
+  <summary>Simple debian package installer for elementary OS</summary>
+  <description>
+    <p>
+      Install, uninstall and view information about debian packages with easy to use graphical interface
+    </p>
+  </description>
+  <provides>
+    <binary>eddy</binary>
+  </provides>
+  <releases>
+  </releases>
+  <developer_name>Adam Bieńkowski</developer_name>
+  <url type="homepage">https://github.com/donadigo/eddy</url>
+  <url type="bugtracker">https://github.com/donadigo/eddy/issues</url>
+  <url type="help">https://github.com/donadigo/eddy</url>
+  <update_contact>donadigos159@gmail.com</update_contact>
+  <custom>
+    <value key="x-appcenter-color-primary">#d00049</value>
+    <value key="x-appcenter-color-primary-text">#f2f2f2</value>
+  </custom>
+</component>

@@ -1,4 +1,5 @@
 install (FILES com.github.donadigo.eddy.desktop DESTINATION share/applications)
+install (FILES com.github.donadigo.eddy.appdata.xml DESTINATION share/metainfo/)
 
 install (FILES icons/16/com.github.donadigo.eddy.svg DESTINATION share/icons/hicolor/16x16/apps)
 install (FILES icons/24/com.github.donadigo.eddy.svg DESTINATION share/icons/hicolor/24x24/apps)
