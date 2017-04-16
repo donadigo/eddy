@@ -66,14 +66,12 @@ namespace Eddy {
             scrolled.add (main_box);
 
             notify["working"].connect (update);
-            // bind_property ("installing", install_button, "sensitive", BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
             add (scrolled);
         }
 
         public void add_package (DebianPackage package) {
             var row = new PackageRow (package);
             row.action_clicked.connect (() => perform_default_action (row.package));
-            //row.changed.connect (update);
             row.removed.connect (on_row_removed);
             list_box.insert (row, 1);
 
@@ -82,7 +80,7 @@ namespace Eddy {
             show_all ();
         }
 
-        public bool contains_filename (string filename) {
+        public bool has_filename (string filename) {
             foreach (PackageRow row in get_package_rows ()) {
                 if (row.package.filename == filename) {
                     return true;

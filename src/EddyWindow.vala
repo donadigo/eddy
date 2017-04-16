@@ -100,6 +100,46 @@ namespace Eddy {
             drag_data_received.connect (on_drag_data_received);
         }
 
+        public override bool delete_event (Gdk.EventAny event) {
+            var packges = new Gee.ArrayList<DebianPackage> ();
+
+            var rows = list_view.get_package_rows ();
+            foreach (var row in rows) {
+                var package = row.package;
+                if (package.has_transaction) {
+                    packges.add (package);
+                }
+            }
+
+            uint size = packges.size;
+            if (size > 0) {
+                string operations_str = ngettext (_("There is %u operation unfinished").printf (size), _("There are %u operations unfinished").printf (size), size);
+                var dialog = new MessageDialog (_("There Are Ongoing Operations"), _("%s. Quitting will cancel all remaining transcations").printf (operations_str), "dialog-warning");
+                dialog.add_button (_("Close"), 0);
+
+                var button = new Gtk.Button.with_label (_("Quit Anyway"));
+                button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+                dialog.add_action_widget (button, 1);
+
+                dialog.show_all ();
+                int res = dialog.run ();
+                switch (res) {
+                    case 0:
+                        dialog.destroy ();
+                        return true;
+                    case 1:
+                        foreach (var package in packges) {
+                            package.cancel ();
+                        }
+
+                        dialog.destroy ();
+                        break;
+                }
+            }
+
+            return false;
+        }
+
         private async void install_all () {
             list_view.working = true;
             var results = yield installer.install ();
@@ -247,7 +287,7 @@ namespace Eddy {
                 }
 
                 string filename = file.get_path ();
-                if (list_view.contains_filename (filename)) {
+                if (list_view.has_filename (filename)) {
                     continue;
                 }
 

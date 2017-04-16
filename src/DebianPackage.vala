@@ -51,10 +51,6 @@ namespace Eddy {
             Object (filename: filename);
         }
 
-        public bool equal (DebianPackage package) {
-            return package.filename == filename;
-        }
-
         public async TransactionResult install () {
             var transaction = yield prepare_install_transaction ();
             if (transaction == null) {
@@ -126,7 +122,7 @@ namespace Eddy {
         }
 
         public void cancel () {
-            if (cancellable != null) {
+            if (cancellable != null && transaction_cancellable) {
                 cancellable.cancel ();
             }
         }
