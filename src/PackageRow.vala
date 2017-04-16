@@ -21,7 +21,6 @@ namespace Eddy {
     public class PackageRow : Gtk.ListBoxRow {
         private const int PROGRESS_BAR_HEIGHT = 5;
 
-        public signal void changed ();
         public signal void action_clicked ();
         public signal void removed ();
 
@@ -66,7 +65,7 @@ namespace Eddy {
             status_label = new Gtk.Label (null);
             state_icon = new Gtk.Image ();
 
-            action_button = new Gtk.Button.with_label (null);
+            action_button = new Gtk.Button ();
             action_button.clicked.connect (() => action_clicked ());
             action_button.valign = Gtk.Align.CENTER;
             action_button.halign = Gtk.Align.CENTER;

@@ -19,8 +19,6 @@
  
 namespace Eddy {
     public class App : Granite.Application {
-        private static App? instance = null;
-
         construct {
             application_id = "com.github.donadigo.eddy";
             program_name = Constants.APP_NAME;
@@ -40,39 +38,34 @@ namespace Eddy {
             about_license_type = Gtk.License.GPL_3_0;
         }
 
-        public static App get_default () {
-            if (instance == null) {
-                instance = new App ();
-            }
-
-            return instance;
-        }
-
         public static int main (string[] args) {
-            Gtk.init (ref args);
-            return App.get_default ().run (args);
+            var app = new App ();
+            return app.run (args);
         }
 
         public override void activate () {
-            if (!FileUtils.test (Constants.DPKG_DEB_BINARY, FileTest.IS_EXECUTABLE)) {
-                show_dependencies_error ();
-            } else if (AptProxy.get_service () == null) {
-                show_apt_service_error ();
-            } else {
-                var window = new EddyWindow ();
-                add_window (window);
-                window.show_all ();
+            try {
+                check_environment ();
+            } catch (IOError e) {
+                var dialog = new MessageDialog (_("Failed To Initialize"), e.message, "dialog-error");
+                dialog.add_button (_("Close"), 0);
+                dialog.show_all ();
+                dialog.run ();
+                dialog.destroy ();
+                return;
             }
 
-            Gtk.main ();
+            var window = new EddyWindow ();
+            add_window (window);
+            window.show_all ();
         }
 
-        private void show_dependencies_error () {
-
-        }
-
-        private void show_apt_service_error () {
-
+        private static void check_environment () throws IOError {
+            if (Environment.find_program_in_path (Constants.DPKG_DEB_BINARY) == null) {
+                throw new IOError.NOT_FOUND (_("Could not find dpkg-deb: dpkg may not be installed on the system").printf (Constants.DPKG_DEB_BINARY));
+            } else if (AptProxy.get_service () == null) {
+                throw new IOError.DBUS_ERROR (_("Could not connect to %s DBus service: apt may not be installed on the system").printf (AptProxy.APTD_DBUS_NAME));
+            }
         }
     }
 }

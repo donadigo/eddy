@@ -76,20 +76,29 @@ namespace Eddy {
     }
 
     public class AptProxy : Object {
-        private const string APTD_DBUS_NAME = "org.debian.apt";
+        public const string APTD_DBUS_NAME = "org.debian.apt";
         private const string APTD_DBUS_PATH = "/org/debian/apt";
 
         private static AptService? service;
         public static unowned AptService? get_service () {
             if (service == null) {
-                service = Bus.get_proxy_sync (BusType.SYSTEM, APTD_DBUS_NAME, APTD_DBUS_PATH);
+                try {
+                    service = Bus.get_proxy_sync (BusType.SYSTEM, APTD_DBUS_NAME, APTD_DBUS_PATH);
+                } catch (IOError e) {
+                    warning (e.message);
+                }
             }
 
             return service;
         }
 
         public static AptTransaction? get_transaction (string transaction_path) {
-            return Bus.get_proxy_sync (BusType.SYSTEM, APTD_DBUS_NAME, transaction_path);
+            try {
+                return Bus.get_proxy_sync (BusType.SYSTEM, APTD_DBUS_NAME, transaction_path);
+            } catch (IOError e) {
+                warning (e.message);
+                return null;
+            }
         }
     }
 }

@@ -74,13 +74,13 @@ namespace Eddy {
         }
 
         private async static bool preauthenticate (string action) {
-            var bus = yield Bus.@get (BusType.SYSTEM);
-            unowned string? unique_name = bus.get_unique_name ();
-            if (unique_name == null) {
-                return true;
-            }
-
             try {
+                var bus = yield Bus.@get (BusType.SYSTEM);
+                unowned string? unique_name = bus.get_unique_name ();
+                if (unique_name == null) {
+                    return true;
+                }
+            
                 var subject = new Polkit.SystemBusName (unique_name);
                 var authority = yield Polkit.Authority.get_async ();
                 var result = yield authority.check_authorization (subject, action, null, Polkit.CheckAuthorizationFlags.ALLOW_USER_INTERACTION);

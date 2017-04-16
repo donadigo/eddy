@@ -98,8 +98,7 @@ namespace Eddy {
 
             transaction_cancellable = transaction.cancellable;
 
-            ulong property_changed_id = 0;
-            property_changed_id = transaction.property_changed.connect (handle_property_change);
+            ulong property_changed_id = transaction.property_changed.connect (handle_property_change);
 
             ulong finished_id = 0;
             finished_id = transaction.finished.connect (() => {
@@ -114,15 +113,9 @@ namespace Eddy {
             });
 
             cancellable = new Cancellable ();
-            cancellable.cancelled.connect (() => {
-                transaction.cancel.begin ();
-            });
+            cancellable.cancelled.connect (() => transaction.cancel.begin ());
 
-            try {
-                transaction.run.begin ();   
-            } catch (Error e) {
-                warning (e.message);
-            }
+            transaction.run.begin ();
 
             yield;
 
@@ -171,7 +164,7 @@ namespace Eddy {
         }
 
         public async void populate_data () {
-            string[] argv = { Constants.DPKG_DEB_BINARY, "--showformat=${Package}\\n${Version}\\n${Installed-Size}\\n${Homepage}\\n${Description}", "-W", filename };
+            string[] argv = { Constants.DPKG_DEB_BINARY, "--showformat=${Package}\\n${Version}\\n${Installed-Size}\\n${Homepage}\\n${Description}", "-W", filename, null };
 
             try {
                 var subprocess = new Subprocess.newv (argv, SubprocessFlags.STDOUT_PIPE);
@@ -231,14 +224,20 @@ namespace Eddy {
 
         private async void update_installed_state () {
             var task = new Pk.Task ();
-            var results = yield task.resolve_async (Pk.Filter.INSTALLED, { name }, null, () => {});
 
             uint installed = 0;
-            results.get_package_array ().@foreach ((package) => {
-                if (package.get_info () == Pk.Info.INSTALLED) {
-                    installed++;
-                }
-            });
+            try {
+                var results = yield task.resolve_async (Pk.Filter.INSTALLED, { name }, null, () => {});
+
+                
+                results.get_package_array ().@foreach ((package) => {
+                    if (package.get_info () == Pk.Info.INSTALLED) {
+                        installed++;
+                    }
+                });
+            } catch (Error e) {
+                warning (e.message);
+            }
 
             is_installed = installed >= 1;
         }

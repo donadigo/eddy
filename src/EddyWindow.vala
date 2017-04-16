@@ -97,7 +97,6 @@ namespace Eddy {
             Granite.Widgets.Utils.set_color_primary (this, Constants.BRAND_COLOR);
             Gtk.drag_dest_set (this, Gtk.DestDefaults.MOTION | Gtk.DestDefaults.DROP, Constants.DRAG_TARGETS, Gdk.DragAction.COPY);
 
-            destroy.connect (Gtk.main_quit);
             drag_data_received.connect (on_drag_data_received);
         }
 
@@ -198,28 +197,33 @@ namespace Eddy {
 
         private string[] open_folder (string path) {
             var file = File.new_for_path (path);
-            var enumerator = file.enumerate_children ("%s,%s".printf (FileAttribute.STANDARD_NAME, FileAttribute.STANDARD_CONTENT_TYPE), FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
 
             string[] uris = {};
-            FileInfo? info = null;
-            while ((info = enumerator.next_file (null)) != null) {
-                if (info.get_file_type () == FileType.DIRECTORY) {
-                    var subdir = file.resolve_relative_path (info.get_name ());
-                    string[] suburis = open_folder (subdir.get_path ());
-                    foreach (string uri in suburis) {
-                        uris += uri;
-                    }
-                } else if (info.get_content_type () in Constants.SUPPORTED_MIMETYPES) {          
-                    try {
-                        var subfile = file.resolve_relative_path (info.get_name ());
-                        string? uri = Filename.to_uri (subfile.get_path (), null);
-                        if (uri != null) {
+            try {
+                var enumerator = file.enumerate_children ("%s,%s".printf (FileAttribute.STANDARD_NAME, FileAttribute.STANDARD_CONTENT_TYPE), FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
+
+                FileInfo? info = null;
+                while ((info = enumerator.next_file (null)) != null) {
+                    if (info.get_file_type () == FileType.DIRECTORY) {
+                        var subdir = file.resolve_relative_path (info.get_name ());
+                        string[] suburis = open_folder (subdir.get_path ());
+                        foreach (string uri in suburis) {
                             uris += uri;
                         }
-                    } catch (ConvertError e) {
-                        warning (e.message);
+                    } else if (info.get_content_type () in Constants.SUPPORTED_MIMETYPES) {          
+                        try {
+                            var subfile = file.resolve_relative_path (info.get_name ());
+                            string? uri = Filename.to_uri (subfile.get_path (), null);
+                            if (uri != null) {
+                                uris += uri;
+                            }
+                        } catch (ConvertError e) {
+                            warning (e.message);
+                        }
                     }
                 }
+            } catch (Error e) {
+                warning (e.message);
             }
 
             return uris;
