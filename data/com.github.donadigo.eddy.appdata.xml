@@ -16,6 +16,11 @@
   </provides>
   <releases>
   </releases>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/donadigo/eddy/master/Screenshot.png</image>
+    </screenshot>
+  </screenshots>  
   <developer_name>Adam Bieńkowski</developer_name>
   <url type="homepage">https://github.com/donadigo/eddy</url>
   <url type="bugtracker">https://github.com/donadigo/eddy/issues</url>
