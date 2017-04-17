@@ -224,8 +224,6 @@ namespace Eddy {
             uint installed = 0;
             try {
                 var results = yield task.resolve_async (Pk.Filter.INSTALLED, { name }, null, () => {});
-
-                
                 results.get_package_array ().@foreach ((package) => {
                     if (package.get_info () == Pk.Info.INSTALLED) {
                         installed++;

@@ -229,7 +229,6 @@ namespace Eddy {
 
                 var notification = new Notification (title);
                 notification.set_body (body);
-
                 notification.set_icon (new ThemedIcon ("eddy"));
                 app.send_notification ("installed", notification);
             }

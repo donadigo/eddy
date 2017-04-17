@@ -3,7 +3,7 @@ include (ValaVersion)
 ensure_vala_version ("0.26.2" MINIMUM)
 include (ValaPrecompile)
 
-configure_file (config.vala.cmake config.vala)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/config.vala.cmake ${CMAKE_CURRENT_SOURCE_DIR}/config.vala)
 vala_precompile (VALA_C ${EXEC_NAME}
     Eddy.vala
     EddyWindow.vala
