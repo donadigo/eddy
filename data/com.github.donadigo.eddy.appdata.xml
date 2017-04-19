@@ -5,7 +5,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
   <name>Eddy</name>
-  <summary>Simple debian package installer for elementary OS</summary>
+  <summary>Simple Debian Package Installer</summary>
   <description>
     <p>
       Install, uninstall and view information about debian packages with easy to use graphical interface
@@ -27,7 +27,7 @@
   <url type="help">https://github.com/donadigo/eddy</url>
   <update_contact>donadigos159@gmail.com</update_contact>
   <custom>
-    <value key="x-appcenter-color-primary">#d00049</value>
+    <value key="x-appcenter-color-primary">#b30033</value>
     <value key="x-appcenter-color-primary-text">#f2f2f2</value>
   </custom>
 </component>
