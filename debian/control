@@ -1,17 +1,19 @@
 Source: eddy
-Section: x11
+Section: utils
 Priority: optional
 Maintainer: Adam Bieńkowski <donadigos159@gmail.com>
 Build-Depends: cmake (>= 2.8),
-               debhelper (>= 8.0.0),
+               debhelper (>= 9),
                libgranite-dev,
-               libglib2.0-dev,
-               libgtk-3-dev (>= 3.12.2),
-               valac-0.26 | valac (>= 0.26)
-Standards-Version: 3.9.3
-
-Package: eddy
+               libpackagekit-glib2-dev,
+               libpolkit-gobject-1-dev,
+               libgtk-3-dev,
+               valac (>= 0.26)
+               
+Standards-Version: 3.9.6
+Package: com.github.donadigo.eddy
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
+Pre-Depends: dpkg (>= 1.15.6)
 Description: Eddy
- Eddy is a simple debian package installer for elementary OS
+ Simple debian package installer
