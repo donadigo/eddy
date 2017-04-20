@@ -19,6 +19,7 @@ vala_precompile (VALA_C ${EXEC_NAME}
 PACKAGES
     ${DEPS_PACKAGES}
 OPTIONS
+    ${GRANITE_OPTIONS}
     --target-glib=2.32
 )
 

@@ -22,7 +22,7 @@ add_definitions (-w)
 
 set (DEPS_PACKAGES
     gtk+-3.0
-    granite>=0.4.0.1
+    granite
     gio-2.0
     packagekit-glib2
     polkit-gobject-1
@@ -30,6 +30,11 @@ set (DEPS_PACKAGES
 
 find_package (PkgConfig)
 pkg_check_modules (DEPS REQUIRED ${DEPS_PACKAGES})
+
+pkg_check_modules(GRANITE0401 QUIET granite>=0.4.0.1)
+if (GRANITE0401_FOUND)
+	set (GRANITE_OPTIONS --define=HAS_PLANK --define=HAS_GRANITE_4_1)
+endif ()
 
 add_definitions (${DEPS_CFLAGS})
 link_libraries (${DEPS_LIBRARIES})

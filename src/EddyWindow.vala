@@ -93,8 +93,19 @@ namespace Eddy {
             stack.add_named (detailed_view, DETAILED_VIEW_ID);
 
             add (stack);
-
+#if HAS_GRANITE_4_1
             Granite.Widgets.Utils.set_color_primary (this, Constants.BRAND_COLOR);
+#else
+            string hex = Constants.BRAND_COLOR.to_string ();
+            var provider = new Gtk.CssProvider ();
+
+            try {
+                provider.load_from_data (@"@define-color colorPrimary $hex;", -1);
+                Gtk.StyleContext.add_provider_for_screen (get_screen (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+            } catch (Error e) {
+                warning ("Could not create CSS Provider: %s", e.message);
+            }
+#endif
             Gtk.drag_dest_set (this, Gtk.DestDefaults.MOTION | Gtk.DestDefaults.DROP, Constants.DRAG_TARGETS, Gdk.DragAction.COPY);
 
             drag_data_received.connect (on_drag_data_received);
