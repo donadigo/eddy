@@ -22,7 +22,7 @@ add_definitions (-w)
 
 set (DEPS_PACKAGES
     gtk+-3.0
-    granite
+    granite>=0.4.0.1
     gio-2.0
     packagekit-glib2
     polkit-gobject-1
