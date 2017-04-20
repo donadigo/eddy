@@ -1,3 +1,11 @@
+com.github.donadigo.eddy (0.9.3) UNSTABLE; urgency=low
+
+  * Fix Desktop file being invalid
+  
+  * Update debian packaging
+
+ -- Adam Bieńkowski <donadigos159@gmail.com>  Thu, 20 Apr 2017 13:55:29 +0200
+
 com.github.donadigo.eddy (0.9.2) UNSTABLE; urgency=low
 
   * Update debian packaging
