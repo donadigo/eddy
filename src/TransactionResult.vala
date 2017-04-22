@@ -17,12 +17,26 @@
  * Authored by: Adam Bieńkowski <donadigos159@gmail.com>
  */
 
-namespace Eddy.Constants {
-    public const string APP_NAME = "Eddy";
-    public const string EXEC_NAME = "eddy";
-    public const string DESKTOP_NAME = "com.github.donadigo.eddy.desktop";
-    public const Gdk.RGBA BRAND_COLOR = { 0.9, 0.2, 0.3, 1 };
+namespace Eddy {
+    public class TransactionResult : Object {
+        public Gee.ArrayList<DebianPackage> packages { get; construct; }
+        public Pk.Role role { get; construct; }
+        public Error? error { get; set; default = null; }
 
-    public const Gtk.TargetEntry[] DRAG_TARGETS = {{ "text/uri-list", 0, 0 }};
-    public const string[] DEFAULT_SUPPORTED_MIMETYPES = { "application/x-deb", "application/vnd.debian.binary-package" };
+        construct {
+            packages = new Gee.ArrayList<DebianPackage> ();
+        }
+
+        public TransactionResult (Pk.Role role) {
+            Object (role: role);
+        }
+
+        public void add_package (DebianPackage package) {
+            packages.add (package);
+        }
+
+        public bool is_empty () {
+            return packages.size < 1;
+        }
+    }
 }

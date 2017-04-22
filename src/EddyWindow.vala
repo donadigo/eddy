@@ -28,8 +28,6 @@ namespace Eddy {
         private const string LIST_VIEW_ID = "list-view";
         private const string DETAILED_VIEW_ID = "detailed-view";
 
-        private DebianPackageManager installer;
-
         private Gtk.Stack stack;
 
         private Gtk.Revealer open_button_revealer;
@@ -45,9 +43,9 @@ namespace Eddy {
         private int open_index;
         private int open_dowloads_index;
 
-        construct {
-            installer = new DebianPackageManager ();
+        private Cancellable? install_cancellable;
 
+        construct {
             stack = new Gtk.Stack ();
             stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
 
@@ -117,7 +115,7 @@ namespace Eddy {
             var rows = list_view.get_package_rows ();
             foreach (var row in rows) {
                 var package = row.package;
-                if (package.has_transaction) {
+                if (package.has_task) {
                     packges.add (package);
                 }
             }
@@ -139,10 +137,14 @@ namespace Eddy {
                         dialog.destroy ();
                         return true;
                     case 1:
-                        foreach (var package in packges) {
-                            package.cancel ();
+                        if (install_cancellable != null) {
+                            install_cancellable.cancel ();
+                        } else {
+                            foreach (var package in packges) {
+                                package.cancel ();
+                            }
                         }
-
+                        
                         dialog.destroy ();
                         break;
                 }
@@ -153,58 +155,54 @@ namespace Eddy {
 
         private async void install_all () {
             list_view.working = true;
-            var results = yield installer.install ();
+            var packages = new Gee.ArrayList<DebianPackage> ();
+            foreach (var row in list_view.get_package_rows ()) {
+                packages.add (row.package);
+            }
+
+            install_cancellable = new Cancellable ();
+
+            TransactionResult result;
+            if (packages.size > 1) {
+                result = yield DebianPackage.install_packages (packages, install_cancellable, install_all_progress_callback);
+            } else {
+                result = yield packages[0].install (null);
+            }
+
+            list_view.status = "";
+            install_cancellable = null;
             list_view.working = false;
 
-            process_results (results);
+            process_result (result);
         }
 
-        private void process_results (Gee.ArrayList<TransactionResult> results) {
-            if (results.size == 0) {
+        private void install_all_progress_callback (Pk.Progress progress, Pk.ProgressType type) {
+            switch (type) {
+                case Pk.ProgressType.STATUS:
+                    unowned string title = DebianPackage.status_to_title (progress.get_status ());
+                    list_view.status = title;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void process_result (TransactionResult result) {
+            if (result.is_empty ()) {
                 return;
             }
 
-            var errors = new Gee.HashMap<string, TransactionError> ();
-            foreach (var result in results) {
-                var error = result.error;
-                if (error != null) {
-                    errors[result.package.name] = error;
-                }
-            }
+            bool install = result.role == Pk.Role.INSTALL_FILES;
 
-            var first = results[0];
-            bool install = first.action_is_install;
-
-            uint errors_size = errors.size;
-            if (errors_size > 0) {
-                var builder = new StringBuilder ();
-
-                uint i = 1;
-                errors.@foreach ((entry) => {
-                    string description = entry.value.get_text ();
-                    builder.append ("%s: %s".printf (entry.key, description));
-                    if (i < errors_size) {
-                        builder.append_c ('\n');
-                    }
-
-                    i++;
-                    return true;
-                });
-
+            if (result.error != null) {
                 string title;
                 if (install) {
-                    if (errors_size == results.size) {
-                        title = _("Installation Failed");
-                    } else {
-                        title = _("Installation Partially Failed");
-                    }
-                } else if (errors_size == results.size) {
-                    title = _("Uninstallation Failed");
+                    title = _("Installation Failed");
                 } else {
-                    title = _("Uninstallation Partially Failed");
-                }                    
+                    title = _("Uninstallation Failed");
+                }            
 
-                var dialog = new MessageDialog (title, builder.str, "dialog-error");
+                var dialog = new MessageDialog (title, result.error.message, "dialog-error");
                 dialog.add_button (_("Close"), 0);
                 dialog.show_all ();
                 dialog.run ();
@@ -222,13 +220,13 @@ namespace Eddy {
 
                 string title;
                 string body;
-                if (results.size == 1) {
+                if (result.packages.size == 1) {
                     if (install) {
                         title = _("Installation succeeded");
-                        body = _("%s has been successfully installed").printf (first.package.name);
+                        body = _("%s has been successfully installed").printf (result.packages[0].name);
                     } else {
                         title = _("Uninstallation succeeded");
-                        body = _("%s has been successfully uninstalled").printf (first.package.name);
+                        body = _("%s has been successfully uninstalled").printf (result.packages[0].name);
                     }
                 } else if (install) {
                     title = _("Installation succeeded");
@@ -240,7 +238,7 @@ namespace Eddy {
 
                 var notification = new Notification (title);
                 notification.set_body (body);
-                notification.set_icon (new ThemedIcon ("eddy"));
+                notification.set_icon (new ThemedIcon ("com.github.donadigo.eddy"));
                 app.send_notification ("installed", notification);
             }
         }
@@ -260,7 +258,7 @@ namespace Eddy {
                         foreach (string uri in suburis) {
                             uris += uri;
                         }
-                    } else if (info.get_content_type () in Constants.SUPPORTED_MIMETYPES) {          
+                    } else if (info.get_content_type () in App.supported_mimetypes) {          
                         try {
                             var subfile = file.resolve_relative_path (info.get_name ());
                             string? uri = Filename.to_uri (subfile.get_path (), null);
@@ -286,7 +284,7 @@ namespace Eddy {
                 if (validate) {
                     try {
                         var info = file.query_info (FileAttribute.STANDARD_CONTENT_TYPE, FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
-                        if (!(info.get_content_type () in Constants.SUPPORTED_MIMETYPES)) {
+                        if (!(info.get_content_type () in App.supported_mimetypes)) {
                             errors += _("%s is not a debian package").printf (file.get_basename ());
                             continue;
                         }
@@ -302,13 +300,13 @@ namespace Eddy {
                 }
 
                 var package = new DebianPackage (filename);
-                package.populate_data.begin ((obj, res) => {
-                    if (validate && !package.valid) {
+                package.populate.begin ((obj, res) => {
+                    bool success = package.populate.end (res);
+                    if (success) {
+                        list_view.add_package (package);
+                    } else {
                         errors += _("%s is not valid").printf (file.get_basename ());
-                        return;
                     }
-
-                    list_view.add_package (package);
                 });
             }
 
@@ -330,7 +328,7 @@ namespace Eddy {
         private void show_open_dialog () {
             var debian_filter = new Gtk.FileFilter ();
             debian_filter.set_filter_name (_("Debian Packages"));
-            foreach (string mime_type in Constants.SUPPORTED_MIMETYPES) {
+            foreach (string mime_type in App.supported_mimetypes) {
                 debian_filter.add_mime_type (mime_type);
             }
 
@@ -367,10 +365,10 @@ namespace Eddy {
 
         private async void on_perform_default_action (DebianPackage package) {
             list_view.working = true;
-            var results = yield DebianPackageManager.perform_default_action (package);
+            var result = yield DebianPackage.perform_default_action (package, null);
             list_view.working = false;
             
-            process_results (results);
+            process_result (result);
         }
 
         private void on_package_added (DebianPackage package) {
@@ -378,8 +376,6 @@ namespace Eddy {
                 open_button_revealer.reveal_child = true;
                 stack.visible_child_name = LIST_VIEW_ID;
             }
-
-            installer.add_package (package);
         }
 
         private void on_package_removed (DebianPackage package) {
@@ -387,8 +383,6 @@ namespace Eddy {
                 open_button_revealer.reveal_child = false;
                 stack.visible_child_name = WELCOME_VIEW_ID;
             }
-
-            installer.remove_package (package);
         }
 
         private void on_back_button_clicked () {

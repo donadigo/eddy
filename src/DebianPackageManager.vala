@@ -23,6 +23,8 @@ namespace Eddy {
         private const string PK_ACTION_MANAGE_PACKAGES = "org.debian.apt.install-or-remove-packages";
         private Queue<DebianPackage> queue;
 
+        private DebianPackage? first = null;
+
         construct {
             queue = new Queue<DebianPackage> ();
         }
@@ -37,40 +39,38 @@ namespace Eddy {
             }
         }
 
-        public async Gee.ArrayList<TransactionResult> install () {
-            var results = new Gee.ArrayList<TransactionResult> ();
-            bool success = yield preauthenticate (PK_ACTION_INSTALL_FILE);
-            if (!success) {
-                return results;
-            }
+        // public async Gee.ArrayList<TransactionResult> install () {
+        //     var results = new Gee.ArrayList<TransactionResult> ();
 
-            for (int i = 0; i < queue.get_length (); i++) {
-                var package = queue.peek_nth (i);
-                var result = yield package.install ();
-                results.add (result);
-            }
+        //     first = queue.peek_nth (0);
+        //     first.notify["status"].connect (status_changed);
+        //     first.install.begin ();
 
-            return results;
-        }
+        //     yield;
+        //     return results;
+        // }
 
-        public async static Gee.ArrayList<TransactionResult> perform_default_action (DebianPackage package) {
-            bool is_installed = package.is_installed;
+        // private void status_changed () {
+        //     if (first.status != Pk.Status.CANCEL && first.status != Pk.Status.RUNNING) {
+        //         return;
+        //     }
 
-            var results = new Gee.ArrayList<TransactionResult> ();
-            bool success = yield preauthenticate (is_installed ? PK_ACTION_MANAGE_PACKAGES : PK_ACTION_INSTALL_FILE);
-            if (!success) {
-                return results;
-            }
+        //     first.notify["status"].disconnect (status_changed);
 
-            if (is_installed) {
-                var result = yield package.uninstall ();
-                results.add (result);
+        //     for (int i = 1; i < queue.get_length (); i++) {
+        //         var package = queue.peek_nth (i);
+        //         package.install.begin ();
+        //     }            
+        // }
+
+        public async static TransactionResult perform_default_action (DebianPackage package, Cancellable? cancellable) {
+            if (package.is_installed) {
+                var result = yield package.uninstall (cancellable);
+                return result;
             } else {
-                var result = yield package.install ();
-                results.add (result);
+                var result = yield package.install (cancellable);
+                return result;
             }
-
-            return results;
         }
 
         private async static bool preauthenticate (string action) {

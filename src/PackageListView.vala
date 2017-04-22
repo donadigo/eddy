@@ -27,10 +27,17 @@ namespace Eddy {
         public signal void removed (DebianPackage package);
 
         public bool working { get; set; }
+        public string status {
+            set {
+                status_label.label = value;
+                set_widget_visible (status_label, value != "");
+            }
+        }
 
         private Gtk.ListBox list_box;
         private Gtk.Label installed_size_label;
 
+        private Gtk.Label status_label;
         private Gtk.Button install_button;
 
         construct {
@@ -43,10 +50,13 @@ namespace Eddy {
             install_button.clicked.connect (() => install_all ());
             install_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 
-            var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+            status_label = new Gtk.Label (null);
+
+            var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
             button_box.margin = 12;
             button_box.add (installed_size_label);
             button_box.pack_end (install_button, false, false);
+            button_box.pack_end (status_label, false, false);
 
             var button_row = new Gtk.ListBoxRow ();
             button_row.add (button_box);
@@ -105,7 +115,7 @@ namespace Eddy {
             var rows = get_package_rows ();
 
             bool has_installed = false;
-            uint total_package_installed_size = 0;
+            uint64 total_package_installed_size = 0;
             foreach (var row in rows) {
                 var package = row.package;
                 total_package_installed_size += package.installed_size;
@@ -116,7 +126,7 @@ namespace Eddy {
 
             set_widget_visible (install_button, !has_installed);
             foreach (var row in rows) {
-                if (!row.package.has_transaction) {
+                if (!row.package.has_task) {
                     row.show_action_button = has_installed;
                 }
             }

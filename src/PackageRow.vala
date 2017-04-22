@@ -101,11 +101,10 @@ namespace Eddy {
                 return false;
             });
 
-            package.finished.connect (update_visibility);
             package.notify["status"].connect (update_status);
             package.notify["progress"].connect (update_progress);
-            package.notify["exit-state"].connect (update_state_icon);
-            package.notify["has-transaction"].connect (update_visibility);
+            package.notify["exit-code"].connect (update_state_icon);
+            package.notify["has-task"].connect (update_visibility);
             package.notify["is-installed"].connect (update_action_button);
 
             draw.connect (on_draw);
@@ -125,16 +124,15 @@ namespace Eddy {
         }
 
         private void update_visibility () {
-            bool running = package.has_transaction;
+            bool running = package.has_task;
             set_widget_visible (remove_button, !running);
             set_widget_visible (action_button, !running);
-            set_widget_visible (state_icon, !running);
+            set_widget_visible (remove_button, !running);
             set_widget_visible (status_label, running);
         }
 
         private void update_action_button () {
-            bool installed = package.is_installed;
-            if (installed) {
+            if (package.is_installed) {
                 action_button.label = _("Uninstall");
                 action_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
             } else {
@@ -144,8 +142,8 @@ namespace Eddy {
         }
 
         private void update_state_icon () {
-            unowned string exit_state = package.get_exit_state_title ();
-            unowned string? icon = package.get_exit_state_icon ();
+            unowned string? exit_state = package.get_exit_title ();
+            unowned string? icon = package.get_exit_icon ();
 
             if (icon != null) {
                 state_icon.set_from_icon_name (icon, Gtk.IconSize.SMALL_TOOLBAR);

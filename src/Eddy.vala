@@ -19,6 +19,23 @@
  
 namespace Eddy {
     public class App : Granite.Application {
+        public static string[] supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
+        private static Pk.Control control;
+
+        static construct {
+            control = new Pk.Control ();
+            control.get_properties_async.begin (null, (obj, res) => {
+                try {
+                    bool success = control.get_properties_async.end (res);
+                    if (success && control.mime_types.length > 0) {
+                        supported_mimetypes = control.mime_types;
+                    }
+                } catch (Error e) {
+                    warning (e.message);
+                }
+            });
+        }
+
         construct {
             application_id = "com.github.donadigo.eddy";
             program_name = Constants.APP_NAME;
@@ -44,28 +61,9 @@ namespace Eddy {
         }
 
         public override void activate () {
-            try {
-                check_environment ();
-            } catch (IOError e) {
-                var dialog = new MessageDialog (_("Failed To Initialize"), e.message, "dialog-error");
-                dialog.add_button (_("Close"), 0);
-                dialog.show_all ();
-                dialog.run ();
-                dialog.destroy ();
-                return;
-            }
-
             var window = new EddyWindow ();
             add_window (window);
             window.show_all ();
-        }
-
-        private static void check_environment () throws IOError {
-            if (Environment.find_program_in_path (Constants.DPKG_DEB_BINARY) == null) {
-                throw new IOError.NOT_FOUND (_("Could not find dpkg-deb: dpkg may not be installed on the system").printf (Constants.DPKG_DEB_BINARY));
-            } else if (AptProxy.get_service () == null) {
-                throw new IOError.DBUS_ERROR (_("Could not connect to %s DBus service: apt may not be installed on the system").printf (AptProxy.APTD_DBUS_NAME));
-            }
         }
     }
 }

@@ -19,213 +19,292 @@
 
 namespace Eddy {
     public class DebianPackage : Object {
-        public signal void finished ();
+        public static uint task_count { public get; private set; default = 0; }
+        private static Pk.Task client;
 
         public string filename { public get; construct; }
-        public string name { public get; private set; }
-        public string summary { public get; private set; }
-        public string version { public get; private set; }
-        public uint installed_size { public get; private set; }
-        public string homepage { public get; private set; }
-        public string description { public get; private set; }
+        public string name { 
+            get {
+                return target.get_name ();
+            }
+        }
 
-        public bool valid { public get; private set; default = true; }
+        public string summary { 
+            get {
+                return target.summary;
+            }
+        }
 
-        public string status { public get; private set; }
-        public string exit_state { public get; private set; }
-        public uint progress { public get; private set; default = 0; }
+        public string version { 
+            get {
+                return target.get_version ();
+            }
+        }
 
-        public bool transaction_cancellable { public get; private set; default = true; }
-        public bool has_transaction { public get; private set; default = false; }
+        public uint64 installed_size { 
+            get {
+                return target.size;
+            }
+        }
+
+        public string homepage { 
+            owned get {
+                return target.url;
+            }
+        }
+
+        public string description {
+            owned get {
+                return target.description;
+            }
+        }
+
+        public Pk.Status status { public get; private set; }
+        public Pk.Exit exit_code { get; set; default = Pk.Exit.UNKNOWN; }
+        public uint progress { get; set; default = 0; }
+
+        public bool can_cancel { public get; private set; default = false; }
+        public bool has_task { get; set; default = false; }
 
         public bool is_installed { public get; private set; default = false; }
 
-        private Cancellable? cancellable = null;
-        private TransactionError? error = null;     
+        private Cancellable? cancellable = null;  
 
-        construct {
-            finished.connect (reset);
+        private Pk.Package? target = null;
+
+        static construct {
+            client = new Pk.Task ();
+            client.interactive = false;
+            client.allow_reinstall = true;
+        }
+
+        public async static TransactionResult install_packages (Gee.ArrayList<DebianPackage> packages, Cancellable? cancellable, Pk.ProgressCallback callback) {
+            string[] filenames = {};
+            Pk.Exit exit_code = Pk.Exit.UNKNOWN;
+
+            var result = new TransactionResult (Pk.Role.INSTALL_FILES);
+            foreach (var package in packages) {
+                package.has_task = true;
+                package.exit_code = Pk.Exit.UNKNOWN;
+
+                filenames += package.filename;
+                result.add_package (package);
+            }
+
+            filenames += null;
+
+            try {
+                var results = yield client.install_files_async (filenames, cancellable, (progress, type) => {
+                    switch (type) {
+                        case Pk.ProgressType.ITEM_PROGRESS:
+                            var item_progress = progress.item_progress;
+                            string id = item_progress.package_id;
+                            string name = Pk.Package.id_split (id)[0];
+                            foreach (var package in packages) {
+                                if (package.name != name) {
+                                    continue;
+                                }
+
+                                package.status = item_progress.get_status ();
+                                package.progress = item_progress.percentage;
+                            }
+
+                            break;
+                        default:
+                            break;
+                    }
+
+                    callback (progress, type);
+                });
+
+                exit_code = results.get_exit_code ();
+            } catch (Error e) {
+                result.error = e;
+                exit_code = Pk.Exit.FAILED;
+            }
+
+            foreach (var package in packages) {
+                yield package.reset ();
+                package.exit_code = exit_code;
+            }   
+
+            return result;
+        }
+
+        public async static TransactionResult perform_default_action (DebianPackage package, Cancellable? cancellable) {
+            if (package.is_installed) {
+                var result = yield package.uninstall (cancellable);
+                return result;
+            } else {
+                var result = yield package.install (cancellable);
+                return result;
+            }
+        }
+
+        public static unowned string status_to_title (Pk.Status status) {
+            // From https://github.com/elementary/appcenter/blob/master/src/Core/ChangeInformation.vala#L51
+            switch (status) {
+                case Pk.Status.SETUP:
+                    return _("Starting");
+                case Pk.Status.WAIT:
+                    return _("Waiting");
+                case Pk.Status.RUNNING:
+                    return _("Running");
+                case Pk.Status.QUERY:
+                    return _("Querying");
+                case Pk.Status.INFO:
+                    return _("Getting information");
+                case Pk.Status.REMOVE:
+                    return _("Removing packages");
+                case Pk.Status.DOWNLOAD:
+                    return _("Downloading");
+                case Pk.Status.INSTALL:
+                    return _("Installing");
+                case Pk.Status.REFRESH_CACHE:
+                    return _("Refreshing software list");
+                case Pk.Status.UPDATE:
+                    return _("Installing updates");
+                case Pk.Status.CLEANUP:
+                    return _("Cleaning up packages");
+                case Pk.Status.OBSOLETE:
+                    return _("Obsoleting packages");
+                case Pk.Status.DEP_RESOLVE:
+                    return _("Resolving dependencies");
+                case Pk.Status.SIG_CHECK:
+                    return _("Checking signatures");
+                case Pk.Status.TEST_COMMIT:
+                    return _("Testing changes");
+                case Pk.Status.COMMIT:
+                    return _("Committing changes");
+                case Pk.Status.REQUEST:
+                    return _("Requesting data");
+                case Pk.Status.FINISHED:
+                    return _("Finished");
+                case Pk.Status.CANCEL:
+                    return _("Cancelling");
+                case Pk.Status.DOWNLOAD_REPOSITORY:
+                    return _("Downloading repository information");
+                case Pk.Status.DOWNLOAD_PACKAGELIST:
+                    return _("Downloading list of packages");
+                case Pk.Status.DOWNLOAD_FILELIST:
+                    return _("Downloading file lists");
+                case Pk.Status.DOWNLOAD_CHANGELOG:
+                    return _("Downloading lists of changes");
+                case Pk.Status.DOWNLOAD_GROUP:
+                    return _("Downloading groups");
+                case Pk.Status.DOWNLOAD_UPDATEINFO:
+                    return _("Downloading update information");
+                case Pk.Status.REPACKAGING:
+                    return _("Repackaging files");
+                case Pk.Status.LOADING_CACHE:
+                    return _("Loading cache");
+                case Pk.Status.SCAN_APPLICATIONS:
+                    return _("Scanning applications");
+                case Pk.Status.GENERATE_PACKAGE_LIST:
+                    return _("Generating package lists");
+                case Pk.Status.WAITING_FOR_LOCK:
+                    return _("Waiting for package manager lock");
+                case Pk.Status.WAITING_FOR_AUTH:
+                    return _("Waiting for authentication");
+                case Pk.Status.SCAN_PROCESS_LIST:
+                    return _("Updating running applications");
+                case Pk.Status.CHECK_EXECUTABLE_FILES:
+                    return _("Checking applications in use");
+                case Pk.Status.CHECK_LIBRARIES:
+                    return _("Checking libraries in use");
+                case Pk.Status.COPY_FILES:
+                    return _("Copying files");
+            }
+
+            return "";            
         }
 
         public DebianPackage (string filename) {
             Object (filename: filename);
         }
 
-        public async TransactionResult install () {
-            var transaction = yield prepare_install_transaction ();
-            if (transaction == null) {
-                error = new TransactionError ("no-transaction", _("could not create a transaction"));
-                var result = new TransactionResult (this, error);
-                exit_state = "exit-failed";
-                finished ();
-                return result;
+        public async TransactionResult install (Cancellable? _cancellable) {
+            has_task = true;
+            cancellable = _cancellable;
+            exit_code = Pk.Exit.UNKNOWN;
+
+            var result = new TransactionResult (Pk.Role.INSTALL_FILES);
+            result.add_package (this);
+
+            string[] filenames = { filename, null };
+
+            try {
+                var results = yield client.install_files_async (filenames, cancellable, progress_callback);
+                exit_code = results.get_exit_code ();
+            } catch (Error e) {
+                result.error = e;
+                exit_code = Pk.Exit.FAILED;
             }
 
-            var result = yield run_transaction (transaction);
-            result.action_is_install = true;
+            yield reset ();
             return result;
         }
 
-        public async TransactionResult uninstall () {
-            var transaction = yield prepare_uninstall_transaction ();
-            if (transaction == null) {
-                error = new TransactionError ("no-transaction", _("could not create a transaction"));
-                var result = new TransactionResult (this, error);
-                exit_state = "exit-failed";
-                finished ();
-                return result;
+        public async TransactionResult uninstall (Cancellable? _cancellable) {
+            has_task = true;
+            cancellable = _cancellable;
+            exit_code = Pk.Exit.UNKNOWN;
+
+            string[] names = { target.package_id, null };
+
+            var result = new TransactionResult (Pk.Role.REMOVE_PACKAGES);
+            result.add_package (this);
+
+            try {
+                var results = yield client.remove_packages_async (names, false, false, cancellable, progress_callback);
+                exit_code = results.get_exit_code ();
+            } catch (Error e) {
+                result.error = e;
+                exit_code = Pk.Exit.FAILED;
             }
 
-            var result = yield run_transaction (transaction);
-            result.action_is_install = false;
-            return result;            
-        }
-
-        private async TransactionResult run_transaction (AptTransaction transaction) {
-            if (has_transaction) {
-                error = new TransactionError ("has-transaction", _("package already has a transaction running"));
-                var result = new TransactionResult (this, error);
-                exit_state = "exit-failed";
-                finished ();
-                return result;
-            }
-
-            has_transaction = true;
-
-            transaction_cancellable = transaction.cancellable;
-
-            ulong property_changed_id = transaction.property_changed.connect (handle_property_change);
-
-            ulong finished_id = 0;
-            finished_id = transaction.finished.connect (() => {
-                if (property_changed_id != 0) {
-                    transaction.disconnect (property_changed_id);
-                }
-
-                if (finished_id != 0) {
-                    transaction.disconnect (finished_id);
-                    Idle.add (run_transaction.callback);
-                }
-            });
-
-            cancellable = new Cancellable ();
-            cancellable.cancelled.connect (() => transaction.cancel.begin ());
-
-            transaction.run.begin ();
-
-            yield;
-
-            var result = new TransactionResult (this, error);
-            yield update_installed_state ();
-            finished ();
+            yield reset ();
             return result;
         }
 
         public void cancel () {
-            if (cancellable != null && transaction_cancellable) {
+            if (cancellable != null && can_cancel) {
                 cancellable.cancel ();
             }
         }
-
-        private async AptTransaction? prepare_install_transaction () {
+        
+        public async bool populate () {
+            string[] filenames = { filename, null };
             try {
-                var service = AptProxy.get_service ();
-                if (service == null) {
-                    return null;
+                var results = yield client.get_details_local_async (filenames, null, () => {});
+                var details = results.get_details_array ()[0];
+
+                target = new Pk.Package ();
+                if (target.set_id (details.package_id)) {
+                    target.summary = details.summary;
+                    target.description = details.description;
+                    target.size = details.size;
+                    target.url = details.url;
+
+                    yield update_installed_state ();
+                    return true;
                 }
-
-                string tid = yield service.install_file (filename, false);
-                return AptProxy.get_transaction (tid);
-            } catch (IOError e) {
-                warning (e.message);
-            }
-
-            return null;
-        }
-
-        private async AptTransaction? prepare_uninstall_transaction () {
-            try {
-                var service = AptProxy.get_service ();
-                if (service == null) {
-                    return null;
-                }
-
-                string tid = yield service.remove_packages ({ name });
-                return AptProxy.get_transaction (tid);
-            } catch (IOError e) {
-                warning (e.message);
-            }
-
-            return null;            
-        }
-
-        public async void populate_data () {
-            string[] argv = { Constants.DPKG_DEB_BINARY, "--showformat=${Package}\\n${Version}\\n${Installed-Size}\\n${Homepage}\\n${Description}", "-W", filename, null };
-
-            try {
-                var subprocess = new Subprocess.newv (argv, SubprocessFlags.STDOUT_PIPE);
-                string output;
-                valid = yield subprocess.communicate_utf8_async (null, null, out output, null);
-                if (!valid) {
-                    return;
-                }
-
-                string[] tokens = output.split ("\n", 5);
-                if (tokens.length < 5) {
-                    valid = false;
-                    return;
-                }
-
-                name = tokens[0];
-                version = tokens[1];
-                installed_size = 1024 * int.parse (tokens[2]);
-                homepage = tokens[3];
-
-                yield update_installed_state ();
-
-                int i = 0;
-                string desc = tokens[4];
-
-                string buffer = "";
-                string[] lines = desc.split ("\n");
-                for (i = 0; i < lines.length; i++) {
-                    string line = lines[i];
-                    if (i == 0) {
-                        summary = line;
-                        continue;
-                    }
-
-                    if (line == " .") {
-                        if (buffer.length > 0) {
-                            buffer += line.substring (0, line.length - 1);
-                        }
-                    
-                        buffer += "\n";
-                        continue;
-                    }
-
-                    buffer += line.strip () + " ";
-                }
-
-                if (buffer.length > 0) {
-                    description = buffer;
-                } else {
-                    description = _("Description not available.");    
-                }
+              
             } catch (Error e) {
                 warning (e.message);
-                valid = false;
-            }            
+            }
+
+            return false;            
         }
 
-        private async void update_installed_state () {
-            var task = new Pk.Task ();
+        public async void update_installed_state () {
+            string[] names = { name, null };
 
             uint installed = 0;
             try {
-                var results = yield task.resolve_async (Pk.Filter.INSTALLED, { name }, null, () => {});
+                var results = yield client.resolve_async (Pk.Filter.INSTALLED, names, null, () => {});
                 results.get_package_array ().@foreach ((package) => {
-                    if (package.get_info () == Pk.Info.INSTALLED) {
+                    if (Pk.Info.INSTALLED in package.get_info ()) {
                         installed++;
                     }
                 });
@@ -236,126 +315,57 @@ namespace Eddy {
             is_installed = installed >= 1;
         }
 
-        public unowned string? get_status_title () {
-            switch (status) {
-                case "status-setting-up":
-                    return _("Setting up");
-                case "status-query":
-                    return _("Querying");
-                case "status-waiting":
-                    return _("Waiting");
-                case "status-waiting-medium":
-                    return _("Waiting for medium");
-                case "status-waiting-config-file-prompt":
-                    return _("Waiting for file configuration");
-                case "status-waiting-lock":
-                    return _("Waiting for package manager lock");
-                case "status-running":
-                    return _("Running");
-                case "status-loading-cache":
-                    return _("Loading cache");
-                case "status-downloading-repo":
-                    return _("Downloading information about available packages");
-                case "status-downloading":
-                    return _("Downloading files");
-                case "status-committing":
-                    return _("Commiting changes");
-                case "status-cleaning-up":
-                    return _("Cleaning up");
-                case "status-resolving-dep":
-                    return _("Resolving conflicts");
-                case "status-finished":
-                    return _("Finished");
-                case "status-cancelling":
-                    return _("Cancelling");
-                case "status-authenticating":
-                    return _("Waiting for authentication");
-            }
-
-            return _("Unknown");
+        public unowned string get_status_title () {
+            return status_to_title (status);
         }
 
-        public unowned string? get_exit_state_icon () {
-            switch (exit_state) {
-                case "exit-success":
+        public unowned string? get_exit_icon () {
+            switch (exit_code) {
+                case Pk.Exit.SUCCESS:
                     return "process-completed-symbolic";
-                case "exit-failed":
-                case "exit-previous-failed":
-                case "exit-unfinished":
+                case Pk.Exit.FAILED:
+                case Pk.Exit.KILLED:
                     return "dialog-error-symbolic";
             }
 
             return null;
         }
 
-        public unowned string get_exit_state_title () {
-            switch (exit_state) {
-                case "exit-success":
+        public unowned string get_exit_title () {
+            switch (exit_code) {
+                case Pk.Exit.SUCCESS:
                     return _("Finished");
-                case "exit-cancelled":
+                case Pk.Exit.CANCELLED:
                     return _("Cancelled");
-                case "exit-failed":
+                case Pk.Exit.FAILED:
+                case Pk.Exit.KILLED:
                     return _("Failed");
-                case "exit-previous-failed":
-                    return _("Previous failed");
-                case "exit-unfinished":
-                    return _("Unfinished");
             }
 
             return _("Unknown");
         }
 
-        private void reset () {
+        public async void reset () {
+            yield update_installed_state ();
             progress = 0;
-            transaction_cancellable = true;
-            has_transaction = false;
-            error = null;
+            can_cancel = false;
+            status = Pk.Status.UNKNOWN;
             cancellable = null;
+            has_task = false;
         }
 
-        private void handle_property_change (string key, Variant val) {
-            switch (key) {
-                case "Status":
-                    if (!val.is_of_type (VariantType.STRING)) {
-                        break;
-                    }
-
-                    status = val.get_string ();
+        private void progress_callback (Pk.Progress _progress, Pk.ProgressType type) {
+            switch (type) {
+                case Pk.ProgressType.STATUS:
+                    status = _progress.get_status ();
                     break;
-                case "ExitState":
-                    if (!val.is_of_type (VariantType.STRING)) {
-                        break;
-                    }
-
-                    exit_state = val.get_string ();
+                case Pk.ProgressType.PERCENTAGE:
+                    progress = _progress.percentage;
                     break;
-                case "Progress":
-                    if (!val.is_of_type (VariantType.INT32)) {
-                        break;
-                    }
-
-                    progress = val.get_int32 ();
+                case Pk.ProgressType.ALLOW_CANCEL:
+                    can_cancel = _progress.allow_cancel;
                     break;
-                case "Error":
-                    if (!val.is_of_type (VariantType.TUPLE) || val.n_children () < 2) {
-                        break;
-                    }                    
-
-                    var codename = val.get_child_value (0);
-                    var description = val.get_child_value (1);
-
-                    if (!codename.is_of_type (VariantType.STRING) || !description.is_of_type (VariantType.STRING)) {
-                        break;
-                    }
-
-                    error = new TransactionError (codename.get_string (), description.get_string ());
-                    break;
-                case "Cancellable":
-                    if (!val.is_of_type (VariantType.BOOLEAN)) {
-                        break;
-                    }
-
-                    transaction_cancellable = val.get_boolean ();
+                default:
                     break;
             }
         }

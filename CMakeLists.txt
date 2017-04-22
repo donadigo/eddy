@@ -25,7 +25,6 @@ set (DEPS_PACKAGES
     granite
     gio-2.0
     packagekit-glib2
-    polkit-gobject-1
 )
 
 find_package (PkgConfig)
