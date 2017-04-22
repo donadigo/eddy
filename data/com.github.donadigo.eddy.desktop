@@ -3,14 +3,14 @@ Type=Application
 Name=Eddy
 GenericName=Package Installer
 Comment=Simple debian package installer
-Exec=eddy
+Exec=eddy %U
 Icon=com.github.donadigo.eddy
 Terminal=false
 Categories=Utility;GTK;
 Actions=AboutDialog;
 X-GNOME-Gettext-Domain=eddy
 X-GNOME-UsesNotifications=true
-MimeType=application/vnd.debian.binary-package;
+MimeType=application/x-deb;application/vnd.debian.binary-package;
 Keywords=package;apt;dpkg;install;
 
 [Desktop Action AboutDialog]

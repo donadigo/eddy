@@ -22,6 +22,8 @@ namespace Eddy {
         public static string[] supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
         private static Pk.Control control;
 
+        private EddyWindow? window = null;
+
         static construct {
             control = new Pk.Control ();
             control.get_properties_async.begin (null, (obj, res) => {
@@ -37,6 +39,8 @@ namespace Eddy {
         }
 
         construct {
+            flags |= ApplicationFlags.HANDLES_OPEN;
+
             application_id = "com.github.donadigo.eddy";
             program_name = Constants.APP_NAME;
             app_years = "2015-2017";
@@ -60,10 +64,26 @@ namespace Eddy {
             return app.run (args);
         }
 
+        public override void open (File[] files, string hint) {
+            string[] uris = {};
+            foreach (var file in files) {
+                uris += file.get_uri ();
+            }
+
+            activate ();
+            if (window != null) {
+                window.open_uris.begin (uris);
+            }
+        }
+
         public override void activate () {
-            var window = new EddyWindow ();
-            add_window (window);
-            window.show_all ();
+            if (window == null) {
+                window = new EddyWindow ();
+                add_window (window);
+                window.show_all ();
+            } else {
+                window.present ();
+            }
         }
     }
 }

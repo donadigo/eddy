@@ -27,8 +27,10 @@ namespace Eddy {
         private const string WELCOME_VIEW_ID = "welcome-view";
         private const string LIST_VIEW_ID = "list-view";
         private const string DETAILED_VIEW_ID = "detailed-view";
+        private const string SPINNER_VIEW_ID = "spinner-view";
 
         private Gtk.Stack stack;
+        private Gtk.Grid spinner_grid;
 
         private Gtk.Revealer open_button_revealer;
         private Gtk.Button open_button;
@@ -57,6 +59,14 @@ namespace Eddy {
             list_view.removed.connect (on_package_removed);
 
             detailed_view = new DetailedView ();
+
+            var spinner = new Gtk.Spinner ();
+            spinner.start ();
+
+            spinner_grid = new Gtk.Grid ();
+            spinner_grid.halign = Gtk.Align.CENTER;
+            spinner_grid.valign = Gtk.Align.CENTER;            
+            spinner_grid.add (spinner);
 
             open_button = new Gtk.Button.from_icon_name ("document-open", Gtk.IconSize.LARGE_TOOLBAR);
             open_button.tooltip_text = _("Open…");
@@ -87,6 +97,7 @@ namespace Eddy {
             welcome_view.activated.connect (on_welcome_view_activated);
 
             stack.add_named (welcome_view, WELCOME_VIEW_ID);
+            stack.add_named (spinner_grid, SPINNER_VIEW_ID);
             stack.add_named (list_view, LIST_VIEW_ID);
             stack.add_named (detailed_view, DETAILED_VIEW_ID);
 
@@ -277,7 +288,11 @@ namespace Eddy {
             return uris;
         }
 
-        private async void open_uris (string[] uris, bool validate = true) {
+        public async void open_uris (string[] uris, bool validate = true) {
+            if (stack.visible_child_name != LIST_VIEW_ID) {
+                stack.visible_child_name = SPINNER_VIEW_ID;
+            }
+
             string[] errors = {};
             int done = 0;
             foreach (string uri in uris) {
@@ -290,6 +305,7 @@ namespace Eddy {
                             done++;
                             if (done == uris.length) {
                                 Idle.add (open_uris.callback);
+                                break;
                             } else {
                                 continue;
                             }
@@ -299,6 +315,7 @@ namespace Eddy {
                         done++;
                         if (done == uris.length) {
                             Idle.add (open_uris.callback);
+                            break;
                         } else {
                             continue;
                         }
@@ -310,6 +327,7 @@ namespace Eddy {
                     done++;
                     if (done == uris.length) {
                         Idle.add (open_uris.callback);
+                        break;
                     } else {
                         continue;
                     }
@@ -338,6 +356,10 @@ namespace Eddy {
             yield;
 
             if (errors.length > 0) {
+                if (list_view.get_package_rows ().size == 0) {
+                    stack.visible_child_name = WELCOME_VIEW_ID;
+                }
+
                 var builder = new StringBuilder ();
                 foreach (string error in errors) {
                     builder.append (error);
@@ -381,7 +403,7 @@ namespace Eddy {
                     }
 
                     chooser.destroy ();
-                    open_uris (uris);
+                    open_uris.begin (uris);
                 } else {
                     chooser.destroy ();
                 }
@@ -434,13 +456,13 @@ namespace Eddy {
             } else if (index == open_dowloads_index) {
                 string path = Environment.get_user_special_dir (UserDirectory.DOWNLOAD);
                 string[] uris = open_folder (path);
-                open_uris (uris, false);
+                open_uris.begin (uris, false);
             }
         }
 
         private void on_drag_data_received (Gdk.DragContext drag_context, int x, int y,
                                             Gtk.SelectionData data, uint info, uint time) {
-            open_uris (data.get_uris ());
+            open_uris.begin (data.get_uris ());
             Gtk.drag_finish (drag_context, true, false, time);
         }
     }
