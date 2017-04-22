@@ -17,7 +17,7 @@ These dependencies must be present before building
  
  You can install these on a Ubuntu-based system by executing this command:
  
- `sudo apt install libgtk-3-dev libgranite-dev libpackagekit-glib2-dev libpolkit-gobject-1-dev`
+ `sudo apt install libgtk-3-dev libgranite-dev libpackagekit-glib2-dev`
 
 ### Building
 ```
