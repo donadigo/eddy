@@ -14,7 +14,6 @@ These dependencies must be present before building
  - `gtk+-3.0`
  - `granite`
  - `packagekit-glib2`
- - `polkit-gobject-1`
  
  You can install these on a Ubuntu-based system by executing this command:
  
