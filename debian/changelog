@@ -1,3 +1,13 @@
+com.github.donadigo.eddy (1.0.1) UNSTABLE; urgency=low
+    
+    * Added an ability to open packages with Eddy in the file manager
+
+    * Show a spinner when loading packages
+
+    * Fixed adding a file already in the list duplicated it
+
+ -- Adam Bieńkowski <donadigos159@gmail.com>  Sat, 22 Apr 2017 23:24:41 +0200
+
 com.github.donadigo.eddy (1.0.0) UNSTABLE; urgency=low
 
   * Completely port to PackageKit and remove aptdaemon dependency
