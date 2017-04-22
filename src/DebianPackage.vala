@@ -272,7 +272,7 @@ namespace Eddy {
             }
         }
 
-        public async bool populate () {
+        public async bool populate () throws Error {
             string[] filenames = { filename, null };
             try {
                 var results = yield client.get_details_local_async (filenames, null, () => {});
@@ -290,7 +290,7 @@ namespace Eddy {
                 }
               
             } catch (Error e) {
-                warning (e.message);
+                throw e;
             }
 
             return false;            

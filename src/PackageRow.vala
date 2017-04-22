@@ -142,7 +142,7 @@ namespace Eddy {
         }
 
         private void update_state_icon () {
-            unowned string? exit_state = package.get_exit_title ();
+            unowned string exit_state = package.get_exit_title ();
             unowned string? icon = package.get_exit_icon ();
 
             if (icon != null) {

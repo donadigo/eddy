@@ -144,7 +144,7 @@ namespace Eddy {
                                 package.cancel ();
                             }
                         }
-                        
+
                         dialog.destroy ();
                         break;
                 }
@@ -277,38 +277,65 @@ namespace Eddy {
             return uris;
         }
 
-        private void open_uris (string[] uris, bool validate = true) {
+        private async void open_uris (string[] uris, bool validate = true) {
             string[] errors = {};
+            int done = 0;
             foreach (string uri in uris) {
                 var file = File.new_for_uri (uri);
                 if (validate) {
                     try {
                         var info = file.query_info (FileAttribute.STANDARD_CONTENT_TYPE, FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
                         if (!(info.get_content_type () in App.supported_mimetypes)) {
-                            errors += _("%s is not a debian package").printf (file.get_basename ());
-                            continue;
+                            errors += _("<b>%s</b> is not a debian package").printf (file.get_basename ());
+                            done++;
+                            if (done == uris.length) {
+                                Idle.add (open_uris.callback);
+                            } else {
+                                continue;
+                            }
                         }
                     } catch (Error e) {
-                        warning (e.message);
-                        continue;                
+                        errors += "<b>%s</b>: %s".printf (file.get_basename (), e.message);
+                        done++;
+                        if (done == uris.length) {
+                            Idle.add (open_uris.callback);
+                        } else {
+                            continue;
+                        }
                     }
                 }
 
                 string filename = file.get_path ();
                 if (list_view.has_filename (filename)) {
-                    continue;
+                    done++;
+                    if (done == uris.length) {
+                        Idle.add (open_uris.callback);
+                    } else {
+                        continue;
+                    }
                 }
 
                 var package = new DebianPackage (filename);
                 package.populate.begin ((obj, res) => {
-                    bool success = package.populate.end (res);
-                    if (success) {
-                        list_view.add_package (package);
-                    } else {
-                        errors += _("%s is not valid").printf (file.get_basename ());
+                    try {
+                        bool success = package.populate.end (res);
+                        if (success) {
+                            list_view.add_package (package);
+                        } else {
+                            errors += _("<b>%s</b> is not a valid package").printf (file.get_basename ());
+                        }
+                    } catch (Error e) {
+                        errors += "<b>%s</b>: %s".printf (file.get_basename (), e.message);
+                    }
+
+                    done++;
+                    if (done == uris.length) {
+                        Idle.add (open_uris.callback);
                     }
                 });
             }
+
+            yield;
 
             if (errors.length > 0) {
                 var builder = new StringBuilder ();

@@ -37,6 +37,7 @@ public class Eddy.MessageDialog : Gtk.Dialog {
         primary_label.xalign = 0;
 
         var secondary_label = new Gtk.Label (secondary_text);
+        secondary_label.use_markup = true;
         secondary_label.selectable = true;
         secondary_label.max_width_chars = 50;
         secondary_label.wrap = true;
