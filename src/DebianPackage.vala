@@ -19,7 +19,6 @@
 
 namespace Eddy {
     public class DebianPackage : Object {
-        public static uint task_count { public get; private set; default = 0; }
         private static Pk.Task client;
 
         public string filename { public get; construct; }
@@ -272,7 +271,7 @@ namespace Eddy {
                 cancellable.cancel ();
             }
         }
-        
+
         public async bool populate () {
             string[] filenames = { filename, null };
             try {
