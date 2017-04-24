@@ -43,7 +43,7 @@ namespace Eddy {
 
             application_id = "com.github.donadigo.eddy";
             program_name = Constants.APP_NAME;
-            app_years = "2015-2017";
+            app_years = "2016-2017";
             exec_name = Constants.EXEC_NAME;
             app_launcher = Constants.DESKTOP_NAME;
 
