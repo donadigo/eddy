@@ -19,19 +19,19 @@
 
 namespace Eddy {
     public class TransactionResult : Object {
-        public Gee.ArrayList<DebianPackage> packages { get; construct; }
+        public Gee.ArrayList<Package> packages { get; construct; }
         public Pk.Role role { get; construct; }
         public Error? error { get; set; default = null; }
 
         construct {
-            packages = new Gee.ArrayList<DebianPackage> ();
+            packages = new Gee.ArrayList<Package> ();
         }
 
         public TransactionResult (Pk.Role role) {
             Object (role: role);
         }
 
-        public void add_package (DebianPackage package) {
+        public void add_package (Package package) {
             packages.add (package);
         }
 

@@ -9,8 +9,9 @@ vala_precompile (VALA_C ${EXEC_NAME}
     EddyWindow.vala
     config.vala
     Constants.vala
-    DebianPackage.vala
+    Package.vala
     TransactionResult.vala
+    MimeTypeHelper.vala
     DetailedView.vala
     PackageListView.vala
     PackageRow.vala

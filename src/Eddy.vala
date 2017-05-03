@@ -20,23 +20,10 @@
 namespace Eddy {
     public class App : Granite.Application {
         public static string[] supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
-        private static Pk.Control control;
+        private Pk.Control control;
+        public bool initted { get; set; default = false; }
 
         private EddyWindow? window = null;
-
-        static construct {
-            control = new Pk.Control ();
-            control.get_properties_async.begin (null, (obj, res) => {
-                try {
-                    bool success = control.get_properties_async.end (res);
-                    if (success && control.mime_types.length > 0) {
-                        supported_mimetypes = control.mime_types;
-                    }
-                } catch (Error e) {
-                    warning (e.message);
-                }
-            });
-        }
 
         construct {
             flags |= ApplicationFlags.HANDLES_OPEN;
@@ -57,6 +44,23 @@ namespace Eddy {
             about_translators = _("translator-credits");
     
             about_license_type = Gtk.License.GPL_3_0;
+
+            control = new Pk.Control ();
+            control.get_properties_async.begin (null, (obj, res) => {
+                try {
+                    bool success = control.get_properties_async.end (res);
+                    if (success) {
+                        string[] mimes = strdupv (control.mime_types);
+                        if (mimes.length > 0) {
+                            supported_mimetypes = mimes;
+                        }
+                    }
+                } catch (Error e) {
+                    warning (e.message);
+                }
+
+                initted = true;
+            });
         }
 
         public static int main (string[] args) {
@@ -78,12 +82,31 @@ namespace Eddy {
 
         public override void activate () {
             if (window == null) {
-                window = new EddyWindow ();
-                add_window (window);
-                window.show_all ();
+                if (initted) {
+                    // Already initted, show the window
+                    init_window ();
+                } else {
+                    // Wait for Pk.Control to get all properties
+                    var loop = new MainLoop ();
+
+                    ulong signal_id = 0;
+                    signal_id = notify["initted"].connect (() => {
+                        init_window ();
+                        disconnect (signal_id);
+                        loop.quit ();
+                    });
+
+                    loop.run ();
+                }
             } else {
                 window.present ();
             }
+        }
+
+        private void init_window () {
+            window = new EddyWindow ();
+            add_window (window);
+            window.show_all ();            
         }
     }
 }

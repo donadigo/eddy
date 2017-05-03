@@ -20,11 +20,11 @@
 namespace Eddy {
     public class PackageListView : Gtk.Box {
         public signal void install_all ();
-        public signal void perform_default_action (DebianPackage package);
+        public signal void perform_default_action (Package package);
 
-        public signal void added (DebianPackage package);
-        public signal void show_package_details (DebianPackage package);
-        public signal void removed (DebianPackage package);
+        public signal void added (Package package);
+        public signal void show_package_details (Package package);
+        public signal void removed (Package package);
 
         public bool working { get; set; }
         public string status {
@@ -79,7 +79,7 @@ namespace Eddy {
             add (scrolled);
         }
 
-        public void add_package (DebianPackage package) {
+        public void add_package (Package package) {
             var row = new PackageRow (package);
             row.action_clicked.connect (() => perform_default_action (row.package));
             row.removed.connect (on_row_removed);

@@ -24,7 +24,7 @@ namespace Eddy {
         public signal void action_clicked ();
         public signal void removed ();
 
-        public DebianPackage package { get; construct; }
+        public Package package { get; construct; }
         public bool show_action_button {
             set {
                 set_widget_visible (action_button, value);
@@ -115,7 +115,7 @@ namespace Eddy {
             add (event_box);
         }
 
-        public PackageRow (DebianPackage package) {
+        public PackageRow (Package package) {
             Object (package: package);
         }
 

@@ -91,9 +91,20 @@ namespace Eddy {
             header_bar.pack_start (open_button_revealer);
             set_titlebar (header_bar);
 
-            var welcome_view = new Granite.Widgets.Welcome (_("Install some apps"), _("Drag and drop .deb files or open them to begin installation."));
+            var helper = MimeTypeHelper.get_default ();
+
+            string[] extensions = {};
+            foreach (string mime_type in App.supported_mimetypes) {
+                foreach (string extension in helper.get_extensions_for_mime_type (mime_type)) {
+                    extensions += extension;
+                }
+            }
+
+            string main_ext = extensions[0];
+
+            var welcome_view = new Granite.Widgets.Welcome (_("Install some apps"), _("Drag and drop .%s files or open them to begin installation.").printf (main_ext));
             open_index = welcome_view.append ("document-open", _("Open"), _("Browse to open a single file"));
-            open_dowloads_index = welcome_view.append ("folder-download", _("Load from Downloads"), _("Load debian files from your Downloads folder"));
+            open_dowloads_index = welcome_view.append ("folder-download", _("Load from Downloads"), _("Load .%s files from your Downloads folder").printf (main_ext));
             welcome_view.activated.connect (on_welcome_view_activated);
 
             stack.add_named (welcome_view, WELCOME_VIEW_ID);
@@ -121,7 +132,7 @@ namespace Eddy {
         }
 
         public override bool delete_event (Gdk.EventAny event) {
-            var packges = new Gee.ArrayList<DebianPackage> ();
+            var packges = new Gee.ArrayList<Package> ();
 
             var rows = list_view.get_package_rows ();
             foreach (var row in rows) {
@@ -166,7 +177,7 @@ namespace Eddy {
 
         private async void install_all () {
             list_view.working = true;
-            var packages = new Gee.ArrayList<DebianPackage> ();
+            var packages = new Gee.ArrayList<Package> ();
             foreach (var row in list_view.get_package_rows ()) {
                 packages.add (row.package);
             }
@@ -175,7 +186,7 @@ namespace Eddy {
 
             TransactionResult result;
             if (packages.size > 1) {
-                result = yield DebianPackage.install_packages (packages, install_cancellable, install_all_progress_callback);
+                result = yield Package.install_packages (packages, install_cancellable, install_all_progress_callback);
             } else {
                 result = yield packages[0].install (null);
             }
@@ -190,7 +201,7 @@ namespace Eddy {
         private void install_all_progress_callback (Pk.Progress progress, Pk.ProgressType type) {
             switch (type) {
                 case Pk.ProgressType.STATUS:
-                    unowned string title = DebianPackage.status_to_title (progress.get_status ());
+                    unowned string title = Package.status_to_title (progress.get_status ());
                     list_view.status = title;
                     break;
                 default:
@@ -301,7 +312,7 @@ namespace Eddy {
                     try {
                         var info = file.query_info (FileAttribute.STANDARD_CONTENT_TYPE, FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
                         if (!(info.get_content_type () in App.supported_mimetypes)) {
-                            errors += _("<b>%s</b> is not a debian package").printf (file.get_basename ());
+                            errors += _("<b>%s</b> is not a package").printf (file.get_basename ());
                             done++;
                             if (done == uris.length) {
                                 Idle.add (open_uris.callback);
@@ -333,7 +344,7 @@ namespace Eddy {
                     }
                 }
 
-                var package = new DebianPackage (filename);
+                var package = new Package (filename);
                 package.populate.begin ((obj, res) => {
                     try {
                         bool success = package.populate.end (res);
@@ -375,24 +386,24 @@ namespace Eddy {
         }
 
         private void show_open_dialog () {
-            var debian_filter = new Gtk.FileFilter ();
-            debian_filter.set_filter_name (_("Debian Packages"));
+            var filter = new Gtk.FileFilter ();
+            filter.set_filter_name (_("Packages"));
             foreach (string mime_type in App.supported_mimetypes) {
-                debian_filter.add_mime_type (mime_type);
+                filter.add_mime_type (mime_type);
             }
 
             var all_filter = new Gtk.FileFilter ();
             all_filter.set_filter_name (_("All Files"));
             all_filter.add_pattern ("*");
 
-            var chooser = new Gtk.FileChooserDialog ("Select debian packages to install",
+            var chooser = new Gtk.FileChooserDialog ("Select packages to install",
                             this,
                             Gtk.FileChooserAction.OPEN,
                             _("Cancel"),
                             Gtk.ResponseType.CANCEL,
                             _("Open"),
                             Gtk.ResponseType.ACCEPT);
-            chooser.add_filter (debian_filter);
+            chooser.add_filter (filter);
             chooser.add_filter (all_filter);
 
             chooser.response.connect ((response) => {
@@ -412,22 +423,22 @@ namespace Eddy {
             chooser.run ();
         }
 
-        private async void on_perform_default_action (DebianPackage package) {
+        private async void on_perform_default_action (Package package) {
             list_view.working = true;
-            var result = yield DebianPackage.perform_default_action (package, null);
+            var result = yield package.perform_default_action (null);
             list_view.working = false;
             
             process_result (result);
         }
 
-        private void on_package_added (DebianPackage package) {
+        private void on_package_added (Package package) {
             if (stack.visible_child_name != LIST_VIEW_ID) {
                 open_button_revealer.reveal_child = true;
                 stack.visible_child_name = LIST_VIEW_ID;
             }
         }
 
-        private void on_package_removed (DebianPackage package) {
+        private void on_package_removed (Package package) {
             if (list_view.get_package_rows ().size == 0 && stack.visible_child_name != WELCOME_VIEW_ID) {
                 open_button_revealer.reveal_child = false;
                 stack.visible_child_name = WELCOME_VIEW_ID;
@@ -441,7 +452,7 @@ namespace Eddy {
             stack.visible_child_name = LIST_VIEW_ID;       
         }
 
-        private void on_show_package_details (DebianPackage package) {
+        private void on_show_package_details (Package package) {
             detailed_view.set_package (package);
 
             set_widget_visible (back_button, true);

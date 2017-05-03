@@ -18,7 +18,7 @@
  */
 
 namespace Eddy {
-    public class DebianPackage : Object {
+    public class Package : Object {
         private static Pk.Task client;
 
         public string filename { public get; construct; }
@@ -77,7 +77,7 @@ namespace Eddy {
             client.allow_reinstall = true;
         }
 
-        public async static TransactionResult install_packages (Gee.ArrayList<DebianPackage> packages, Cancellable? cancellable, Pk.ProgressCallback callback) {
+        public async static TransactionResult install_packages (Gee.ArrayList<Package> packages, Cancellable? cancellable, Pk.ProgressCallback callback) {
             string[] filenames = {};
             Pk.Exit exit_code = Pk.Exit.UNKNOWN;
 
@@ -128,16 +128,6 @@ namespace Eddy {
             }   
 
             return result;
-        }
-
-        public async static TransactionResult perform_default_action (DebianPackage package, Cancellable? cancellable) {
-            if (package.is_installed) {
-                var result = yield package.uninstall (cancellable);
-                return result;
-            } else {
-                var result = yield package.install (cancellable);
-                return result;
-            }
         }
 
         public static unowned string status_to_title (Pk.Status status) {
@@ -218,8 +208,18 @@ namespace Eddy {
             return "";            
         }
 
-        public DebianPackage (string filename) {
+        public Package (string filename) {
             Object (filename: filename);
+        }
+
+        public async TransactionResult perform_default_action (Cancellable? cancellable) {
+            if (is_installed) {
+                var result = yield uninstall (cancellable);
+                return result;
+            } else {
+                var result = yield install (cancellable);
+                return result;
+            }
         }
 
         public async TransactionResult install (Cancellable? _cancellable) {

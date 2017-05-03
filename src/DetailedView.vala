@@ -19,7 +19,7 @@
 
 namespace Eddy {
     public class DetailedView : Gtk.Box {
-        private DebianPackage? current_package;
+        private Package? current_package;
 
         private Gtk.Label name_label;
         private Gtk.Label version_label;
@@ -58,7 +58,7 @@ namespace Eddy {
             add (description_label);
         }
 
-        public void set_package (DebianPackage package) {
+        public void set_package (Package package) {
             current_package = package;
 
             name_label.label = _("Package name: %s".printf (package.name));
@@ -70,7 +70,7 @@ namespace Eddy {
             homepage_button.visible = package.homepage.strip () != "";
         }
 
-        public DebianPackage? get_package () {
+        public Package? get_package () {
             return current_package;
         }
     }

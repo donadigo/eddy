@@ -24,5 +24,5 @@ namespace Eddy.Constants {
     public const Gdk.RGBA BRAND_COLOR = { 0.9, 0.2, 0.3, 1 };
 
     public const Gtk.TargetEntry[] DRAG_TARGETS = {{ "text/uri-list", 0, 0 }};
-    public const string[] DEFAULT_SUPPORTED_MIMETYPES = { "application/x-deb", "application/vnd.debian.binary-package" };
+    public const string[] DEFAULT_SUPPORTED_MIMETYPES = { "application/vnd.debian.binary-package", "application/x-deb" };
 }
