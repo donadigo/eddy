@@ -4,8 +4,9 @@
 
 ![screenshot](Screenshot.png)
 
-Install, uninstall and view information about debian packages with easy to use graphical interface
+Install, uninstall and view information about debian packages with easy to use graphical interface.
 
+Eddy can also support other packaging formats such as .rpm thanks to it's PackageKit backend, although it's primary focus is still managing debian packages and elementary OS. 
 
 ## Installation
 
