@@ -18,27 +18,27 @@
  */
 
 namespace Eddy {
-	public class AppSettings : Granite.Services.Settings {
-		public string[] mime_types { get; set; } 
-		public bool always_on_top { get; set; }
+    public class AppSettings : Granite.Services.Settings {
+        public string[] mime_types { get; set; } 
+        public bool always_on_top { get; set; }
 
-		public int window_width { get; set; }
-		public int window_height { get; set; }
-		public int window_x { get; set; }
-		public int window_y { get; set; }
-		public bool window_maximized { get; set; }
+        public int window_width { get; set; }
+        public int window_height { get; set; }
+        public int window_x { get; set; }
+        public int window_y { get; set; }
+        public bool window_maximized { get; set; }
 
-		private static AppSettings? instance;
-		public static unowned AppSettings get_default () {
-			if (instance == null) {
-				instance = new AppSettings ();
-			}
+        private static AppSettings? instance;
+        public static unowned AppSettings get_default () {
+            if (instance == null) {
+                instance = new AppSettings ();
+            }
 
-			return instance;
-		}
+            return instance;
+        }
 
-		private AppSettings () {
-			base ("com.github.donadigo.eddy");
-		}
-	}
+        private AppSettings () {
+            base ("com.github.donadigo.eddy");
+        }
+    }
 }
