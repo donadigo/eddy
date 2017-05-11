@@ -1,3 +1,11 @@
+com.github.donadigo.eddy (1.0.3) UNSTABLE; urgency=low
+    
+    * Save window state between sessions
+
+    * Improved performance of launching the app second time
+
+ -- Adam Bieńkowski <donadigos159@gmail.com>  Thu, 11 May 2017 23:23:38 +0200
+
 com.github.donadigo.eddy (1.0.2) UNSTABLE; urgency=low
     
     * Support other package formats such as .rpm for other package managers
