@@ -19,10 +19,11 @@
  
 namespace Eddy {
     public class App : Granite.Application {
-        public static string[] supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
-        private Pk.Control control;
+        public static string[] supported_mimetypes;
+
         public bool initted { get; set; default = false; }
 
+        private Pk.Control control;
         private EddyWindow? window = null;
 
         construct {
@@ -46,21 +47,36 @@ namespace Eddy {
             about_license_type = Gtk.License.GPL_3_0;
 
             control = new Pk.Control ();
-            control.get_properties_async.begin (null, (obj, res) => {
-                try {
-                    bool success = control.get_properties_async.end (res);
-                    if (success) {
-                        string[] mimes = strdupv (control.mime_types);
-                        if (mimes.length > 0) {
-                            supported_mimetypes = mimes;
-                        }
-                    }
-                } catch (Error e) {
-                    warning (e.message);
-                }
 
+            var settings = AppSettings.get_default ();
+            string[] available_mimetypes = settings.mime_types;
+
+            if (available_mimetypes.length > 0) {
+                supported_mimetypes = available_mimetypes;
                 initted = true;
-            });
+            } else {
+                control.get_properties_async.begin (null, (obj, res) => {
+                    try {
+                        bool success = control.get_properties_async.end (res);
+                        if (success) {
+                            string[] mimes = strdupv (control.mime_types);
+                            if (mimes.length > 0) {
+                                supported_mimetypes = mimes;
+                            } else {
+                                supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
+                            }
+                        } else {
+                            supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
+                        }
+                    } catch (Error e) {
+                        warning (e.message);
+                        supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
+                    }
+
+                    settings.mime_types = supported_mimetypes;
+                    initted = true;
+                });
+            }
         }
 
         public static int main (string[] args) {

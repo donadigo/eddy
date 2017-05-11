@@ -1,0 +1,39 @@
+<schemalist>
+	<schema id="com.github.donadigo.eddy" path="/com/github/donadigo/eddy/" gettext-domain="eddy">
+		<key name="mime-types" type="as">
+			<default>[]</default>
+			<summary>Supported mime types</summary>
+			<description>Cached supported mime types which the app can open and handle</description>
+		</key>
+		<key name="window-width" type="i">
+			<default>650</default>
+			<summary>Width of the window</summary>
+			<description>The width of the window</description>
+		</key>
+		<key name="window-height" type="i">
+			<default>550</default>
+			<summary>Height of the window</summary>
+			<description>The height of the window</description>
+		</key>
+		<key name="window-x" type="i">
+			<default>-1</default>
+			<summary>Window position</summary>
+			<description>The x axis of window position</description>
+		</key>
+		<key name="window-y" type="i">
+			<default>-1</default>
+			<summary>Window position</summary>
+			<description>The y axis of window position</description>
+		</key>
+		<key name="window-maximized" type="b">
+			<default>false</default>
+			<summary>Window maximized</summary>
+			<description>If window should be maximized</description>
+		</key>
+		<key name="always-on-top" type="b">
+			<default>false</default>
+			<summary>If the main window should be shown always on top</summary>
+			<description>Determines if the window will be always above other windows</description>
+		</key>		
+	</schema>
+</schemalist>

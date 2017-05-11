@@ -9,6 +9,7 @@ vala_precompile (VALA_C ${EXEC_NAME}
     EddyWindow.vala
     config.vala
     Constants.vala
+    AppSettings.vala
     Package.vala
     TransactionResult.vala
     MimeTypeHelper.vala

@@ -1,3 +1,6 @@
+include(GSettings)
+
+add_schema ("com.github.donadigo.eddy.gschema.xml")
 install (FILES com.github.donadigo.eddy.desktop DESTINATION share/applications)
 install (FILES com.github.donadigo.eddy.appdata.xml DESTINATION share/metainfo/)
 
