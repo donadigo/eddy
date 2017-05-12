@@ -21,8 +21,6 @@ namespace Eddy {
     public class App : Granite.Application {
         public static string[] supported_mimetypes;
 
-        public bool initted { get; set; default = false; }
-
         private Pk.Control control;
         private EddyWindow? window = null;
 
@@ -53,29 +51,51 @@ namespace Eddy {
 
             if (available_mimetypes.length > 0) {
                 supported_mimetypes = available_mimetypes;
-                initted = true;
             } else {
-                control.get_properties_async.begin (null, (obj, res) => {
-                    try {
-                        bool success = control.get_properties_async.end (res);
-                        if (success) {
-                            string[] mimes = strdupv (control.mime_types);
-                            if (mimes.length > 0) {
-                                supported_mimetypes = mimes;
-                            } else {
-                                supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
-                            }
+                try {
+                    bool success = control.get_properties ();
+                    if (success) {
+                        string[] mimes = strdupv (control.mime_types);
+                        if (mimes.length > 0) {
+                            supported_mimetypes = mimes;
                         } else {
                             supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
                         }
-                    } catch (Error e) {
-                        warning (e.message);
+                    } else {
                         supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
                     }
+                } catch (Error e) {
+                    warning (e.message);
+                    supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
+                }
 
-                    settings.mime_types = supported_mimetypes;
-                    initted = true;
-                });
+                settings.mime_types = supported_mimetypes;
+
+                // Register Eddy as the default app if there's no handler for a supported mimetype
+                var app_info = new DesktopAppInfo (Constants.DESKTOP_NAME);
+                if (app_info == null) {
+                    return;
+                }
+
+                foreach (string mimetype in supported_mimetypes) {
+                    var handler = AppInfo.get_default_for_type (mimetype, false);
+                    if (handler == null) {
+                        try {
+                            app_info.set_as_default_for_type (mimetype);
+                        } catch (Error e) {
+                            warning (e.message);
+                        }
+                    } else {
+                        unowned string[] types = handler.get_supported_types ();
+                        if (types == null || !(mimetype in types)) {
+                            try {
+                                app_info.set_as_default_for_type (mimetype);
+                            } catch (Error e) {
+                                warning (e.message);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -98,31 +118,12 @@ namespace Eddy {
 
         public override void activate () {
             if (window == null) {
-                if (initted) {
-                    // Already initted, show the window
-                    init_window ();
-                } else {
-                    // Wait for Pk.Control to get all properties
-                    var loop = new MainLoop ();
-
-                    ulong signal_id = 0;
-                    signal_id = notify["initted"].connect (() => {
-                        init_window ();
-                        disconnect (signal_id);
-                        loop.quit ();
-                    });
-
-                    loop.run ();
-                }
+                window = new EddyWindow ();
+                add_window (window);
+                window.show_all ();
             } else {
                 window.present ();
             }
-        }
-
-        private void init_window () {
-            window = new EddyWindow ();
-            add_window (window);
-            window.show_all ();            
         }
     }
 }
