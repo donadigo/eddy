@@ -29,6 +29,10 @@ namespace Eddy {
         private const string DETAILED_VIEW_ID = "detailed-view";
         private const string SPINNER_VIEW_ID = "spinner-view";
 
+#if HAVE_UNITY
+        private static Unity.LauncherEntry unity_entry;
+#endif
+
         private Gtk.Stack stack;
         private Gtk.Grid spinner_grid;
 
@@ -46,6 +50,14 @@ namespace Eddy {
         private int open_dowloads_index;
 
         private Cancellable? install_cancellable;
+
+        // TODO: since Unity is no longer developed, this API will probably go away and 
+        // be ported into something more abstract like GLib.Application
+#if HAVE_UNITY
+        static construct {
+            unity_entry = Unity.LauncherEntry.get_for_desktop_id (Constants.DESKTOP_NAME);
+        }
+#endif
 
         construct {
             stack = new Gtk.Stack ();
@@ -219,7 +231,7 @@ namespace Eddy {
             if (packages.size > 1) {
                 result = yield Package.install_packages (packages, install_cancellable, install_all_progress_callback);
             } else {
-                result = yield packages[0].install (null);
+                result = yield packages[0].install (null, operation_progress_callback);
             }
 
             list_view.status = "";
@@ -232,16 +244,41 @@ namespace Eddy {
         private void install_all_progress_callback (Pk.Progress progress, Pk.ProgressType type) {
             switch (type) {
                 case Pk.ProgressType.STATUS:
-                    unowned string title = Package.status_to_title (progress.get_status ());
-                    list_view.status = title;
+                    var status = progress.get_status ();
+#if HAVE_UNITY                    
+                    unity_entry.progress_visible = status != Pk.Status.FINISHED;
+#endif
+
+                    unowned string title = Package.status_to_title (status);
+                    list_view.status = title;                    
                     break;
+#if HAVE_UNITY
+                case Pk.ProgressType.PERCENTAGE:                
+                    double percentage = ((double)progress.get_percentage ()) / 100;
+                    unity_entry.progress = percentage;
+                    break;
+#endif
                 default:
                     break;
             }
         }
 
+        private void operation_progress_callback (Pk.Progress progress, Pk.ProgressType type) {
+#if HAVE_UNITY            
+            switch (type) {
+                case Pk.ProgressType.STATUS:
+                    unity_entry.progress_visible = progress.get_status () != Pk.Status.FINISHED;
+                    break;
+                case Pk.ProgressType.PERCENTAGE:
+                    double percentage = ((double)progress.get_percentage ()) / 100;
+                    unity_entry.progress = percentage;
+                    break;                    
+            }
+#endif
+        }
+
         private void process_result (TransactionResult result) {
-            if (result.is_empty ()) {
+            if (result.cancelled || result.is_empty ()) {
                 return;
             }
 
@@ -456,7 +493,7 @@ namespace Eddy {
 
         private async void on_perform_default_action (Package package) {
             list_view.working = true;
-            var result = yield package.perform_default_action (null);
+            var result = yield package.perform_default_action (null, operation_progress_callback);
             list_view.working = false;
             
             process_result (result);

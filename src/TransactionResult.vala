@@ -22,6 +22,7 @@ namespace Eddy {
         public Gee.ArrayList<Package> packages { get; construct; }
         public Pk.Role role { get; construct; }
         public Error? error { get; set; default = null; }
+        public bool cancelled { get; set; default = false; }
 
         construct {
             packages = new Gee.ArrayList<Package> ();

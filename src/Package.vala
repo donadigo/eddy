@@ -19,6 +19,9 @@
 
 namespace Eddy {
     public class Package : Object {
+        private const int AUTH_FAILED_CODE = 303;
+        private const int CANCELLED_CODE = 303;
+
         private static Pk.Task client;
 
         public string filename { public get; construct; }
@@ -77,7 +80,11 @@ namespace Eddy {
             client.allow_reinstall = true;
         }
 
-        public async static TransactionResult install_packages (Gee.ArrayList<Package> packages, Cancellable? cancellable, Pk.ProgressCallback callback) {
+        public static bool get_was_cancelled (Error error) {
+            return error.matches (Pk.ClientError.quark (), AUTH_FAILED_CODE) || error.matches (IOError.quark (), CANCELLED_CODE);
+        }
+
+        public async static TransactionResult install_packages (Gee.ArrayList<Package> packages, Cancellable? cancellable, Pk.ProgressCallback progress_callback_external) {
             string[] filenames = {};
             Pk.Exit exit_code = Pk.Exit.UNKNOWN;
 
@@ -113,13 +120,19 @@ namespace Eddy {
                             break;
                     }
 
-                    callback (progress, type);
+                    progress_callback_external (progress, type);
                 });
 
                 exit_code = results.get_exit_code ();
             } catch (Error e) {
                 result.error = e;
-                exit_code = Pk.Exit.FAILED;
+
+                if (get_was_cancelled (result.error)) {
+                    exit_code = Pk.Exit.CANCELLED;
+                    result.cancelled = true;
+                } else {
+                    exit_code = Pk.Exit.FAILED;
+                }
             }
 
             foreach (var package in packages) {
@@ -212,17 +225,17 @@ namespace Eddy {
             Object (filename: filename);
         }
 
-        public async TransactionResult perform_default_action (Cancellable? cancellable) {
+        public async TransactionResult perform_default_action (Cancellable? cancellable, Pk.ProgressCallback progress_callback_external) {
             if (is_installed) {
-                var result = yield uninstall (cancellable);
+                var result = yield uninstall (cancellable, progress_callback_external);
                 return result;
             } else {
-                var result = yield install (cancellable);
+                var result = yield install (cancellable, progress_callback_external);
                 return result;
             }
         }
 
-        public async TransactionResult install (Cancellable? _cancellable) {
+        public async TransactionResult install (Cancellable? _cancellable, Pk.ProgressCallback progress_callback_external) {
             has_task = true;
             cancellable = _cancellable;
             exit_code = Pk.Exit.UNKNOWN;
@@ -233,18 +246,28 @@ namespace Eddy {
             string[] filenames = { filename, null };
 
             try {
-                var results = yield client.install_files_async (filenames, cancellable, progress_callback);
+                var results = yield client.install_files_async (filenames, cancellable, (progress, type) => {
+                    progress_callback_internal (progress, type);
+                    progress_callback_external (progress, type);
+                });
+
                 exit_code = results.get_exit_code ();
             } catch (Error e) {
                 result.error = e;
-                exit_code = Pk.Exit.FAILED;
+
+                if (get_was_cancelled (result.error)) {
+                    exit_code = Pk.Exit.CANCELLED;
+                    result.cancelled = true;
+                } else {
+                    exit_code = Pk.Exit.FAILED;
+                }
             }
 
             yield reset ();
             return result;
         }
 
-        public async TransactionResult uninstall (Cancellable? _cancellable) {
+        public async TransactionResult uninstall (Cancellable? _cancellable, Pk.ProgressCallback progress_callback_external) {
             has_task = true;
             cancellable = _cancellable;
             exit_code = Pk.Exit.UNKNOWN;
@@ -255,11 +278,21 @@ namespace Eddy {
             result.add_package (this);
 
             try {
-                var results = yield client.remove_packages_async (names, false, false, cancellable, progress_callback);
+                var results = yield client.remove_packages_async (names, false, false, cancellable, (progress, type) => {
+                    progress_callback_internal (progress, type);
+                    progress_callback_external (progress, type);
+                });
+
                 exit_code = results.get_exit_code ();
             } catch (Error e) {
                 result.error = e;
-                exit_code = Pk.Exit.FAILED;
+
+                if (get_was_cancelled (result.error)) {
+                    exit_code = Pk.Exit.CANCELLED;
+                    result.cancelled = true;
+                } else {
+                    exit_code = Pk.Exit.FAILED;
+                }
             }
 
             yield reset ();
@@ -353,7 +386,7 @@ namespace Eddy {
             has_task = false;
         }
 
-        private void progress_callback (Pk.Progress _progress, Pk.ProgressType type) {
+        private void progress_callback_internal (Pk.Progress _progress, Pk.ProgressType type) {
             switch (type) {
                 case Pk.ProgressType.STATUS:
                     status = _progress.get_status ();

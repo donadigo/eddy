@@ -16,10 +16,11 @@ These dependencies must be present before building
  - `gtk+-3.0`
  - `granite`
  - `packagekit-glib2`
+ - `unity`
  
  You can install these on a Ubuntu-based system by executing this command:
  
- `sudo apt install valac libgtk-3-dev libgranite-dev libpackagekit-glib2-dev`
+ `sudo apt install valac libgranite-dev libpackagekit-glib2-dev libunity-dev`
 
 ### Building
 ```

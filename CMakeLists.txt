@@ -20,19 +20,23 @@ add_definitions (-DI_KNOW_THE_PACKAGEKIT_GLIB2_API_IS_SUBJECT_TO_CHANGE)
 # Hide C compiler warnings
 add_definitions (-w)
 
-set (DEPS_PACKAGES
-    gtk+-3.0
-    granite
-    gio-2.0
-    packagekit-glib2
-)
+set (DEPS_PACKAGES granite;packagekit-glib2)
+
+option (USE_UNITY "Use Unity integration" ON)
+if (USE_UNITY)
+  message ("-- Unity integration enabled")
+  set (DEPS_PACKAGES ${DEPS_PACKAGES};unity)
+  set (UNITY_OPTIONS --define=HAVE_UNITY)
+else ()
+  message ("-- Unity integration disabled")
+endif ()
 
 find_package (PkgConfig)
 pkg_check_modules (DEPS REQUIRED ${DEPS_PACKAGES})
 
 pkg_check_modules(GRANITE0401 QUIET granite>=0.4.0.1)
 if (GRANITE0401_FOUND)
-	set (GRANITE_OPTIONS --define=HAS_PLANK --define=HAS_GRANITE_4_1)
+    set (GRANITE_OPTIONS --define=HAS_GRANITE_4_1)
 endif ()
 
 add_definitions (${DEPS_CFLAGS})

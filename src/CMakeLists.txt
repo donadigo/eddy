@@ -21,8 +21,9 @@ PACKAGES
     ${DEPS_PACKAGES}
 OPTIONS
     ${GRANITE_OPTIONS}
+    ${UNITY_OPTIONS}
     --target-glib=2.32
 )
 
-add_executable(${EXEC_NAME} ${VALA_C})
+add_executable (${EXEC_NAME} ${VALA_C})
 install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)
