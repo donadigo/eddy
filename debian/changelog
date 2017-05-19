@@ -1,3 +1,13 @@
+com.github.donadigo.eddy (1.0.4) UNSTABLE; urgency=low
+    
+    * Do not display error dialog when operation cancelled
+
+    * Display the progress of current operation in the dock
+
+    * Sort packages by their state and name in the list view
+
+ -- Adam Bieńkowski <donadigos159@gmail.com>  Fri, 19 May 2017 17:43:06 +0200
+
 com.github.donadigo.eddy (1.0.3) UNSTABLE; urgency=low
     
     * Save window state between sessions
