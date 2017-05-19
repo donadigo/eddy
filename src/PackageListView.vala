@@ -65,6 +65,7 @@ namespace Eddy {
 
             list_box = new Gtk.ListBox ();
             list_box.expand = true;
+            list_box.set_sort_func (sort_func);
             list_box.row_activated.connect (on_row_activated);
             list_box.add (button_row);
 
@@ -133,6 +134,29 @@ namespace Eddy {
 
             installed_size_label.label = _("Total installed size: %s".printf (format_size (total_package_installed_size)));
             install_button.sensitive = !working && rows.size > 0;
+        }
+
+        private int sort_func (Gtk.ListBoxRow row1, Gtk.ListBoxRow row2) {
+            var package_row1 = row1 as PackageRow;
+            if (package_row1 == null) {
+                return 0;
+            }
+
+            var package_row2 = row2 as PackageRow;
+            if (package_row2 == null) {
+                return 0;
+            }
+
+            var package1 = package_row1.package;
+            var package2 = package_row2.package;
+
+            if (package1.is_installed && !package2.is_installed) {
+                return 1;
+            } else if (!package1.is_installed && package2.is_installed) {
+                return -1;
+            }
+
+            return package1.name.collate (package2.name);
         }
 
         private void on_row_removed (PackageRow row) {

@@ -139,6 +139,8 @@ namespace Eddy {
                 action_button.label = _("Install");
                 action_button.get_style_context ().remove_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
             }
+
+            changed ();
         }
 
         private void update_state_icon () {
