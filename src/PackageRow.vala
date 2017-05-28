@@ -61,7 +61,6 @@ namespace Eddy {
             var name_label = new Gtk.Label (package.name);
             name_label.wrap = true;
             name_label.wrap_mode = Pango.WrapMode.WORD_CHAR;
-            name_label.use_markup = true;
             name_label.halign = Gtk.Align.START;
 
             var vertical_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
