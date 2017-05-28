@@ -43,11 +43,9 @@ namespace Eddy {
         private Gtk.Image state_icon;
 
         private static Gtk.SizeGroup size_group;
-        private static bool updating_same_packages;
 
         static construct {
             size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.HORIZONTAL);
-            updating_same_packages = false;
         }
 
         construct {
