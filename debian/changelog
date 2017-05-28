@@ -1,36 +1,48 @@
+com.github.donadigo.eddy (1.1.4) UNSTABLE; urgency=low
+    
+  * Add a button to update / downgrade already installed package
+
+  * Fix window growing in size when summary or package name is really long
+
+  * The application can be now found under "System" category
+
+  * Ctrl-Q now exists the app
+
+ -- Adam Bieńkowski <donadigos159@gmail.com>  Sun, 28 May 2017 20:42:08 +0200
+
 com.github.donadigo.eddy (1.0.4) UNSTABLE; urgency=low
     
-    * Do not display error dialog when operation cancelled
+  * Do not display error dialog when operation cancelled
 
-    * Display the progress of current operation in the dock
+  * Display the progress of current operation in the dock
 
-    * Sort packages by their state and name in the list view
+  * Sort packages by their state and name in the list view
 
  -- Adam Bieńkowski <donadigos159@gmail.com>  Fri, 19 May 2017 17:43:06 +0200
 
 com.github.donadigo.eddy (1.0.3) UNSTABLE; urgency=low
     
-    * Save window state between sessions
+  * Save window state between sessions
 
-    * Improved performance of launching the app second time
+  * Improved performance of launching the app second time
 
  -- Adam Bieńkowski <donadigos159@gmail.com>  Thu, 11 May 2017 23:23:38 +0200
 
 com.github.donadigo.eddy (1.0.2) UNSTABLE; urgency=low
     
-    * Support other package formats such as .rpm for other package managers
+  * Support other package formats such as .rpm for other package managers
 
-    * Minor fixes
+  * Minor fixes
 
  -- Adam Bieńkowski <donadigos159@gmail.com>  Wed, 3 May 2017 16:41:55 +0200
 
 com.github.donadigo.eddy (1.0.1) UNSTABLE; urgency=low
     
-    * Added an ability to open packages with Eddy in the file manager
+  * Added an ability to open packages with Eddy in the file manager
 
-    * Show a spinner when loading packages
+  * Show a spinner when loading packages
 
-    * Fixed adding a file already in the list duplicated it
+  * Fixed adding a file already in the list duplicated it
 
  -- Adam Bieńkowski <donadigos159@gmail.com>  Sat, 22 Apr 2017 23:24:41 +0200
 

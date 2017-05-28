@@ -15,6 +15,72 @@
     <binary>eddy</binary>
   </provides>
   <releases>
+      <release version = "1.1.4" date="2017-05-28">
+        <description>
+          <ul>
+            <li>Add a button to update / downgrade already installed package</li>
+            <li>Fix window growing in size when summary or package name is really long</li>
+            <li>The application can be now found under "System" category</li>
+            <li>Ctrl-Q now exists the app</li>
+          </ul>
+        </description>
+      </release>
+      <release version = "1.0.4" date="2017-05-19">
+        <description>
+          <ul>
+            <li>Do not display error dialog when operation cancelled</li>
+            <li>Display the progress of current operation in the dock</li>
+            <li>Sort packages by their state and name in the list view</li>
+          </ul>
+        </description>
+      </release>
+      <release version = "1.0.3" date="2017-05-11">
+        <description>
+          <ul>
+            <li>Save window state between sessions</li>
+            <li>Improved performance of launching the app second time</li>
+          </ul>
+        </description>
+      </release>
+      <release version = "1.0.2" date="2017-05-03">
+        <description>
+          <ul>
+            <li>Support other package formats such as .rpm for other package managers</li>
+            <li>Minor fixes</li>
+          </ul>
+        </description>
+      </release>
+      <release version = "1.0.1" date="2017-04-22">
+        <description>
+          <ul>
+            <li>Added an ability to open packages with Eddy in the file manager</li>
+            <li>Show a spinner when loading packages</li>
+            <li>Fixed adding a file already in the list duplicated it</li>
+          </ul>
+        </description>
+      </release>
+      <release version = "1.0.0" date="2017-04-22">
+        <description>
+          <ul>
+            <li>Completely port to PackageKit and remove aptdaemon dependency</li>
+            <li>Fix wrong icon displayed in the notifications</li>
+          </ul>
+        </description>
+      </release>
+      <release version = "0.9.1" date="2017-04-20">
+        <description>
+          <ul>
+            <li>Fix Desktop file being invalid</li>
+            <li>Bump granite dependency version</li>
+            <li>Update debian packaging</li>
+          </ul>
+        </description>
+      </release>
+      <release version = "0.9.0" date="2017-04-17">
+        <description>
+          <p>Initial release</p>
+        </description>
+      </release>
   </releases>
   <screenshots>
     <screenshot type="default">
