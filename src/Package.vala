@@ -24,6 +24,16 @@ namespace Eddy {
 
         private static Pk.Task client;
 
+        [Flags]
+        public enum StateFlags {
+            NOT_INSTALLED,
+            INSTALLED,
+            CAN_DOWNGRADE,
+            CAN_UPDATE
+        }
+
+        public signal void state_updated ();
+
         public string filename { public get; construct; }
         public string name { 
             get {
@@ -68,7 +78,25 @@ namespace Eddy {
         public bool can_cancel { public get; private set; default = false; }
         public bool has_task { get; set; default = false; }
 
-        public bool is_installed { public get; private set; default = false; }
+        public StateFlags state_flags { public get; private set; default = StateFlags.NOT_INSTALLED; }
+        
+        public bool is_installed { 
+            get {
+                return StateFlags.INSTALLED in state_flags;
+            }
+        }
+
+        public bool can_downgrade {
+            get {
+                return StateFlags.CAN_DOWNGRADE in state_flags;
+            }
+        }
+
+        public bool can_update {
+            get {
+                return StateFlags.CAN_UPDATE in state_flags;
+            }
+        }
 
         private Cancellable? cancellable = null;  
 
@@ -221,6 +249,39 @@ namespace Eddy {
             return "";            
         }
 
+        private static int compare_versions (string a, string b) {
+            if (a == b) {
+                return 0;
+            }
+
+            string[] atok = a.split ("~");
+            string[] btok = b.split ("~");
+
+            if (atok.length < 2 && btok.length >= 2) {
+                return -1;
+            } else if (atok.length >= 2 && btok.length < 2) {
+                return 1;
+            }
+
+            string aver = atok[0];
+            string bver = btok[0];
+
+            string[] aparts = aver.split (".");
+            string[] bparts = bver.split (".");
+
+            int length = int.max (aparts.length, bparts.length);
+            for (int i = 0; i < length; i++) {
+                int rc = strcmp (aparts[i], bparts[i]);
+                if (rc < 0) {
+                    return -1;
+                } else if (rc > 0) {
+                    return 1;
+                }
+            }
+
+            return 0;
+        }
+
         public Package (string filename) {
             Object (filename: filename);
         }
@@ -326,25 +387,39 @@ namespace Eddy {
                 throw e;
             }
 
-            return false;            
+            return false;
         }
 
         public async void update_installed_state () {
-            string[] names = { name, null };
+            state_flags = StateFlags.NOT_INSTALLED;
 
-            uint installed = 0;
+            string[] names = { name, null };
             try {
+                bool found = false;
+
                 var results = yield client.resolve_async (Pk.Filter.INSTALLED, names, null, () => {});
                 results.get_package_array ().@foreach ((package) => {
+                    if (found) {
+                        return;
+                    }
+
                     if (Pk.Info.INSTALLED in package.get_info ()) {
-                        installed++;
+                        found = true;
+                        state_flags = StateFlags.INSTALLED;
+
+                        int rc = compare_versions (package.get_version (), version); 
+                        if (rc == 1) {
+                            state_flags |= StateFlags.CAN_DOWNGRADE;
+                        } else if (rc == -1) {
+                            state_flags |= StateFlags.CAN_UPDATE;
+                        }
                     }
                 });
             } catch (Error e) {
                 warning (e.message);
             }
 
-            is_installed = installed >= 1;
+            state_updated ();
         }
 
         public unowned string get_status_title () {

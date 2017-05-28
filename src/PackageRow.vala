@@ -22,7 +22,9 @@ namespace Eddy {
         private const int PROGRESS_BAR_HEIGHT = 5;
 
         public signal void action_clicked ();
+        public signal void reinstall ();
         public signal void removed ();
+        // public signal void update_same_packages ();
 
         public Package package { get; construct; }
         public bool show_action_button {
@@ -34,15 +36,18 @@ namespace Eddy {
         private Gtk.Box main_box;
 
         private Gtk.Button action_button;
+        private Gtk.Button reinstall_button;
 
         private Gtk.Button remove_button;
         private Gtk.Label status_label;
         private Gtk.Image state_icon;
 
         private static Gtk.SizeGroup size_group;
+        private static bool updating_same_packages;
 
         static construct {
             size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.HORIZONTAL);
+            updating_same_packages = false;
         }
 
         construct {
@@ -70,11 +75,22 @@ namespace Eddy {
             status_label = new Gtk.Label (null);
             state_icon = new Gtk.Image ();
 
+            // Action button can be a button for installing or uninstalling
             action_button = new Gtk.Button ();
             action_button.clicked.connect (() => action_clicked ());
             action_button.valign = Gtk.Align.CENTER;
             action_button.halign = Gtk.Align.CENTER;
             size_group.add_widget (action_button);
+
+            // Reinstall button can be a button for downgrading or updating.
+            // Since we install local packages there is no difference
+            // between those, it is just installing this package again
+            // over the old one
+            reinstall_button = new Gtk.Button ();
+            reinstall_button.clicked.connect (() => reinstall ());
+            reinstall_button.valign = Gtk.Align.CENTER;
+            reinstall_button.halign = Gtk.Align.CENTER;
+            size_group.add_widget (reinstall_button);
 
             remove_button = new Gtk.Button.from_icon_name ("edit-delete-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             remove_button.tooltip_text = _("Remove from list");
@@ -92,6 +108,7 @@ namespace Eddy {
             main_box.add (vertical_box);
             main_box.pack_end (status_label, false, false);
             main_box.pack_end (action_button, false, false);
+            main_box.pack_end (reinstall_button, false, false);
             main_box.pack_end (state_icon, false, false);
             main_box.pack_end (remove_button, false, false);
 
@@ -111,13 +128,13 @@ namespace Eddy {
             package.notify["progress"].connect (update_progress);
             package.notify["exit-code"].connect (update_state_icon);
             package.notify["has-task"].connect (update_visibility);
-            package.notify["is-installed"].connect (update_action_button);
+            package.state_updated.connect (update_buttons);
 
             draw.connect (on_draw);
             update_visibility ();
             update_state_icon ();
             update_status ();
-            update_action_button ();
+            update_buttons ();
             add (event_box);
         }
 
@@ -133,11 +150,12 @@ namespace Eddy {
             bool running = package.has_task;
             set_widget_visible (remove_button, !running);
             set_widget_visible (action_button, !running);
-            set_widget_visible (remove_button, !running);
             set_widget_visible (status_label, running);
+
+            update_buttons ();
         }
 
-        private void update_action_button () {
+        private void update_buttons () {
             if (package.is_installed) {
                 action_button.label = _("Uninstall");
                 action_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
@@ -146,7 +164,22 @@ namespace Eddy {
                 action_button.get_style_context ().remove_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
             }
 
+            if (package.can_update) {
+                reinstall_button.label = _("Update");
+                reinstall_button.get_style_context ().remove_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+                reinstall_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+                set_widget_visible (reinstall_button, !package.has_task);
+            } else if (package.can_downgrade) {
+                reinstall_button.label = _("Downgrade");
+                reinstall_button.get_style_context ().remove_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+                reinstall_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+                set_widget_visible (reinstall_button, !package.has_task);
+            } else {
+                set_widget_visible (reinstall_button, false);
+            }
+
             changed ();
+            // update_same_packages ();
         }
 
         private void update_state_icon () {

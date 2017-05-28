@@ -64,9 +64,10 @@ namespace Eddy {
             stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
 
             list_view = new PackageListView ();
+            list_view.install_all.connect ((packages) => on_install_all.begin ());
             list_view.perform_default_action.connect ((package) => on_perform_default_action.begin (package));
+            list_view.reinstall.connect ((package) => on_reinstall.begin (package));
             list_view.show_package_details.connect (on_show_package_details);
-            list_view.install_all.connect ((packages) => install_all.begin ());
             list_view.added.connect (on_package_added);
             list_view.removed.connect (on_package_removed);
 
@@ -216,29 +217,6 @@ namespace Eddy {
             }
             
             return false;
-        }
-
-        private async void install_all () {
-            list_view.working = true;
-            var packages = new Gee.ArrayList<Package> ();
-            foreach (var row in list_view.get_package_rows ()) {
-                packages.add (row.package);
-            }
-
-            install_cancellable = new Cancellable ();
-
-            TransactionResult result;
-            if (packages.size > 1) {
-                result = yield Package.install_packages (packages, install_cancellable, install_all_progress_callback);
-            } else {
-                result = yield packages[0].install (null, operation_progress_callback);
-            }
-
-            list_view.status = "";
-            install_cancellable = null;
-            list_view.working = false;
-
-            process_result (result);
         }
 
         private void install_all_progress_callback (Pk.Progress progress, Pk.ProgressType type) {
@@ -489,6 +467,37 @@ namespace Eddy {
             });
 
             chooser.run ();
+        }
+
+        private async void on_install_all () {
+            list_view.working = true;
+            var packages = new Gee.ArrayList<Package> ();
+            foreach (var row in list_view.get_package_rows ()) {
+                packages.add (row.package);
+            }
+
+            install_cancellable = new Cancellable ();
+
+            TransactionResult result;
+            if (packages.size > 1) {
+                result = yield Package.install_packages (packages, install_cancellable, install_all_progress_callback);
+            } else {
+                result = yield packages[0].install (null, operation_progress_callback);
+            }
+
+            list_view.status = "";
+            install_cancellable = null;
+            list_view.working = false;
+
+            process_result (result);
+        }
+
+        private async void on_reinstall (Package package) {
+            list_view.working = true;
+            var result = yield package.install (null, operation_progress_callback);
+            list_view.working = false;
+            
+            process_result (result);
         }
 
         private async void on_perform_default_action (Package package) {

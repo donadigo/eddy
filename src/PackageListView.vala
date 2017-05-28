@@ -21,6 +21,7 @@ namespace Eddy {
     public class PackageListView : Gtk.Box {
         public signal void install_all ();
         public signal void perform_default_action (Package package);
+        public signal void reinstall (Package package);
 
         public signal void added (Package package);
         public signal void show_package_details (Package package);
@@ -83,7 +84,9 @@ namespace Eddy {
         public void add_package (Package package) {
             var row = new PackageRow (package);
             row.action_clicked.connect (() => perform_default_action (row.package));
+            row.reinstall.connect (() => reinstall (row.package));
             row.removed.connect (on_row_removed);
+            // row.update_same_packages.connect (on_update_same_packages);
             list_box.insert (row, 1);
 
             update ();
@@ -111,6 +114,22 @@ namespace Eddy {
 
             return rows;
         }
+
+        // private Gee.ArrayList<PackageRow> get_package_rows_by_name (string name) {
+        //     var rows = new Gee.ArrayList<PackageRow> ();
+        //     foreach (var child in list_box.get_children ()) {
+        //         var row = child as PackageRow;
+        //         if (row == null) {
+        //             continue;
+        //         }
+
+        //         if (row.package.name == name) {
+        //             rows.add (row);
+        //         }
+        //     }   
+
+        //     return rows;
+        // }
 
         public void update () {
             var rows = get_package_rows ();
@@ -156,6 +175,18 @@ namespace Eddy {
                 return -1;
             }
 
+            if (package1.can_update && !package2.can_update) {
+                return 1;
+            } else if (!package1.can_update && package2.can_update) {
+                return -1;
+            }
+
+            if (package1.can_downgrade && !package2.can_downgrade) {
+                return 1;
+            } else if (!package1.can_downgrade && package2.can_downgrade) {
+                return -1;
+            }
+
             return package1.name.collate (package2.name);
         }
 
@@ -164,6 +195,21 @@ namespace Eddy {
             update ();
             removed (row.package);
         }
+
+        // TODO: this has an issue with update_same_packages () signal recursion 
+        // The user could have added two same packages with different versions
+        // so we probably need to update those also
+        // private void on_update_same_packages (PackageRow row) {
+        //     var rows = get_package_rows_by_name (row.package.name);
+        //     foreach (var _row in rows) {
+        //         // Do not update an already changed one
+        //         if (row == _row) {
+        //             continue;
+        //         }
+
+        //         _row.package.update_installed_state.begin ();
+        //     }
+        // }
 
         private void on_row_activated (Gtk.ListBoxRow row) {
             show_package_details (((PackageRow)row).package);
