@@ -50,12 +50,18 @@ namespace Eddy {
             main_box.margin = 12;
 
             var package_image = new Gtk.Image.from_icon_name ("package", Gtk.IconSize.DND);
+            package_image.valign = Gtk.Align.START;
 
             var summary_label = new Gtk.Label ("<b>%s</b>".printf (package.summary));
+            summary_label.wrap = true;
+            summary_label.wrap_mode = Pango.WrapMode.WORD_CHAR;
             summary_label.use_markup = true;
             summary_label.halign = Gtk.Align.START;
 
             var name_label = new Gtk.Label (package.name);
+            name_label.wrap = true;
+            name_label.wrap_mode = Pango.WrapMode.WORD_CHAR;
+            name_label.use_markup = true;
             name_label.halign = Gtk.Align.START;
 
             var vertical_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
@@ -73,6 +79,7 @@ namespace Eddy {
 
             remove_button = new Gtk.Button.from_icon_name ("edit-delete-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             remove_button.tooltip_text = _("Remove from list");
+            remove_button.valign = Gtk.Align.CENTER;
             remove_button.opacity = 0;
             remove_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
             remove_button.show_all ();
