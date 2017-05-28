@@ -16,7 +16,7 @@
  *
  * Authored by: Adam Bieńkowski <donadigos159@gmail.com>
  */
- 
+
 namespace Eddy {
     public class App : Granite.Application {
         public static string[] supported_mimetypes;
@@ -41,7 +41,7 @@ namespace Eddy {
             translate_url = "https://github.com/donadigo/eddy";
             about_authors = {"Adam Bieńkowski <donadigos159gmail.com>", null};
             about_translators = _("translator-credits");
-    
+
             about_license_type = Gtk.License.GPL_3_0;
 
             control = new Pk.Control ();
@@ -97,6 +97,15 @@ namespace Eddy {
                     }
                 }
             }
+            
+            var quit_action = new SimpleAction ("quit", null);
+            add_action (quit_action);
+            add_accelerator ("<Control>q", "app.quit", null);
+            quit_action.activate.connect (() => {
+                if (window != null) {
+                    window.destroy ();
+                }
+            });
         }
 
         public static int main (string[] args) {
