@@ -103,7 +103,7 @@ namespace Eddy {
             add_accelerator ("<Control>q", "app.quit", null);
             quit_action.activate.connect (() => {
                 if (window != null) {
-                    window.destroy ();
+                    window.close ();
                 }
             });
         }
