@@ -49,6 +49,8 @@ namespace Eddy {
         private int open_index;
         private int open_dowloads_index;
 
+        private string[] download_uris;
+
         private Cancellable? install_cancellable;
 
         // TODO: since Unity is no longer developed, this API will probably go away and 
@@ -116,7 +118,16 @@ namespace Eddy {
 
             var welcome_view = new Granite.Widgets.Welcome (_("Install some apps"), _("Drag and drop .%s files or open them to begin installation.").printf (main_ext));
             open_index = welcome_view.append ("document-open", _("Open"), _("Browse to open a single file"));
-            open_dowloads_index = welcome_view.append ("folder-download", _("Load from Downloads"), _("Load .%s files from your Downloads folder").printf (main_ext));
+
+            string downloads_path = Environment.get_user_special_dir (UserDirectory.DOWNLOAD);
+            open_folder.begin (downloads_path, (obj, res) => {
+                download_uris = open_folder.end (res);
+                if (download_uris.length > 0) {
+                    open_dowloads_index = welcome_view.append ("folder-download", _("Load from Downloads"), _("Load .%s files from your Downloads folder").printf (main_ext));
+                    welcome_view.show_all ();
+                }
+            });
+
             welcome_view.activated.connect (on_welcome_view_activated);
 
             stack.add_named (welcome_view, WELCOME_VIEW_ID);
@@ -311,18 +322,18 @@ namespace Eddy {
             }
         }
 
-        private string[] open_folder (string path) {
+        private async string[] open_folder (string path) {
             var file = File.new_for_path (path);
 
             string[] uris = {};
             try {
-                var enumerator = file.enumerate_children ("%s,%s".printf (FileAttribute.STANDARD_NAME, FileAttribute.STANDARD_CONTENT_TYPE), FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
+                var enumerator = yield file.enumerate_children_async ("%s,%s".printf (FileAttribute.STANDARD_NAME, FileAttribute.STANDARD_CONTENT_TYPE), FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
 
                 FileInfo? info = null;
                 while ((info = enumerator.next_file (null)) != null) {
                     if (info.get_file_type () == FileType.DIRECTORY) {
                         var subdir = file.resolve_relative_path (info.get_name ());
-                        string[] suburis = open_folder (subdir.get_path ());
+                        string[] suburis = yield open_folder (subdir.get_path ());
                         foreach (string uri in suburis) {
                             uris += uri;
                         }
@@ -542,9 +553,7 @@ namespace Eddy {
             if (index == open_index) {
                 show_open_dialog ();
             } else if (index == open_dowloads_index) {
-                string path = Environment.get_user_special_dir (UserDirectory.DOWNLOAD);
-                string[] uris = open_folder (path);
-                open_uris.begin (uris, false);
+                open_uris.begin (download_uris, false);
             }
         }
 
