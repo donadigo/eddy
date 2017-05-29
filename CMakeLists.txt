@@ -7,7 +7,7 @@ set (PKGDATADIR "${DATADIR}/${CMAKE_PROJECT_NAME}")
 set (GETTEXT_PACKAGE ${CMAKE_PROJECT_NAME})
 set (VERSION "1.1.4")
 set (VERSION_INFO "Stable")
-set (EXEC_NAME ${CMAKE_PROJECT_NAME})
+set (EXEC_NAME com.github.donadigo.eddy)
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
 set (DOLLAR "$")
 

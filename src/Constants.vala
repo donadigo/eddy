@@ -19,7 +19,7 @@
 
 namespace Eddy.Constants {
     public const string APP_NAME = "Eddy";
-    public const string EXEC_NAME = "eddy";
+    public const string EXEC_NAME = "com.github.donadigo.eddy";
     public const string DESKTOP_NAME = "com.github.donadigo.eddy.desktop";
     public const Gdk.RGBA BRAND_COLOR = { 0.9, 0.2, 0.3, 1 };
 
