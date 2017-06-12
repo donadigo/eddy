@@ -50,6 +50,7 @@ namespace Eddy {
             string[] available_mimetypes = settings.mime_types;
 
             if (available_mimetypes.length > 0) {
+                debug ("Using cached mime types from %s schema: %s", Constants.SCHEMA_NAME, string.joinv ("; ", available_mimetypes));
                 supported_mimetypes = available_mimetypes;
             } else {
                 try {
@@ -58,44 +59,23 @@ namespace Eddy {
                         string[] mimes = strdupv (control.mime_types);
                         if (mimes.length > 0) {
                             supported_mimetypes = mimes;
-                        } else {
-                            supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
                         }
-                    } else {
-                        supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
                     }
                 } catch (Error e) {
                     warning (e.message);
+                }
+
+                if (supported_mimetypes.length > 0) {
+                    debug ("Found %i supported mime types: %s", supported_mimetypes.length, string.joinv ("; ", supported_mimetypes));
+                } else {
+                    debug ("No supported mime types found. Using default set of mime types");
                     supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
                 }
 
                 settings.mime_types = supported_mimetypes;
 
                 // Register Eddy as the default app if there's no handler for a supported mimetype
-                var app_info = new DesktopAppInfo (Constants.DESKTOP_NAME);
-                if (app_info == null) {
-                    return;
-                }
-
-                foreach (string mimetype in supported_mimetypes) {
-                    var handler = AppInfo.get_default_for_type (mimetype, false);
-                    if (handler == null) {
-                        try {
-                            app_info.set_as_default_for_type (mimetype);
-                        } catch (Error e) {
-                            warning (e.message);
-                        }
-                    } else {
-                        unowned string[] types = handler.get_supported_types ();
-                        if (types == null || !(mimetype in types)) {
-                            try {
-                                app_info.set_as_default_for_type (mimetype);
-                            } catch (Error e) {
-                                warning (e.message);
-                            }
-                        }
-                    }
-                }
+                register_default_handler ();
             }
             
             var quit_action = new SimpleAction ("quit", null);
@@ -106,6 +86,36 @@ namespace Eddy {
                     window.close ();
                 }
             });
+        }
+
+        private static void register_default_handler () {
+            var app_info = new DesktopAppInfo (Constants.DESKTOP_NAME);
+            if (app_info == null) {
+                warning ("AppInfo object not found for %s.", Constants.DESKTOP_NAME);
+                return;
+            }
+
+            foreach (string mimetype in supported_mimetypes) {
+                var handler = AppInfo.get_default_for_type (mimetype, false);
+                if (handler == null) {
+                    try {
+                        debug ("Registering %s as the default handler for %s", Constants.APP_NAME, mimetype);
+                        app_info.set_as_default_for_type (mimetype);
+                    } catch (Error e) {
+                        warning (e.message);
+                    }
+                } else {
+                    unowned string[] types = handler.get_supported_types ();
+                    if (types == null || !(mimetype in types)) {
+                        try {
+                            debug ("Registering %s as the default handler for %s", Constants.APP_NAME, mimetype);
+                            app_info.set_as_default_for_type (mimetype);
+                        } catch (Error e) {
+                            warning (e.message);
+                        }
+                    }
+                }
+            }
         }
 
         public static int main (string[] args) {

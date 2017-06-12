@@ -71,5 +71,21 @@ namespace Eddy {
 
             return {};
         }
+
+        public string resolve_extension_for_mime_types (string[] mime_types) {
+            string[] extensions = {};
+            foreach (string mime_type in mime_types) {
+                foreach (string extension in get_extensions_for_mime_type (mime_type)) {
+                    extensions += extension;
+                }
+            }
+
+            if (extensions.length > 0) {
+                return extensions[0];
+            }
+
+            debug ("No extensions found. Using default %s extension", Constants.DEFAULT_EXTENSION);
+            return Constants.DEFAULT_EXTENSION;
+        }
     }
 }

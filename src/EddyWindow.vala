@@ -105,25 +105,18 @@ namespace Eddy {
             header_bar.pack_start (open_button_revealer);
             set_titlebar (header_bar);
 
+            debug ("Resolving extension for supported mime types");
             var helper = MimeTypeHelper.get_default ();
+            string extension = helper.resolve_extension_for_mime_types (App.supported_mimetypes);
 
-            string[] extensions = {};
-            foreach (string mime_type in App.supported_mimetypes) {
-                foreach (string extension in helper.get_extensions_for_mime_type (mime_type)) {
-                    extensions += extension;
-                }
-            }
-
-            string main_ext = extensions[0];
-
-            var welcome_view = new Granite.Widgets.Welcome (_("Install some apps"), _("Drag and drop .%s files or open them to begin installation.").printf (main_ext));
+            var welcome_view = new Granite.Widgets.Welcome (_("Install some apps"), _("Drag and drop .%s files or open them to begin installation.").printf (extension));
             open_index = welcome_view.append ("document-open", _("Open"), _("Browse to open a single file"));
 
             string downloads_path = Environment.get_user_special_dir (UserDirectory.DOWNLOAD);
             open_folder.begin (downloads_path, (obj, res) => {
                 download_uris = open_folder.end (res);
                 if (download_uris.length > 0) {
-                    open_dowloads_index = welcome_view.append ("folder-download", _("Load from Downloads"), _("Load .%s files from your Downloads folder").printf (main_ext));
+                    open_dowloads_index = welcome_view.append ("folder-download", _("Load from Downloads"), _("Load .%s files from your Downloads folder").printf (extension));
                     welcome_view.show_all ();
                 }
             });

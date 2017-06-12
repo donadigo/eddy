@@ -38,7 +38,7 @@ namespace Eddy {
         }
 
         private AppSettings () {
-            base ("com.github.donadigo.eddy");
+            base (Constants.SCHEMA_NAME);
         }
     }
 }
