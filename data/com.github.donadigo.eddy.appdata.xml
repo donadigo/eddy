@@ -15,6 +15,16 @@
     <binary>com.github.donadigo.eddy</binary>
   </provides>
   <releases>
+      <release version = "1.1.5" date="2017-06-12">
+        <description>
+          <ul>
+            <li>Fix choosing "Load from Downloads" option only showing a spinner if there are no packages in the folder</li>
+            <li>Minor code cleanups</li>
+            <li>More debug information in the app output if ran in a shell</li>
+            <li>Rename executable to match RDNN naming convention</li>
+          </ul>
+        </description>
+      </release>
       <release version = "1.1.4" date="2017-05-28">
         <description>
           <ul>
