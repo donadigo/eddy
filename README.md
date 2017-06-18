@@ -1,6 +1,7 @@
-# eddy
+# Eddy
 
 ### Simple debian package installer for elementary OS
+[![Get it on AppCenter](https://appcenter.elementary.io/badge.svg)](https://appcenter.elementary.io/com.github.donadigo.eddy)
 
 ![screenshot](Screenshot.png)
 
@@ -9,6 +10,8 @@ Install, uninstall and view information about debian packages with easy to use g
 Eddy can also support other packaging formats such as .rpm thanks to it's PackageKit backend, although it's primary focus is still managing debian packages and elementary OS. 
 
 ## Installation
+If you are on elementary OS you can just click this button and it will redirect you to an AppCenter page!
+[![Get it on AppCenter](https://appcenter.elementary.io/badge.svg)](https://appcenter.elementary.io/com.github.donadigo.eddy)
 
 ### Dependencies
 These dependencies must be present before building
