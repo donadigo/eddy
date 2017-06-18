@@ -38,3 +38,10 @@ make
 sudo make install
 com.github.donadigo.eddy
 ```
+
+### Reporting bugs & debugging
+When reporting a bug you should include as much information as possible, that is the system that you're running, what you did in order to have the bug appear and probably a simple list of steps on how to reproduce the issue, however it is not required as some issues are not easily reproducible.
+
+Additionally you can include a debug log in the description of the issue. To get a full log of backend and application messages, you can execute Eddy in a terminal with the following command:
+`G_MESSAGES_DEBUG=all com.github.donadigo.eddy --debug`, reproduce the bug in the application window and copy the terminal output to the issue's description.
+This information could really help localizing and fixing the issue.
