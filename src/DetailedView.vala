@@ -23,27 +23,23 @@ namespace Eddy {
 
         private Gtk.Label name_label;
         private Gtk.Label version_label;
-        private Gtk.Label installed_size_label;
         private Gtk.Label description_label;
         private Gtk.LinkButton homepage_button;
 
         construct {
             orientation = Gtk.Orientation.VERTICAL;
-            margin = 24;
+            margin = 40;
 
             name_label = new Gtk.Label (_("Unknown"));
             version_label = new Gtk.Label (_("Unknown"));
             version_label.halign = Gtk.Align.START;
 
-            installed_size_label = new Gtk.Label (_("Unknown"));
-            installed_size_label.halign = Gtk.Align.START;
-
             description_label = new Gtk.Label (_("Unknown"));
-            description_label.wrap_mode = Pango.WrapMode.CHAR;
+            description_label.wrap_mode = Pango.WrapMode.WORD;
             description_label.wrap = true;
-            description_label.selectable = true;
+            description_label.selectable = false;
             description_label.halign = Gtk.Align.START;
-            description_label.margin_top = 12;
+            description_label.margin_top = 16;
 
             homepage_button = new Gtk.LinkButton.with_label ("", _("Homepage"));
             homepage_button.no_show_all = true;
@@ -54,16 +50,15 @@ namespace Eddy {
 
             add (header_box);
             add (version_label);
-            add (installed_size_label);
+	    add (homepage_button);
             add (description_label);
         }
 
         public void set_package (Package package) {
             current_package = package;
 
-            name_label.label = _("Package name: %s".printf (package.name));
-            version_label.label = _("Version: %s".printf (package.version));
-            installed_size_label.label = _("Installed size: %s".printf (format_size (package.installed_size)));
+            name_label.set_markup (_("<span size='xx-large'><b>%s</b></span>".printf (package.name)));
+            version_label.set_markup (_("<span size='x-large'>version %s • %s</span>".printf (package.version, format_size (package.installed_size))));
             homepage_button.uri = package.homepage;
             description_label.label = package.description.strip ();
 
