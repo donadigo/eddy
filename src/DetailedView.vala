@@ -50,7 +50,6 @@ namespace Eddy {
 
             add (header_box);
             add (version_label);
-	    add (homepage_button);
             add (description_label);
         }
 
