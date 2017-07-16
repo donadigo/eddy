@@ -17,27 +17,26 @@
  * Authored by: Adam Bieńkowski <donadigos159@gmail.com>
  */
 
-namespace Eddy {
-    public class TransactionResult : Object {
-        public Gee.ArrayList<Package> packages { get; construct; }
-        public Pk.Role role { get; construct; }
-        public Error? error { get; set; default = null; }
-        public bool cancelled { get; set; default = false; }
 
-        construct {
-            packages = new Gee.ArrayList<Package> ();
-        }
+public class Eddy.TransactionResult : Object {
+    public Gee.ArrayList<Package> packages { get; construct; }
+    public Pk.Role role { get; construct; }
+    public Error? error { get; set; default = null; }
+    public bool cancelled { get; set; default = false; }
 
-        public TransactionResult (Pk.Role role) {
-            Object (role: role);
-        }
+    construct {
+        packages = new Gee.ArrayList<Package> ();
+    }
 
-        public void add_package (Package package) {
-            packages.add (package);
-        }
+    public TransactionResult (Pk.Role role) {
+        Object (role: role);
+    }
 
-        public bool is_empty () {
-            return packages.size < 1;
-        }
+    public void add_package (Package package) {
+        packages.add (package);
+    }
+
+    public bool is_empty () {
+        return packages.size < 1;
     }
 }

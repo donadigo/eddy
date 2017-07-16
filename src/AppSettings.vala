@@ -17,28 +17,26 @@
  * Authored by: Adam Bieńkowski <donadigos159@gmail.com>
  */
 
-namespace Eddy {
-    public class AppSettings : Granite.Services.Settings {
-        public string[] mime_types { get; set; } 
-        public bool always_on_top { get; set; }
+public class Eddy.AppSettings : Granite.Services.Settings {
+    public string[] mime_types { get; set; } 
+    public bool always_on_top { get; set; }
 
-        public int window_width { get; set; }
-        public int window_height { get; set; }
-        public int window_x { get; set; }
-        public int window_y { get; set; }
-        public bool window_maximized { get; set; }
+    public int window_width { get; set; }
+    public int window_height { get; set; }
+    public int window_x { get; set; }
+    public int window_y { get; set; }
+    public bool window_maximized { get; set; }
 
-        private static AppSettings? instance;
-        public static unowned AppSettings get_default () {
-            if (instance == null) {
-                instance = new AppSettings ();
-            }
-
-            return instance;
+    private static AppSettings? instance;
+    public static unowned AppSettings get_default () {
+        if (instance == null) {
+            instance = new AppSettings ();
         }
 
-        private AppSettings () {
-            base (Constants.SCHEMA_NAME);
-        }
+        return instance;
+    }
+
+    private AppSettings () {
+        base (Constants.SCHEMA_NAME);
     }
 }
