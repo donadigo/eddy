@@ -38,7 +38,7 @@ public class Eddy.Application : Granite.Application {
         bug_url = "https://github.com/donadigo/eddy/issues";
         help_url = "https://github.com/donadigo/eddy";
         translate_url = "https://github.com/donadigo/eddy";
-        about_authors = {"Adam Bieńkowski <donadigos159gmail.com>", null};
+        about_authors = { "Adam Bieńkowski <donadigos159gmail.com>", "Cristian Molina <megatux@gmail.com>", "J Winnie" };
         about_translators = _("translator-credits");
 
         about_license_type = Gtk.License.GPL_3_0;
