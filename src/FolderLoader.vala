@@ -46,7 +46,7 @@ namespace Eddy {
                             uris += uri;
                             uris_loaded++;
                         }
-                    } else if (info.get_content_type () in App.supported_mimetypes) {
+                    } else if (info.get_content_type () in Application.supported_mimetypes) {
                         try {
                             var subfile = file.resolve_relative_path (info.get_name ());
                             string? uri = Filename.to_uri (subfile.get_path (), null);

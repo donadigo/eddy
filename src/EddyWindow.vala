@@ -114,7 +114,7 @@ namespace Eddy {
 
             debug ("Resolving extension for supported mime types");
             var helper = MimeTypeHelper.get_default ();
-            main_extension = helper.resolve_extension_for_mime_types (App.supported_mimetypes);
+            main_extension = helper.resolve_extension_for_mime_types (Application.supported_mimetypes);
 
             welcome_view = new Granite.Widgets.Welcome (_("Install some apps"), _("Drag and drop .%s files or open them to begin installation.").printf (main_extension));
             open_index = welcome_view.append ("document-open", _("Open"), _("Browse to open a single file"));
@@ -344,7 +344,7 @@ namespace Eddy {
                 if (validate) {
                     try {
                         var info = file.query_info (FileAttribute.STANDARD_CONTENT_TYPE, FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
-                        if (!(info.get_content_type () in App.supported_mimetypes)) {
+                        if (!(info.get_content_type () in Application.supported_mimetypes)) {
                             errors += _("<b>%s</b> is not a package").printf (file.get_basename ());
                             done++;
                             if (done == uris.length) {
@@ -421,7 +421,7 @@ namespace Eddy {
         private void show_open_dialog () {
             var filter = new Gtk.FileFilter ();
             filter.set_filter_name (_("Packages"));
-            foreach (string mime_type in App.supported_mimetypes) {
+            foreach (string mime_type in Application.supported_mimetypes) {
                 filter.add_mime_type (mime_type);
             }
 

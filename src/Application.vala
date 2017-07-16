@@ -18,7 +18,7 @@
  */
 
 namespace Eddy {
-    public class App : Granite.Application {
+    public class Application : Granite.Application {
         public static string[] supported_mimetypes;
 
         private Pk.Control control;
@@ -119,7 +119,7 @@ namespace Eddy {
         }
 
         public static int main (string[] args) {
-            var app = new App ();
+            var app = new Application ();
             return app.run (args);
         }
 
