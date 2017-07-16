@@ -15,6 +15,17 @@
     <binary>com.github.donadigo.eddy</binary>
   </provides>
   <releases>
+      <release version="1.1.6" date="2017-07-16">
+        <description>
+          <ul>
+            <li>Fix about dialog not showing correctly</li>
+            <li>Fix the description label being already selected when entering details view</li>
+            <li>Minor code cleanups</li>
+            <li>New design of the details view</li>
+            <li>Better visibility in the window's titlebar</li>
+          </ul>
+        </description>
+      </release>
       <release version="1.1.5" date="2017-06-12">
         <description>
           <ul>
