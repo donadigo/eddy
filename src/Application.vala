@@ -22,7 +22,7 @@ namespace Eddy {
         public static string[] supported_mimetypes;
 
         private Pk.Control control;
-        private EddyWindow? window = null;
+        private MainWindow? window = null;
 
         construct {
             flags |= ApplicationFlags.HANDLES_OPEN;
@@ -137,7 +137,7 @@ namespace Eddy {
 
         public override void activate () {
             if (window == null) {
-                window = new EddyWindow ();
+                window = new MainWindow ();
                 add_window (window);
                 window.show_all ();
             } else {

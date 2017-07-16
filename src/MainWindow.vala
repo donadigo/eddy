@@ -23,7 +23,7 @@ namespace Eddy {
         widget.visible = visible;
     }
 
-    public class EddyWindow : Gtk.Window {
+    public class MainWindow : Gtk.Window {
         private const string WELCOME_VIEW_ID = "welcome-view";
         private const string LIST_VIEW_ID = "list-view";
         private const string DETAILED_VIEW_ID = "detailed-view";

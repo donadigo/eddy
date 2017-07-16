@@ -6,7 +6,7 @@ include (ValaPrecompile)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/config.vala.cmake ${CMAKE_CURRENT_SOURCE_DIR}/config.vala)
 vala_precompile (VALA_C ${EXEC_NAME}
     Application.vala
-    EddyWindow.vala
+    MainWindow.vala
     config.vala
     Constants.vala
     AppSettings.vala
