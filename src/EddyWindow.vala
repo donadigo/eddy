@@ -28,6 +28,11 @@ namespace Eddy {
         private const string LIST_VIEW_ID = "list-view";
         private const string DETAILED_VIEW_ID = "detailed-view";
         private const string SPINNER_VIEW_ID = "spinner-view";
+        private const string BRAND_STYLESHEET = """
+            @define-color colorPrimary #e6334d;
+            @define-color textColorPrimary #f2f2f2;
+            @define-color textColorPrimaryShadow #7b1b29;
+        """;
 
 #if HAVE_UNITY
         private static Unity.LauncherEntry unity_entry;
@@ -41,14 +46,16 @@ namespace Eddy {
 
         private Gtk.Button back_button;
 
+        private Granite.Widgets.Welcome welcome_view;
         private PackageListView list_view;
         private DetailedView detailed_view;
 
         private Gtk.HeaderBar header_bar;
 
-        private int open_index;
-        private int open_dowloads_index;
+        private int open_index = -1;
+        private int open_dowloads_index = -1;
 
+        private string main_extension;
         private string[] download_uris;
 
         private Cancellable? install_cancellable;
@@ -80,7 +87,7 @@ namespace Eddy {
 
             spinner_grid = new Gtk.Grid ();
             spinner_grid.halign = Gtk.Align.CENTER;
-            spinner_grid.valign = Gtk.Align.CENTER;            
+            spinner_grid.valign = Gtk.Align.CENTER;
             spinner_grid.add (spinner);
 
             open_button = new Gtk.Button.from_icon_name ("document-open", Gtk.IconSize.LARGE_TOOLBAR);
@@ -107,21 +114,13 @@ namespace Eddy {
 
             debug ("Resolving extension for supported mime types");
             var helper = MimeTypeHelper.get_default ();
-            string extension = helper.resolve_extension_for_mime_types (App.supported_mimetypes);
+            main_extension = helper.resolve_extension_for_mime_types (App.supported_mimetypes);
 
-            var welcome_view = new Granite.Widgets.Welcome (_("Install some apps"), _("Drag and drop .%s files or open them to begin installation.").printf (extension));
+            welcome_view = new Granite.Widgets.Welcome (_("Install some apps"), _("Drag and drop .%s files or open them to begin installation.").printf (main_extension));
             open_index = welcome_view.append ("document-open", _("Open"), _("Browse to open a single file"));
-
-            string downloads_path = Environment.get_user_special_dir (UserDirectory.DOWNLOAD);
-            open_folder.begin (downloads_path, (obj, res) => {
-                download_uris = open_folder.end (res);
-                if (download_uris.length > 0) {
-                    open_dowloads_index = welcome_view.append ("folder-download", _("Load from Downloads"), _("Load .%s files from your Downloads folder").printf (extension));
-                    welcome_view.show_all ();
-                }
-            });
-
             welcome_view.activated.connect (on_welcome_view_activated);
+
+            populate_download_folder_uris ();
 
             stack.add_named (welcome_view, WELCOME_VIEW_ID);
             stack.add_named (spinner_grid, SPINNER_VIEW_ID);
@@ -129,19 +128,15 @@ namespace Eddy {
             stack.add_named (detailed_view, DETAILED_VIEW_ID);
 
             add (stack);
-#if HAS_GRANITE_4_1
-            Granite.Widgets.Utils.set_color_primary (this, Constants.BRAND_COLOR);
-#else
-            string hex = Constants.BRAND_COLOR.to_string ();
-            var provider = new Gtk.CssProvider ();
 
+            var provider = new Gtk.CssProvider ();
             try {
-                provider.load_from_data (@"@define-color colorPrimary $hex;", -1);
+                provider.load_from_data (BRAND_STYLESHEET, -1);
                 Gtk.StyleContext.add_provider_for_screen (get_screen (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
             } catch (Error e) {
                 warning ("Could not create CSS Provider: %s", e.message);
             }
-#endif
+
             Gtk.drag_dest_set (this, Gtk.DestDefaults.MOTION | Gtk.DestDefaults.DROP, Constants.DRAG_TARGETS, Gdk.DragAction.COPY);
 
             var settings = AppSettings.get_default ();
@@ -232,10 +227,10 @@ namespace Eddy {
 #endif
 
                     unowned string title = Package.status_to_title (status);
-                    list_view.status = title;                    
+                    list_view.status = title;
                     break;
 #if HAVE_UNITY
-                case Pk.ProgressType.PERCENTAGE:                
+                case Pk.ProgressType.PERCENTAGE:
                     double percentage = ((double)progress.get_percentage ()) / 100;
                     unity_entry.progress = percentage;
                     break;
@@ -254,7 +249,7 @@ namespace Eddy {
                 case Pk.ProgressType.PERCENTAGE:
                     double percentage = ((double)progress.get_percentage ()) / 100;
                     unity_entry.progress = percentage;
-                    break;                    
+                    break;
             }
 #endif
         }
@@ -315,38 +310,26 @@ namespace Eddy {
             }
         }
 
-        private async string[] open_folder (string path) {
-            var file = File.new_for_path (path);
+        private void add_open_downloads_entry () {
+            open_dowloads_index = welcome_view.append ("folder-download", _("Load from Downloads"), _("Load .%s files from your Downloads folder").printf (main_extension));
+            welcome_view.show_all ();
+        }
 
-            string[] uris = {};
-            try {
-                var enumerator = yield file.enumerate_children_async ("%s,%s".printf (FileAttribute.STANDARD_NAME, FileAttribute.STANDARD_CONTENT_TYPE), FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
+        private void populate_download_folder_uris () {
+            string downloads_path = Environment.get_user_special_dir (UserDirectory.DOWNLOAD);
+            var loader = new FolderLoader (downloads_path);
 
-                FileInfo? info = null;
-                while ((info = enumerator.next_file (null)) != null) {
-                    if (info.get_file_type () == FileType.DIRECTORY) {
-                        var subdir = file.resolve_relative_path (info.get_name ());
-                        string[] suburis = yield open_folder (subdir.get_path ());
-                        foreach (string uri in suburis) {
-                            uris += uri;
-                        }
-                    } else if (info.get_content_type () in App.supported_mimetypes) {          
-                        try {
-                            var subfile = file.resolve_relative_path (info.get_name ());
-                            string? uri = Filename.to_uri (subfile.get_path (), null);
-                            if (uri != null) {
-                                uris += uri;
-                            }
-                        } catch (ConvertError e) {
-                            warning (e.message);
-                        }
-                    }
+            ulong signal_id = 0U;
+            signal_id = loader.notify["uris-loaded"].connect (() => {
+                if (loader.uris_loaded > 0) {
+                    add_open_downloads_entry ();
+                    loader.disconnect (signal_id);
                 }
-            } catch (Error e) {
-                warning (e.message);
-            }
+            });
 
-            return uris;
+            loader.load.begin ((obj, res) => {
+                download_uris = loader.load.end (res);
+            });
         }
 
         public async void open_uris (string[] uris, bool validate = true) {
@@ -530,7 +513,7 @@ namespace Eddy {
             set_widget_visible (back_button, false);
 
             open_button.sensitive = true;     
-            stack.visible_child_name = LIST_VIEW_ID;       
+            stack.visible_child_name = LIST_VIEW_ID;
         }
 
         private void on_show_package_details (Package package) {
@@ -539,6 +522,10 @@ namespace Eddy {
             set_widget_visible (back_button, true);
 
             open_button.sensitive = false;
+
+            // Do not select any of the labels in the detailed view
+            set_focus (null);
+
             stack.visible_child_name = DETAILED_VIEW_ID;
         }
 

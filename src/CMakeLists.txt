@@ -13,6 +13,7 @@ vala_precompile (VALA_C ${EXEC_NAME}
     Package.vala
     TransactionResult.vala
     MimeTypeHelper.vala
+    FolderLoader.vala
     DetailedView.vala
     PackageListView.vala
     PackageRow.vala

@@ -31,13 +31,14 @@ namespace Eddy {
             margin = 40;
 
             name_label = new Gtk.Label (_("Unknown"));
+
             version_label = new Gtk.Label (_("Unknown"));
             version_label.halign = Gtk.Align.START;
 
             description_label = new Gtk.Label (_("Unknown"));
             description_label.wrap_mode = Pango.WrapMode.WORD;
             description_label.wrap = true;
-            description_label.selectable = false;
+            description_label.selectable = true;
             description_label.halign = Gtk.Align.START;
             description_label.margin_top = 16;
 
@@ -56,8 +57,8 @@ namespace Eddy {
         public void set_package (Package package) {
             current_package = package;
 
-            name_label.set_markup (_("<span size='xx-large'><b>%s</b></span>".printf (package.name)));
-            version_label.set_markup (_("<span size='x-large'>version %s • %s</span>".printf (package.version, format_size (package.installed_size))));
+            name_label.set_markup ("<span size='xx-large'><b>%s</b></span>".printf (package.name));
+            version_label.set_markup (_("<span size='x-large'>version %s • %s</span>").printf (package.version, format_size (package.installed_size)));
             homepage_button.uri = package.homepage;
             description_label.label = package.description.strip ();
 
