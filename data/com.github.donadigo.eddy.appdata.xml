@@ -8,7 +8,7 @@
   <summary>Simple Debian Package Installer</summary>
   <description>
     <p>
-      Install, uninstall and view information about debian packages with easy to use graphical interface
+      Install .deb files from the internet
     </p>
   </description>
   <provides>
