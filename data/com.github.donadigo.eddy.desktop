@@ -14,5 +14,5 @@ MimeType=application/x-deb;application/vnd.debian.binary-package;
 Keywords=package;apt;dpkg;install;
 
 [Desktop Action AboutDialog]
-Exec=com.github.donadigo.eddy --about
+Exec=xdg-open appstream://com.github.donadigo.eddy.desktop
 Name=About Eddy
