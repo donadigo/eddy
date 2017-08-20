@@ -5,11 +5,17 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
   <name>Eddy</name>
-  <summary>Simple Debian Package Installer</summary>
+  <summary>Install and manage .deb files</summary>
   <description>
     <p>
-      Install, uninstall and view information about debian packages with easy to use graphical interface
+      Install, uninstall and view information about debian packages.
     </p>
+    <p>Features include:</p>
+    <ul>
+        <li>Install multiple packages at once</li>
+        <li>Upgrade and downgrade existing packages</li>
+        <li>Load all packages automatically from your Downloads folder</li>
+    </ul>
   </description>
   <provides>
     <binary>com.github.donadigo.eddy</binary>
