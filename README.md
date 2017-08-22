@@ -3,7 +3,7 @@
 ### A debian package installer for elementary OS
 [![Get it on AppCenter](https://appcenter.elementary.io/badge.svg)](https://appcenter.elementary.io/com.github.donadigo.eddy)
 
-![screenshot](Screenshot.png)
+![screenshot](Screenshot_1.png)
 
 Install, update, uninstall and view information about debian packages.
 
