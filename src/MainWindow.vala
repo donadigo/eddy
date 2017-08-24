@@ -70,6 +70,7 @@ public class Eddy.MainWindow : Gtk.Window {
     construct {
         stack = new Gtk.Stack ();
         stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
+        stack.get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
 
         list_view = new PackageListView ();
         list_view.install_all.connect ((packages) => on_install_all.begin ());
@@ -116,6 +117,7 @@ public class Eddy.MainWindow : Gtk.Window {
         main_extension = helper.resolve_extension_for_mime_types (Application.supported_mimetypes);
 
         welcome_view = new Granite.Widgets.Welcome (_("Install some apps"), _("Drag and drop .%s files or open them to begin installation.").printf (main_extension));
+        welcome_view.margin_start = welcome_view.margin_end = 6;
         open_index = welcome_view.append ("document-open", _("Open"), _("Browse to open a single file"));
         welcome_view.activated.connect (on_welcome_view_activated);
 
