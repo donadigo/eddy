@@ -71,7 +71,7 @@ public class Eddy.MainWindow : Gtk.Window {
         stack = new Gtk.Stack ();
         stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
         stack.get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
-
+        
         list_view = new PackageListView ();
         list_view.install_all.connect ((packages) => on_install_all.begin ());
         list_view.perform_default_action.connect ((package) => on_perform_default_action.begin (package));
