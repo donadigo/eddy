@@ -158,9 +158,24 @@ public class Eddy.MainWindow : Gtk.Window {
         set_keep_above (settings.always_on_top);
 
         drag_data_received.connect (on_drag_data_received);
+        
+        Unix.signal_add (Posix.SIGINT, signal_source_func, Priority.HIGH);
+        Unix.signal_add (Posix.SIGTERM, signal_source_func, Priority.HIGH);
     }
 
     public override bool delete_event (Gdk.EventAny event) {
+        return request_quit ();
+    }
+
+    private bool signal_source_func () {
+        if (!request_quit ()) {
+            destroy ();
+        }
+
+        return true;
+    }
+
+    private bool request_quit () {
         var packges = new Gee.ArrayList<Package> ();
 
         var rows = list_view.get_package_rows ();
@@ -216,7 +231,7 @@ public class Eddy.MainWindow : Gtk.Window {
         if (window != null) {
             settings.always_on_top = Gdk.WindowState.ABOVE in window.get_state ();
         }
-        
+
         return false;
     }
 
