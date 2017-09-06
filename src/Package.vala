@@ -72,7 +72,7 @@ public class Eddy.Package : Object {
 
     public Pk.Status status { public get; private set; }
     public Pk.Exit exit_code { get; set; default = Pk.Exit.UNKNOWN; }
-    public uint progress { get; set; default = 0; }
+    public int progress { get; set; default = -1; }
 
     public bool can_cancel { public get; private set; default = false; }
     public bool has_task { get; set; default = false; }
@@ -97,7 +97,20 @@ public class Eddy.Package : Object {
         }
     }
 
-    private Cancellable? cancellable = null;  
+    public bool should_show_progress {
+        get {
+            return has_task &&
+                progress >= 0 &&
+                progress <= 100 &&
+                status != Pk.Status.FINISHED &&
+                status != Pk.Status.CANCEL &&
+                status != Pk.Status.WAIT &&
+                status != Pk.Status.WAITING_FOR_LOCK &&
+                status != Pk.Status.WAITING_FOR_AUTH;
+        }
+    }
+
+    private Cancellable? cancellable = null;
 
     private Pk.Package? target = null;
 
@@ -139,7 +152,7 @@ public class Eddy.Package : Object {
                             }
 
                             package.status = item_progress.get_status ();
-                            package.progress = item_progress.percentage;
+                            package.progress = (int)item_progress.percentage;
                         }
 
                         break;
@@ -187,8 +200,6 @@ public class Eddy.Package : Object {
                 return _("Removing packages");
             case Pk.Status.DOWNLOAD:
                 return _("Downloading");
-            case Pk.Status.INSTALL:
-                return _("Installing");
             case Pk.Status.REFRESH_CACHE:
                 return _("Refreshing software list");
             case Pk.Status.UPDATE:
@@ -243,9 +254,10 @@ public class Eddy.Package : Object {
                 return _("Checking libraries in use");
             case Pk.Status.COPY_FILES:
                 return _("Copying files");
+            case Pk.Status.INSTALL:
+            default:
+                return _("Installing");
         }
-
-        return "";            
     }
 
     private static int compare_versions (string a, string b) {

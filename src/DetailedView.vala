@@ -57,7 +57,11 @@ public class Eddy.DetailedView : Gtk.Box {
         current_package = package;
 
         name_label.set_markup ("<span size='xx-large'><b>%s</b></span>".printf (package.name));
+
+        //  TRANSLATORS:
+        //  this string is formatted as: "version: `package-version` • `package-installed-size`"
         version_label.set_markup ("<span size='x-large'>" + _("version %s • %s").printf (package.version, format_size (package.installed_size)) + "</span>");
+
         homepage_button.uri = package.homepage;
         description_label.label = package.description.strip ();
 

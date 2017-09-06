@@ -31,6 +31,7 @@ public class Eddy.MainWindow : Gtk.Window {
         @define-color colorPrimary #e6334d;
         @define-color textColorPrimary #f2f2f2;
         @define-color textColorPrimaryShadow #7b1b29;
+
     """;
 
 #if HAVE_UNITY
@@ -223,7 +224,7 @@ public class Eddy.MainWindow : Gtk.Window {
         switch (type) {
             case Pk.ProgressType.STATUS:
                 var status = progress.get_status ();
-#if HAVE_UNITY                    
+#if HAVE_UNITY
                 unity_entry.progress_visible = status != Pk.Status.FINISHED;
 #endif
 
@@ -242,7 +243,7 @@ public class Eddy.MainWindow : Gtk.Window {
     }
 
     private void operation_progress_callback (Pk.Progress progress, Pk.ProgressType type) {
-#if HAVE_UNITY            
+#if HAVE_UNITY
         switch (type) {
             case Pk.ProgressType.STATUS:
                 unity_entry.progress_visible = progress.get_status () != Pk.Status.FINISHED;
@@ -268,7 +269,7 @@ public class Eddy.MainWindow : Gtk.Window {
                 title = _("Installation Failed");
             } else {
                 title = _("Uninstallation Failed");
-            }            
+            }
 
             var dialog = new MessageDialog (title, result.error.message, "dialog-error");
             dialog.add_button (_("Close"), 0);
@@ -302,7 +303,7 @@ public class Eddy.MainWindow : Gtk.Window {
             } else {
                 title = _("Uninstallation succeeded");
                 body = _("All packages have been successfully uninstalled");
-            }                    
+            }
 
             var notification = new Notification (title);
             notification.set_body (body);

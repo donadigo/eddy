@@ -18,12 +18,12 @@
  */
 
 public class Eddy.PackageRow : Gtk.ListBoxRow {
-    private const int PROGRESS_BAR_HEIGHT = 5;
+    private const int PROGRESS_BAR_HEIGHT = 6;
 
     public signal void action_clicked ();
     public signal void reinstall ();
     public signal void removed ();
-    // public signal void update_same_packages ();
+    //  public signal void update_same_packages ();
 
     public Package package { get; construct; }
     public bool show_action_button {
@@ -70,6 +70,7 @@ public class Eddy.PackageRow : Gtk.ListBoxRow {
         vertical_box.add (name_label);
 
         status_label = new Gtk.Label (null);
+        status_label.use_markup = true;
         state_icon = new Gtk.Image ();
 
         // Action button can be a button for installing or uninstalling
@@ -79,10 +80,10 @@ public class Eddy.PackageRow : Gtk.ListBoxRow {
         action_button.halign = Gtk.Align.CENTER;
         size_group.add_widget (action_button);
 
-        // Reinstall button can be a button for downgrading or updating.
-        // Since we install local packages there is no difference
-        // between those, it is just installing this package again
-        // over the old one
+        //  Reinstall button can be a button for downgrading or updating.
+        //  Since we install local packages there is no difference
+        //  between those, it is just installing this package again
+        //  over the old one
         reinstall_button = new Gtk.Button ();
         reinstall_button.clicked.connect (() => reinstall ());
         reinstall_button.valign = Gtk.Align.CENTER;
@@ -140,7 +141,11 @@ public class Eddy.PackageRow : Gtk.ListBoxRow {
     }
 
     private void update_status () {
-        status_label.label = package.get_status_title ();
+        if (package.should_show_progress) {
+            status_label.label = "%s (<b>%u%</b>)".printf (package.get_status_title (), package.progress);
+        } else {
+            status_label.label = package.get_status_title ();
+        }
     }
 
     private void update_visibility () {
@@ -176,7 +181,7 @@ public class Eddy.PackageRow : Gtk.ListBoxRow {
         }
 
         changed ();
-        // update_same_packages ();
+        //  update_same_packages ();
     }
 
     private void update_state_icon () {
@@ -195,24 +200,24 @@ public class Eddy.PackageRow : Gtk.ListBoxRow {
 
     private void update_progress () {
         queue_draw ();
+        update_status ();
 
-        // Unfortunately, animating the progress bar like this
-        // makes it show false progress when it's size changes
-        //
-        // uint from = progress_bar.get_allocated_width ();
-        // uint to = this.get_allocated_width () * progress / 100;
-        // uint i = from;
-        // Timeout.add (1, () => {
-        //     progress_bar.set_size_request ((int)i, PROGRESS_BAR_HEIGHT);
+        //  Unfortunately, animating the progress bar like this
+        //  makes it show false progress when it's size changes
+        //  uint from = progress_bar.get_allocated_width ();
+        //  uint to = this.get_allocated_width () * progress / 100;
+        //  uint i = from;
+        //  Timeout.add (1, () => {
+        //       progress_bar.set_size_request ((int)i, PROGRESS_BAR_HEIGHT);
 
-        //     if (to > from) {
-        //         i++;
-        //         return i <= to;
-        //     } else {
-        //         i--;
-        //         return i >= to;
-        //     }
-        // }); 
+        //       if (to > from) {
+        //           i++;
+        //           return i <= to;
+        //       } else {
+        //           i--;
+        //           return i >= to;
+        //       }
+        //  }); 
     }
 
     private bool on_draw (Cairo.Context context) {

@@ -85,7 +85,7 @@ public class Eddy.PackageListView : Gtk.Box {
         row.action_clicked.connect (() => perform_default_action (row.package));
         row.reinstall.connect (() => reinstall (row.package));
         row.removed.connect (on_row_removed);
-        // row.update_same_packages.connect (on_update_same_packages);
+        //  row.update_same_packages.connect (on_update_same_packages);
         list_box.insert (row, 1);
 
         update ();
@@ -114,7 +114,7 @@ public class Eddy.PackageListView : Gtk.Box {
         return rows;
     }
 
-    // private Gee.ArrayList<PackageRow> get_package_rows_by_name (string name) {
+    //  private Gee.ArrayList<PackageRow> get_package_rows_by_name (string name) {
     //     var rows = new Gee.ArrayList<PackageRow> ();
     //     foreach (var child in list_box.get_children ()) {
     //         var row = child as PackageRow;
@@ -128,7 +128,7 @@ public class Eddy.PackageListView : Gtk.Box {
     //     }   
 
     //     return rows;
-    // }
+    //  }
 
     public void update () {
         var rows = get_package_rows ();
@@ -168,6 +168,12 @@ public class Eddy.PackageListView : Gtk.Box {
         var package1 = package_row1.package;
         var package2 = package_row2.package;
 
+        if (package1.has_task && !package2.has_task) {
+            return -1;
+        } else if (!package1.has_task && package2.has_task) {
+            return 1;
+        }
+
         if (package1.is_installed && !package2.is_installed) {
             return 1;
         } else if (!package1.is_installed && package2.is_installed) {
@@ -198,7 +204,7 @@ public class Eddy.PackageListView : Gtk.Box {
     // TODO: this has an issue with update_same_packages () signal recursion 
     // The user could have added two same packages with different versions
     // so we probably need to update those also
-    // private void on_update_same_packages (PackageRow row) {
+    //  private void on_update_same_packages (PackageRow row) {
     //     var rows = get_package_rows_by_name (row.package.name);
     //     foreach (var _row in rows) {
     //         // Do not update an already changed one
@@ -208,9 +214,9 @@ public class Eddy.PackageListView : Gtk.Box {
 
     //         _row.package.update_installed_state.begin ();
     //     }
-    // }
+    //  }
 
     private void on_row_activated (Gtk.ListBoxRow row) {
         show_package_details (((PackageRow)row).package);
-    }        
+    }
 }
