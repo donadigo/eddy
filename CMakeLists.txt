@@ -20,7 +20,7 @@ add_definitions (-DI_KNOW_THE_PACKAGEKIT_GLIB2_API_IS_SUBJECT_TO_CHANGE)
 # Hide C compiler warnings
 add_definitions (-w)
 
-set (DEPS_PACKAGES granite;packagekit-glib2;posix)
+set (DEPS_PACKAGES granite;packagekit-glib2)
 
 option (USE_UNITY "Use Unity integration" ON)
 if (USE_UNITY)

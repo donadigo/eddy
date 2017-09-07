@@ -20,6 +20,7 @@ vala_precompile (VALA_C ${EXEC_NAME}
     MessageDialog.vala
 PACKAGES
     ${DEPS_PACKAGES}
+    posix
 OPTIONS
     ${GRANITE_OPTIONS}
     ${UNITY_OPTIONS}
