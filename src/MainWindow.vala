@@ -189,7 +189,7 @@ public class Eddy.MainWindow : Gtk.Window {
         uint size = packges.size;
         if (size > 0) {
             string operations_str = ngettext (_("There is %u operation unfinished").printf (size), _("There are %u operations unfinished").printf (size), size);
-            var dialog = new MessageDialog (_("There Are Ongoing Operations"), _("%s. Quitting will cancel all remaining transcations").printf (operations_str), "dialog-warning");
+            var dialog = new MessageDialog (_("There Are Ongoing Operations"), _("%s. Quitting will cancel all remaining transactions.").printf (operations_str), "dialog-warning");
             dialog.add_button (_("Do Not Quit"), 0);
 
             var button = new Gtk.Button.with_label (_("Quit Anyway"));

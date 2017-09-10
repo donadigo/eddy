@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-10 15:16+0200\n"
+"POT-Creation-Date: 2017-09-10 15:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -219,7 +219,7 @@ msgid "There Are Ongoing Operations"
 msgstr ""
 
 #: ../src/MainWindow.vala:192
-msgid "%s. Quitting will cancel all remaining transcations"
+msgid "%s. Quitting will cancel all remaining transactions."
 msgstr ""
 
 #: ../src/MainWindow.vala:193
