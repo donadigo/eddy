@@ -5,22 +5,35 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
   <name>Eddy</name>
-  <summary>Install and manage .deb files</summary>
+  <summary>Install and Manage .deb Files</summary>
   <description>
-    <p>
-      Install, uninstall and view information about debian packages.
-    </p>
-    <p>Features include:</p>
+    <p>Install, uninstall and view information about debian packages.</p>
+    <p><b>Features include:</b></p>
     <ul>
         <li>Install multiple packages at once</li>
         <li>Upgrade and downgrade existing packages</li>
         <li>Load all packages automatically from your Downloads folder</li>
+        <li>Complete system integration including notifications and progress bar in the dock</li>
     </ul>
   </description>
   <provides>
     <binary>com.github.donadigo.eddy</binary>
   </provides>
   <releases>
+      <release version="1.1.8" date="2017-09-21">
+        <description>
+          <p>This release adds small improvements to the user interface and adds initial support for translations.</p>
+          <p>Miscellaneous:</p>
+          <ul>
+            <li>Show operation percentage alongside the status label</li>
+            <li>Properly handle terminating the application by external processes</li>
+            <li>Fix punctuation in the quit dialog</li>
+            <li>Replace confusing quit dialog actions with more explicit ones</li>
+            <li>Update application metadata</li>
+            <li>Update Dutch and German translations</li>
+          </ul>
+        </description>
+      </release>
       <release version="1.1.7" date="2017-08-20">
         <description>
           <p>Fixed:</p>
