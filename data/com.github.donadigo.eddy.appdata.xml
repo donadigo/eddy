@@ -131,7 +131,11 @@
     <screenshot>
       <image>https://raw.githubusercontent.com/donadigo/eddy/master/Screenshot_3.png</image>
     </screenshot>
-  </screenshots>  
+  </screenshots>
+  ​<mimetypes>
+    <mimetype>application/x-debian-package</mimetype>
+    <mimetype>application/vnd.debian.binary-package</mimetype>
+  </mimetypes>
   <developer_name>Adam Bieńkowski</developer_name>
   <url type="homepage">https://github.com/donadigo/eddy</url>
   <url type="bugtracker">https://github.com/donadigo/eddy/issues</url>
