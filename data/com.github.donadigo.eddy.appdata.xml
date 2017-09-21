@@ -8,7 +8,7 @@
   <summary>Install and Manage .deb Files</summary>
   <description>
     <p>Install, uninstall and view information about debian packages.</p>
-    <p><b>Features include:</b></p>
+    <p>Features include:</p>
     <ul>
         <li>Install multiple packages at once</li>
         <li>Upgrade and downgrade existing packages</li>
