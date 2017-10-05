@@ -2,7 +2,9 @@
 Type=Application
 Name=Eddy
 GenericName=Package Installer
+GenericName[pt_BR]=Instalador de Pacotes
 Comment=Simple debian package installer
+Comment[pt_BR]=Um instalador de pacotes Debian simples
 Exec=com.github.donadigo.eddy %U
 Icon=com.github.donadigo.eddy
 Terminal=false
@@ -16,3 +18,4 @@ Keywords=package;apt;dpkg;install;
 [Desktop Action AboutDialog]
 Exec=xdg-open appstream://com.github.donadigo.eddy.desktop
 Name=About Eddy
+Name[pt_BR]=Sobre o Eddy
