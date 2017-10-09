@@ -150,7 +150,7 @@ public class Eddy.PackageListView : Gtk.Box {
             }
         }
 
-        installed_size_label.label = _("Total installed size: %s".printf (format_size (total_package_installed_size)));
+        installed_size_label.label = _("Total installed size: %s").printf (format_size (total_package_installed_size));
         install_button.sensitive = !working && rows.size > 0;
     }
 
