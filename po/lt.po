@@ -1,5 +1,324 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Moo, 2017.
+#
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-10-02 11:49+0300\n"
+"PO-Revision-Date: 2017-10-02 12:11+0300\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"Last-Translator: Moo\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: lt\n"
+
+#: ../src/PackageListView.vala:49 ../src/PackageRow.vala:165
+msgid "Install"
+msgstr "Įdiegti"
+
+#: ../src/PackageListView.vala:153
+msgid "Total installed size: %s"
+msgstr "Bendras dydis įdiegus: %s"
+
+#: ../src/Application.vala:42
+msgid "translator-credits"
+msgstr "Moo"
+
+#: ../src/Package.vala:190
+msgid "Starting"
+msgstr "Pradedama"
+
+#: ../src/Package.vala:192
+msgid "Waiting"
+msgstr "Laukiama"
+
+#: ../src/Package.vala:194
+msgid "Running"
+msgstr "Vykdoma"
+
+#: ../src/Package.vala:196
+msgid "Querying"
+msgstr "Užklausiama"
+
+#: ../src/Package.vala:198
+msgid "Getting information"
+msgstr "Gaunama informacija"
+
+#: ../src/Package.vala:200
+msgid "Removing packages"
+msgstr "Šalinami paketai"
+
+#: ../src/Package.vala:202
+msgid "Downloading"
+msgstr "Atsiunčiama"
+
+#: ../src/Package.vala:204
+msgid "Refreshing software list"
+msgstr "Iš naujo įkeliamas programinės įrangos sąrašas"
+
+#: ../src/Package.vala:206
+msgid "Installing updates"
+msgstr "Įdiegiami paketai"
+
+#: ../src/Package.vala:208
+msgid "Cleaning up packages"
+msgstr "Išvalomi paketai"
+
+#: ../src/Package.vala:210
+msgid "Obsoleting packages"
+msgstr "Pažymimi nebenaudojami paketai"
+
+#: ../src/Package.vala:212
+msgid "Resolving dependencies"
+msgstr "Sprendžiamos priklausomybės"
+
+#: ../src/Package.vala:214
+msgid "Checking signatures"
+msgstr "Tikrinami parašai"
+
+#: ../src/Package.vala:216
+msgid "Testing changes"
+msgstr "Išbandomi pakeitimai"
+
+#: ../src/Package.vala:218
+msgid "Committing changes"
+msgstr "Vykdomi pakeitimai"
+
+#: ../src/Package.vala:220
+msgid "Requesting data"
+msgstr "Užklausiami duomenys"
+
+#: ../src/Package.vala:222 ../src/Package.vala:455
+msgid "Finished"
+msgstr "Užbaigta"
+
+#: ../src/Package.vala:224
+msgid "Cancelling"
+msgstr "Atsisakoma"
+
+#: ../src/Package.vala:226
+msgid "Downloading repository information"
+msgstr "Atsiunčiama saugyklos informacija"
+
+#: ../src/Package.vala:228
+msgid "Downloading list of packages"
+msgstr "Atsiunčiamas paketų sąrašas"
+
+#: ../src/Package.vala:230
+msgid "Downloading file lists"
+msgstr "Atsiunčiamas failų sąrašas"
+
+#: ../src/Package.vala:232
+msgid "Downloading lists of changes"
+msgstr "Atsiunčiamas pakeitimų sąrašas"
+
+#: ../src/Package.vala:234
+msgid "Downloading groups"
+msgstr "Atsiunčiamos grupės"
+
+#: ../src/Package.vala:236
+msgid "Downloading update information"
+msgstr "Atsiunčiama atnaujinimo informacija"
+
+#: ../src/Package.vala:238
+msgid "Repackaging files"
+msgstr "Iš naujo supakuojami failai"
+
+#: ../src/Package.vala:240
+msgid "Loading cache"
+msgstr "Įkeliamas podėlis"
+
+#: ../src/Package.vala:242
+msgid "Scanning applications"
+msgstr "Peržiūrimos programos"
+
+#: ../src/Package.vala:244
+msgid "Generating package lists"
+msgstr "Kuriami paketų sąrašai"
+
+#: ../src/Package.vala:246
+msgid "Waiting for package manager lock"
+msgstr "Laukiama paketų tvarkytuvės užrakto"
+
+#: ../src/Package.vala:248
+msgid "Waiting for authentication"
+msgstr "Laukiama tapatybės nustatymo"
+
+#: ../src/Package.vala:250
+msgid "Updating running applications"
+msgstr "Atnaujinamos vykdomos programos"
+
+#: ../src/Package.vala:252
+msgid "Checking applications in use"
+msgstr "Tikrinamos naudojamos programos"
+
+#: ../src/Package.vala:254
+msgid "Checking libraries in use"
+msgstr "Tikrinamos naudojamos bibliotekos"
+
+#: ../src/Package.vala:256
+msgid "Copying files"
+msgstr "Kopijuojami failai"
+
+#: ../src/Package.vala:259
+msgid "Installing"
+msgstr "Įdiegiama"
+
+#: ../src/Package.vala:457
+msgid "Cancelled"
+msgstr "Atsisakoma"
+
+#: ../src/Package.vala:460
+msgid "Failed"
+msgstr "Nepavyko"
+
+#: ../src/Package.vala:463 ../src/DetailedView.vala:32
+#: ../src/DetailedView.vala:34 ../src/DetailedView.vala:37
+msgid "Unknown"
+msgstr "Nežinoma"
+
+#: ../src/MainWindow.vala:95
+msgid "Open…"
+msgstr "Atverti…"
+
+#: ../src/MainWindow.vala:103
+msgid "Go back"
+msgstr "Grįžti"
+
+#: ../src/MainWindow.vala:120
+msgid "Install some apps"
+msgstr "Įdiegti programas"
+
+#: ../src/MainWindow.vala:120
+msgid "Drag and drop .%s files or open them to begin installation."
+msgstr "Norėdami pradėti diegimą, vilkite arba atverkite .%s failus"
+
+#: ../src/MainWindow.vala:122 ../src/MainWindow.vala:454
+msgid "Open"
+msgstr "Atverti"
+
+#: ../src/MainWindow.vala:122
+msgid "Browse to open a single file"
+msgstr "Naršykite, norėdami atverti pavienį failą"
+
+#: ../src/MainWindow.vala:191
+msgid "There is %u operation unfinished"
+msgstr "Yra %u neužbaigta(-os) operacija(-os)"
+
+#: ../src/MainWindow.vala:191
+msgid "There are %u operations unfinished"
+msgstr "Yra %u neužbaigtų(-os) operacijų(-os)"
+
+#: ../src/MainWindow.vala:192
+msgid "There Are Ongoing Operations"
+msgstr "Yra vykdomų operacijų"
+
+#: ../src/MainWindow.vala:192
+msgid "%s. Quitting will cancel all remaining transactions."
+msgstr "%s. Išėjus, bus atsisakyta visų likusių operacijų."
+
+#: ../src/MainWindow.vala:193
+msgid "Do Not Quit"
+msgstr "Neišeiti"
+
+#: ../src/MainWindow.vala:195
+msgid "Quit Anyway"
+msgstr "Vis tiek išeiti"
+
+#: ../src/MainWindow.vala:284
+msgid "Installation Failed"
+msgstr "Įdiegimas nepavyko"
+
+#: ../src/MainWindow.vala:286
+msgid "Uninstallation Failed"
+msgstr "Šalinimas nepavyko"
+
+#: ../src/MainWindow.vala:290 ../src/MainWindow.vala:431
+msgid "Close"
+msgstr "Užverti"
+
+#: ../src/MainWindow.vala:309 ../src/MainWindow.vala:316
+msgid "Installation succeeded"
+msgstr "Įdiegimas sėkmingas"
+
+#: ../src/MainWindow.vala:310
+msgid "%s has been successfully installed"
+msgstr "%s buvo sėkmingai įdiegta"
+
+#: ../src/MainWindow.vala:312 ../src/MainWindow.vala:319
+msgid "Uninstallation succeeded"
+msgstr "Šalinimas pavyko"
+
+#: ../src/MainWindow.vala:313
+msgid "%s has been successfully uninstalled"
+msgstr "%s buvo sėkmingai pašalinta"
+
+#: ../src/MainWindow.vala:317
+msgid "All packages have been successfully installed"
+msgstr "Visi paketai buvo sėkmingai įdiegti"
+
+#: ../src/MainWindow.vala:320
+msgid "All packages have been successfully uninstalled"
+msgstr "Visi paketai buvo sėkmingai pašalinti"
+
+#: ../src/MainWindow.vala:331
+msgid "Load from Downloads"
+msgstr "Įkelti iš Atsiuntimų"
+
+#: ../src/MainWindow.vala:331
+msgid "Load .%s files from your Downloads folder"
+msgstr "Įkelkite .%s failus iš savo Atsiuntimų aplanko"
+
+#: ../src/MainWindow.vala:365
+msgid "<b>%s</b> is not a package"
+msgstr "<b>%s</b> nėra paketas"
+
+#: ../src/MainWindow.vala:404
+msgid "<b>%s</b> is not a valid package"
+msgstr "<b>%s</b> nėra teisingas paketas"
+
+#: ../src/MainWindow.vala:430
+msgid "Some Packages Could Not Be Added"
+msgstr "Kai kurių paketų nepavyko pridėti"
+
+#: ../src/MainWindow.vala:440
+msgid "Packages"
+msgstr "Paketai"
+
+#: ../src/MainWindow.vala:446
+msgid "All Files"
+msgstr "Visi failai"
+
+#: ../src/MainWindow.vala:452
+msgid "Cancel"
+msgstr "Atsisakyti"
+
+#: ../src/DetailedView.vala:44
+msgid "Homepage"
+msgstr "Tinklalapis"
+
+#: ../src/DetailedView.vala:63
+msgid "version %s • %s"
+msgstr "versija %s • %s"
+
+#: ../src/PackageRow.vala:94
+msgid "Remove from list"
+msgstr "Šalinti iš sąrašo"
+
+#: ../src/PackageRow.vala:162
+msgid "Uninstall"
+msgstr "Šalinti"
+
+#: ../src/PackageRow.vala:170
+msgid "Update"
+msgstr "Atnaujinti"
+
+#: ../src/PackageRow.vala:175
+msgid "Downgrade"
+msgstr "Sendinti"
