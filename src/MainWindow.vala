@@ -514,7 +514,8 @@ public class Eddy.MainWindow : Gtk.Window {
     }
 
     private void on_package_added (Package package) {
-        if (stack.visible_child_name != LIST_VIEW_ID) {
+        string name = stack.visible_child_name;
+        if (name != LIST_VIEW_ID && name != DETAILED_VIEW_ID) {
             open_button_revealer.reveal_child = true;
             stack.visible_child_name = LIST_VIEW_ID;
         }
@@ -530,7 +531,7 @@ public class Eddy.MainWindow : Gtk.Window {
     private void on_back_button_clicked () {
         set_widget_visible (back_button, false);
 
-        open_button.sensitive = true;     
+        open_button.sensitive = true;
         stack.visible_child_name = LIST_VIEW_ID;
     }
 
