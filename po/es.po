@@ -27,7 +27,7 @@ msgstr "Tamaño total instalado: %s"
 
 #: ../src/Application.vala:42
 msgid "translator-credits"
-msgstr "Juan Velandia https://juankz.github.io\n"
+msgstr "Juan Velandia https://juankz.github.io"
 
 #: ../src/Package.vala:190
 msgid "Starting"
