@@ -1,7 +1,17 @@
-# Eddy
+<div>
+  <h1 align="center">Eddy</h1>
+  <h3 align="center">A debian package installer for elementary OS</h3>
+</div>
 
-### A debian package installer for elementary OS
-[![Get it on AppCenter](https://appcenter.elementary.io/badge.svg)](https://appcenter.elementary.io/com.github.donadigo.eddy)
+<br/>
+
+<p align="center">
+  <a href="https://appcenter.elementary.io/com.github.donadigo.eddy">
+    <img src="https://appcenter.elementary.io/badge.svg" alt="Get it on AppCenter">
+  </a>
+</p>
+
+<br/>
 
 ![screenshot](Screenshot_1.png)
 
