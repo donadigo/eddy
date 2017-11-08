@@ -13,7 +13,9 @@
 
 <br/>
 
-![screenshot](Screenshot_1.png)
+<p align="center">
+    <img src="Screenshot_1.png" alt="Screenshot">
+</p>
 
 Install, update, uninstall and view information about debian packages.
 
