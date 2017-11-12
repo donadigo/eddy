@@ -429,6 +429,7 @@ public class Eddy.MainWindow : Gtk.Window {
             }
 
             var dialog = new MessageDialog (_("Some Packages Could Not Be Added"), builder.str, "dialog-warning");
+            dialog.title = Constants.APP_NAME;
             dialog.add_button (_("Close"), 0);
             dialog.show_all ();
             dialog.run ();
