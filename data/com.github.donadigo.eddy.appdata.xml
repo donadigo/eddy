@@ -20,6 +20,22 @@
     <binary>com.github.donadigo.eddy</binary>
   </provides>
   <releases>
+      <release version="1.1.9" date="2017-11-12">
+        <description>
+          <p>This release fixes small annoyances with the UI and includes new translations:</p>
+          <ul>
+            <li>Brazilian Portuguese translation (Paulo Galardi)</li>
+            <li>Lithuanian translation (welaq)</li>
+            <li>Spanish translation (Juan Carlos)</li>
+            <li>French translation (nvivant)</li>
+          </ul>
+          <p>Fixed:</p>
+          <ul>
+            <li>Fast switching to the detailed view while loading packages caused unintentional auto-switching to list view</li>
+            <li>Error dialog now has a proper title</li>
+          </ul>
+        </description>
+      </release>
       <release version="1.1.8" date="2017-09-21">
         <description>
           <p>This release adds small improvements to the user interface and adds initial support for translations.</p>
