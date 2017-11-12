@@ -1,7 +1,7 @@
 Source: com.github.donadigo.eddy
 Section: utils
 Priority: optional
-Maintainer: Adam Bieńkowski <donadigos159@gmail.com>
+Maintainer: Adam Bienkowski <donadigos159@gmail.com>
 Build-Depends: cmake (>= 2.8),
                debhelper (>= 9),
                libgranite-dev,
