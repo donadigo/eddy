@@ -1,5 +1,320 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-13 21:18+0400\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Андрей Культяпов <camellan@yandex.ru>\n"
+"Language-Team: \n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Poedit 2.0\n"
+
+#: ../src/PackageListView.vala:49 ../src/PackageRow.vala:165
+msgid "Install"
+msgstr "Установить"
+
+#: ../src/PackageListView.vala:153
+msgid "Total installed size: %s"
+msgstr "Общий размер установки: %s"
+
+#: ../src/Application.vala:42
+msgid "translator-credits"
+msgstr "translator-credits"
+
+#: ../src/Package.vala:190
+msgid "Starting"
+msgstr "Старт"
+
+#: ../src/Package.vala:192
+msgid "Waiting"
+msgstr "Ожидание"
+
+#: ../src/Package.vala:194
+msgid "Running"
+msgstr "Запуск"
+
+#: ../src/Package.vala:196
+msgid "Querying"
+msgstr "Запрос"
+
+#: ../src/Package.vala:198
+msgid "Getting information"
+msgstr "Получение информации"
+
+#: ../src/Package.vala:200
+msgid "Removing packages"
+msgstr "Удаление пакетов"
+
+#: ../src/Package.vala:202
+msgid "Downloading"
+msgstr "Загружается"
+
+#: ../src/Package.vala:204
+msgid "Refreshing software list"
+msgstr "Обновление списка программ"
+
+#: ../src/Package.vala:206
+msgid "Installing updates"
+msgstr "Установка обновлений"
+
+#: ../src/Package.vala:208
+msgid "Cleaning up packages"
+msgstr "Очистка пакетов"
+
+#: ../src/Package.vala:210
+msgid "Obsoleting packages"
+msgstr "Каталогизация пакетов"
+
+#: ../src/Package.vala:212
+msgid "Resolving dependencies"
+msgstr "Разрешение зависимостей"
+
+#: ../src/Package.vala:214
+msgid "Checking signatures"
+msgstr "Проверка подписей"
+
+#: ../src/Package.vala:216
+msgid "Testing changes"
+msgstr "Проверка изменений"
+
+#: ../src/Package.vala:218
+msgid "Committing changes"
+msgstr "Внесение изменений"
+
+#: ../src/Package.vala:220
+msgid "Requesting data"
+msgstr "Запрос данных"
+
+#: ../src/Package.vala:222 ../src/Package.vala:455
+msgid "Finished"
+msgstr "Завершено"
+
+#: ../src/Package.vala:224
+msgid "Cancelling"
+msgstr "Отменение"
+
+#: ../src/Package.vala:226
+msgid "Downloading repository information"
+msgstr "Загрузка информации репозитория"
+
+#: ../src/Package.vala:228
+msgid "Downloading list of packages"
+msgstr "Загрузка списка пакетов"
+
+#: ../src/Package.vala:230
+msgid "Downloading file lists"
+msgstr "Загрузка списка файлов"
+
+#: ../src/Package.vala:232
+msgid "Downloading lists of changes"
+msgstr "Згрузка списка изменений"
+
+#: ../src/Package.vala:234
+msgid "Downloading groups"
+msgstr "Загрузка групп"
+
+#: ../src/Package.vala:236
+msgid "Downloading update information"
+msgstr "Загрузка информации об обновлении"
+
+#: ../src/Package.vala:238
+msgid "Repackaging files"
+msgstr "Переупаковка файлов"
+
+#: ../src/Package.vala:240
+msgid "Loading cache"
+msgstr "Загрузка кэша"
+
+#: ../src/Package.vala:242
+msgid "Scanning applications"
+msgstr "Сканирование приложений"
+
+#: ../src/Package.vala:244
+msgid "Generating package lists"
+msgstr "Составление списка пакетов"
+
+#: ../src/Package.vala:246
+msgid "Waiting for package manager lock"
+msgstr "Ожидание блокировки менеджера пакетов"
+
+#: ../src/Package.vala:248
+msgid "Waiting for authentication"
+msgstr "Ожидание аутентификации"
+
+#: ../src/Package.vala:250
+msgid "Updating running applications"
+msgstr "Обновление запущенных приложений"
+
+#: ../src/Package.vala:252
+msgid "Checking applications in use"
+msgstr "Проверка используемых приложений"
+
+#: ../src/Package.vala:254
+msgid "Checking libraries in use"
+msgstr "Проверка используемых библиотек"
+
+#: ../src/Package.vala:256
+msgid "Copying files"
+msgstr "Копирование файлов"
+
+#: ../src/Package.vala:259
+msgid "Installing"
+msgstr "Установка"
+
+#: ../src/Package.vala:457
+msgid "Cancelled"
+msgstr "Отменено"
+
+#: ../src/Package.vala:460
+msgid "Failed"
+msgstr "Неудачно"
+
+#: ../src/Package.vala:463 ../src/DetailedView.vala:32
+#: ../src/DetailedView.vala:34 ../src/DetailedView.vala:37
+msgid "Unknown"
+msgstr "Неизвестно"
+
+#: ../src/MainWindow.vala:95
+msgid "Open…"
+msgstr "Открыть…"
+
+#: ../src/MainWindow.vala:103
+msgid "Go back"
+msgstr "Вернуться"
+
+#: ../src/MainWindow.vala:120
+msgid "Install some apps"
+msgstr "Установка приложений"
+
+#: ../src/MainWindow.vala:120
+msgid "Drag and drop .%s files or open them to begin installation."
+msgstr "Перетащите сюда .%s-файлы или выберете нужные для установки."
+
+#: ../src/MainWindow.vala:122 ../src/MainWindow.vala:454
+msgid "Open"
+msgstr "Открыть"
+
+#: ../src/MainWindow.vala:122
+msgid "Browse to open a single file"
+msgstr "Обзор для открытия одного файла"
+
+#: ../src/MainWindow.vala:191
+msgid "There is %u operation unfinished"
+msgstr "Эта операция %u незавершена"
+
+#: ../src/MainWindow.vala:191
+msgid "There are %u operations unfinished"
+msgstr "Эти операции %u незавершены"
+
+#: ../src/MainWindow.vala:192
+msgid "There Are Ongoing Operations"
+msgstr "Есть выполняемые операции"
+
+#: ../src/MainWindow.vala:192
+msgid "%s. Quitting will cancel all remaining transactions."
+msgstr "%s. Выход отменит все незавершённые действия."
+
+#: ../src/MainWindow.vala:193
+msgid "Do Not Quit"
+msgstr "Не завершать"
+
+#: ../src/MainWindow.vala:195
+msgid "Quit Anyway"
+msgstr "Всегда завершать"
+
+#: ../src/MainWindow.vala:284
+msgid "Installation Failed"
+msgstr "Ошибка установки"
+
+#: ../src/MainWindow.vala:286
+msgid "Uninstallation Failed"
+msgstr "Ошибка удаления"
+
+#: ../src/MainWindow.vala:290 ../src/MainWindow.vala:431
+msgid "Close"
+msgstr "Закрыть"
+
+#: ../src/MainWindow.vala:309 ../src/MainWindow.vala:316
+msgid "Installation succeeded"
+msgstr "Установка прошла успешно"
+
+#: ../src/MainWindow.vala:310
+msgid "%s has been successfully installed"
+msgstr "%s успешно установлен"
+
+#: ../src/MainWindow.vala:312 ../src/MainWindow.vala:319
+msgid "Uninstallation succeeded"
+msgstr "Удаление завершено"
+
+#: ../src/MainWindow.vala:313
+msgid "%s has been successfully uninstalled"
+msgstr "%s было успешно удалено"
+
+#: ../src/MainWindow.vala:317
+msgid "All packages have been successfully installed"
+msgstr "Все пакеты были успешно установлены"
+
+#: ../src/MainWindow.vala:320
+msgid "All packages have been successfully uninstalled"
+msgstr "Все пакеты были успешно удалены"
+
+#: ../src/MainWindow.vala:331
+msgid "Load from Downloads"
+msgstr "Запуск из папки загрузок"
+
+#: ../src/MainWindow.vala:331
+msgid "Load .%s files from your Downloads folder"
+msgstr "Запуск .%s-файлов из папки загрузок"
+
+#: ../src/MainWindow.vala:365
+msgid "<b>%s</b> is not a package"
+msgstr "<b>%s</b> это не установочный пакет"
+
+#: ../src/MainWindow.vala:404
+msgid "<b>%s</b> is not a valid package"
+msgstr "<b>%s</b> недопустимый установочный пакет"
+
+#: ../src/MainWindow.vala:430
+msgid "Some Packages Could Not Be Added"
+msgstr "Некоторые пакеты не могут быть добавлены"
+
+#: ../src/MainWindow.vala:440
+msgid "Packages"
+msgstr "Пакеты"
+
+#: ../src/MainWindow.vala:446
+msgid "All Files"
+msgstr "Все файлы"
+
+#: ../src/MainWindow.vala:452
+msgid "Cancel"
+msgstr "Отмена"
+
+#: ../src/DetailedView.vala:44
+msgid "Homepage"
+msgstr "Домашняя страница"
+
+#: ../src/DetailedView.vala:63
+msgid "version %s • %s"
+msgstr "версия %s • %s"
+
+#: ../src/PackageRow.vala:94
+msgid "Remove from list"
+msgstr "Удалить из списка"
+
+#: ../src/PackageRow.vala:162
+msgid "Uninstall"
+msgstr "Удалить"
+
+#: ../src/PackageRow.vala:170
+msgid "Update"
+msgstr "Обновить"
+
+#: ../src/PackageRow.vala:175
+msgid "Downgrade"
+msgstr "Откатить"
