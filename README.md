@@ -19,7 +19,7 @@
 
 Install, update, uninstall and view information about debian packages.
 
-Eddy can also support other packaging formats such as .rpm thanks to it's PackageKit backend, although it's primary focus is managing debian packages and being designed for elementary OS. 
+Eddy can also support other packaging formats such as .rpm thanks to it's PackageKit backend, although it's primary focus is managing debian packages and being designed for elementary OS.
 
 ## Installation
 
@@ -30,16 +30,16 @@ These dependencies must be present before building
  - `granite`
  - `packagekit-glib2`
  - `unity`
- 
+
  You can install these on a Ubuntu-based system by executing this command:
- 
+
  `sudo apt install valac libgranite-dev libpackagekit-glib2-dev libunity-dev`
 
 ### Building
 ```
 mkdir build
 cd build
-cmake ..
+cmake -DCMAKE_INSTALL_PREFIX=/usr ..
 make
 ```
 
