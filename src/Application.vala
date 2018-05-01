@@ -32,7 +32,7 @@ public class Eddy.Application : Granite.Application {
         exec_name = Constants.EXEC_NAME;
         app_launcher = Constants.DESKTOP_NAME;
 
-        build_version = Constants.VERSION;
+//        build_version = Constants.VERSION;
         app_icon = "com.github.donadigo.eddy";
         main_url = "https://github.com/donadigo/eddy";
         bug_url = "https://github.com/donadigo/eddy/issues";
