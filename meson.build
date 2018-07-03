@@ -32,7 +32,6 @@ executable(
     'src/DetailedView.vala',
     'src/FolderLoader.vala',
     'src/MainWindow.vala',
-    'src/MessageDialog.vala',
     'src/MimeTypeHelper.vala',
     'src/Package.vala',
     'src/PackageListView.vala',
