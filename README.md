@@ -37,15 +37,14 @@ These dependencies must be present before building
 
 ### Building
 ```
-mkdir build
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=/usr ..
-make
+meson build && cd build
+meson configure -Dprefix=/usr
+ninja
 ```
 
 ### Installing & executing
 ```
-sudo make install
+sudo ninja install
 com.github.donadigo.eddy
 ```
 
