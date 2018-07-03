@@ -2,7 +2,7 @@ Source: com.github.donadigo.eddy
 Section: utils
 Priority: optional
 Maintainer: Adam Bienkowski <donadigos159@gmail.com>
-Build-Depends: cmake (>= 2.8),
+Build-Depends: meson,
                debhelper (>= 9),
                libgranite-dev,
                libpackagekit-glib2-dev,
