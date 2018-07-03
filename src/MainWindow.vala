@@ -160,8 +160,8 @@ public class Eddy.MainWindow : Gtk.Window {
 
         drag_data_received.connect (on_drag_data_received);
         
-        Unix.signal_add (Posix.SIGINT, signal_source_func, Priority.HIGH);
-        Unix.signal_add (Posix.SIGTERM, signal_source_func, Priority.HIGH);
+        Unix.signal_add (Posix.Signal.INT, signal_source_func, Priority.HIGH);
+        Unix.signal_add (Posix.Signal.TERM, signal_source_func, Priority.HIGH);
     }
 
     public override bool delete_event (Gdk.EventAny event) {
@@ -190,7 +190,10 @@ public class Eddy.MainWindow : Gtk.Window {
         uint size = packges.size;
         if (size > 0) {
             string operations_str = ngettext (_("There is %u operation unfinished").printf (size), _("There are %u operations unfinished").printf (size), size);
-            var dialog = new MessageDialog (_("There Are Ongoing Operations"), _("%s. Quitting will cancel all remaining transactions.").printf (operations_str), "dialog-warning");
+            var dialog = new Granite.MessageDialog.with_image_from_icon_name (_("There Are Ongoing Operations"),
+                _("%s. Quitting will cancel all remaining transactions.").printf (operations_str),
+                "dialog-warning",
+                Gtk.ButtonsType.NONE);
             dialog.add_button (_("Do Not Quit"), 0);
 
             var button = new Gtk.Button.with_label (_("Quit Anyway"));
@@ -287,8 +290,7 @@ public class Eddy.MainWindow : Gtk.Window {
                 title = _("Uninstallation Failed");
             }
 
-            var dialog = new MessageDialog (title, result.error.message, "dialog-error");
-            dialog.add_button (_("Close"), 0);
+            var dialog = new Granite.MessageDialog.with_image_from_icon_name (title, result.error.message, "dialog-error");
             dialog.show_all ();
             dialog.run ();
             dialog.destroy ();
@@ -428,9 +430,8 @@ public class Eddy.MainWindow : Gtk.Window {
                 builder.append_c ('\n');
             }
 
-            var dialog = new MessageDialog (_("Some Packages Could Not Be Added"), builder.str, "dialog-warning");
+            var dialog = new Granite.MessageDialog.with_image_from_icon_name (_("Some Packages Could Not Be Added"), builder.str, "dialog-warning");
             dialog.title = Constants.APP_NAME;
-            dialog.add_button (_("Close"), 0);
             dialog.show_all ();
             dialog.run ();
             dialog.destroy ();

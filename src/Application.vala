@@ -17,7 +17,7 @@
  * Authored by: Adam Bieńkowski <donadigos159@gmail.com>
  */
 
-public class Eddy.Application : Granite.Application {
+public class Eddy.Application : Gtk.Application {
     public static string[] supported_mimetypes;
 
     private Pk.Control control;
@@ -27,21 +27,6 @@ public class Eddy.Application : Granite.Application {
         flags |= ApplicationFlags.HANDLES_OPEN;
 
         application_id = "com.github.donadigo.eddy";
-        program_name = Constants.APP_NAME;
-        app_years = "2016-2017";
-        exec_name = Constants.EXEC_NAME;
-        app_launcher = Constants.DESKTOP_NAME;
-
-//        build_version = Constants.VERSION;
-        app_icon = "com.github.donadigo.eddy";
-        main_url = "https://github.com/donadigo/eddy";
-        bug_url = "https://github.com/donadigo/eddy/issues";
-        help_url = "https://github.com/donadigo/eddy";
-        translate_url = "https://github.com/donadigo/eddy";
-        about_authors = { "Adam Bieńkowski <donadigos159gmail.com>", "Cristian Molina <megatux@gmail.com>", "J Winnie" };
-        about_translators = _("translator-credits");
-
-        about_license_type = Gtk.License.GPL_3_0;
 
         control = new Pk.Control ();
 
