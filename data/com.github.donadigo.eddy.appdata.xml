@@ -20,6 +20,14 @@
     <binary>com.github.donadigo.eddy</binary>
   </provides>
   <releases>
+      <release version="1.2.1" date="2018-07-04" urgency="high">
+        <description>
+          <p>
+            This release fixes a critical error where the app would not launch due to missing files in installation.
+          </p>
+        </description>
+      </release>
+
       <release version="1.2.0" date="2018-07-04">
         <description>
           <p>This release makes a Eddy work on Juno and includes new translations:</p>
