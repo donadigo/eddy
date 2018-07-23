@@ -24,7 +24,7 @@ msgstr "Nainstalovat"
 
 #: ../src/PackageListView.vala:153
 msgid "Total installed size: %s"
-msgstr "Velikost po instalaci:"
+msgstr "Velikost po instalaci: %s"
 
 #: ../src/Application.vala:42
 msgid "translator-credits"
