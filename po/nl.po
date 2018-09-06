@@ -1,321 +1,323 @@
-
 # Dutch translations for com.github.donadigo.eddy package.
 # Copyright (C) 2017 Adam Bieńkowski
 # This file is distributed under the same license as the com.github.donadigo.eddy package.
 # Patrick van Efferen <patrickvanefferen@gmail.com>, 2017.
-
 msgid ""
 msgstr ""
 "Project-Id-Version: com.github.donadigo.eddy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-04 23:37+0200\n"
-"PO-Revision-Date: 2017-09-08 11:08+0200\n"
-"Last-Translator: Patrick van Efferen <patrickvanefferen@gmail.com>\n"
-"Language-Team: Dutch team\n"
+"POT-Creation-Date: 2017-09-10 15:31+0200\n"
+"PO-Revision-Date: 2018-09-06 20:14+0200\n"
+"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
+"Language-Team: Dutch <vistausss@outlook.com>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 2.1.1\n"
 
-#: ../src/PackageListView.vala:49 ../src/PackageRow.vala:160
+#: ../src/PackageListView.vala:49 ../src/PackageRow.vala:165
 msgid "Install"
 msgstr "Installeren"
 
 #: ../src/PackageListView.vala:153
 msgid "Total installed size: %s"
-msgstr ""
+msgstr "Totale installatiegrootte: %s"
 
 #: ../src/Application.vala:42
 msgid "translator-credits"
-msgstr ""
+msgstr "Heimen Stoffels"
 
-#: ../src/Package.vala:177
+#: ../src/Package.vala:190
 msgid "Starting"
-msgstr "Starten"
+msgstr "Bezig met starten"
 
-#: ../src/Package.vala:179
+#: ../src/Package.vala:192
 msgid "Waiting"
-msgstr "Wachten"
+msgstr "Bezig met wachten"
 
-#: ../src/Package.vala:181
+#: ../src/Package.vala:194
 msgid "Running"
-msgstr "Loopt"
+msgstr "Bezig met uitvoeren"
 
-#: ../src/Package.vala:183
+#: ../src/Package.vala:196
 msgid "Querying"
-msgstr "Zoeken"
+msgstr "Bezig met opvragen"
 
-#: ../src/Package.vala:185
+#: ../src/Package.vala:198
 msgid "Getting information"
-msgstr "Informatie ophalen"
+msgstr "Bezig met ophalen van informatie"
 
-#: ../src/Package.vala:187
+#: ../src/Package.vala:200
 msgid "Removing packages"
-msgstr "Pakketten verwijderen"
+msgstr "Bezig met verwijderen van pakketten"
 
-#: ../src/Package.vala:189
+#: ../src/Package.vala:202
 msgid "Downloading"
-msgstr "Downloaden"
+msgstr "Bezig met downloaden"
 
-#: ../src/Package.vala:191
-msgid "Installing"
-msgstr "Installeren"
-
-#: ../src/Package.vala:193
+#: ../src/Package.vala:204
 msgid "Refreshing software list"
-msgstr "Software lijst bijwerken"
+msgstr "Bezig met verversen van softwarelijst"
 
-#: ../src/Package.vala:195
+#: ../src/Package.vala:206
 msgid "Installing updates"
-msgstr "Updates installeren"
+msgstr "Bezig met installeren van updates"
 
-#: ../src/Package.vala:197
+#: ../src/Package.vala:208
 msgid "Cleaning up packages"
-msgstr "Pakketten opschonen"
+msgstr "Bezig met opschonen van pakketten"
 
-#: ../src/Package.vala:199
+#: ../src/Package.vala:210
 msgid "Obsoleting packages"
-msgstr ""
+msgstr "Bezig met markeren van pakketten als verouderd"
 
-#: ../src/Package.vala:201
+#: ../src/Package.vala:212
 msgid "Resolving dependencies"
-msgstr "Afhankelijkheden bepalen"
+msgstr "Bezig met oplossen van afhankelijkheden"
 
-#: ../src/Package.vala:203
+#: ../src/Package.vala:214
 msgid "Checking signatures"
-msgstr "Handtekeningen controleren"
+msgstr "Bezig met controleren van ondertekeningen"
 
-#: ../src/Package.vala:205
+#: ../src/Package.vala:216
 msgid "Testing changes"
-msgstr "Wijzigingen testen"
+msgstr "Bezig met testen van wijigingen"
 
-#: ../src/Package.vala:207
+#: ../src/Package.vala:218
 msgid "Committing changes"
-msgstr "Wijzigingen toepassen"
+msgstr "Bezig met toepassen van wijzigingen"
 
-#: ../src/Package.vala:209
+#: ../src/Package.vala:220
 msgid "Requesting data"
-msgstr "Data opvragen"
+msgstr "Bezig met opvragen van gegevens"
 
-#: ../src/Package.vala:211 ../src/Package.vala:443
+#: ../src/Package.vala:222 ../src/Package.vala:455
 msgid "Finished"
-msgstr "Klaar"
+msgstr "Voltooid"
 
-#: ../src/Package.vala:213
+#: ../src/Package.vala:224
 msgid "Cancelling"
-msgstr "Annuleren"
+msgstr "Bezig met annuleren"
 
-#: ../src/Package.vala:215
+#: ../src/Package.vala:226
 msgid "Downloading repository information"
-msgstr "Repository informatie downloaden"
+msgstr "Bezig met downloaden van pakketbroninformatie"
 
-#: ../src/Package.vala:217
+#: ../src/Package.vala:228
 msgid "Downloading list of packages"
-msgstr "Lijst met pakketten downloaden"
+msgstr "Bezig met downloaden van pakketlijst"
 
-#: ../src/Package.vala:219
+#: ../src/Package.vala:230
 msgid "Downloading file lists"
-msgstr "Bestandslijst downloaden"
+msgstr "Bezig met downloaden van bestandslijsten"
 
-#: ../src/Package.vala:221
+#: ../src/Package.vala:232
 msgid "Downloading lists of changes"
-msgstr "Lijst met wijzigingen downloaden"
+msgstr "Bezig met downloaden van wijziginglogs"
 
-#: ../src/Package.vala:223
+#: ../src/Package.vala:234
 msgid "Downloading groups"
-msgstr "Groepen downloaden"
+msgstr "Bezig met downloaden van groepen"
 
-#: ../src/Package.vala:225
+#: ../src/Package.vala:236
 msgid "Downloading update information"
-msgstr "Update-informatie downloaden"
+msgstr "Bezig met downloaden van update-informatie"
 
-#: ../src/Package.vala:227
+#: ../src/Package.vala:238
 msgid "Repackaging files"
-msgstr "Bestanden opnieuw verpakken"
+msgstr "Bezig met opnieuw inpakken van bestanden"
 
-#: ../src/Package.vala:229
+#: ../src/Package.vala:240
 msgid "Loading cache"
-msgstr "Cache laden"
+msgstr "Bezig met laden van cache"
 
-#: ../src/Package.vala:231
+#: ../src/Package.vala:242
 msgid "Scanning applications"
-msgstr "Applicaties scannen"
+msgstr "Bezig met scannen van applicaties"
 
-#: ../src/Package.vala:233
+#: ../src/Package.vala:244
 msgid "Generating package lists"
-msgstr "Pakketlijst genereren"
+msgstr "Bezig met genereren van pakketlijsten"
 
-#: ../src/Package.vala:235
+#: ../src/Package.vala:246
 msgid "Waiting for package manager lock"
-msgstr "Wachten op pakketbeheerder blokkering"
+msgstr "Bezig met wachten op pakketbeheervergrendeling"
 
-#: ../src/Package.vala:237
+#: ../src/Package.vala:248
 msgid "Waiting for authentication"
-msgstr "Wachten op autenticatie"
+msgstr "Bezig met wachten op authenticatie"
 
-#: ../src/Package.vala:239
+#: ../src/Package.vala:250
 msgid "Updating running applications"
-msgstr "Actieve programma's bijwerken"
+msgstr "Bezig met bijwerken van draaiende applicaties"
 
-#: ../src/Package.vala:241
+#: ../src/Package.vala:252
 msgid "Checking applications in use"
-msgstr "Controleren gebruikte applicaties"
+msgstr "Bezig met controleren van in gebruik zijnde applicaties"
 
-#: ../src/Package.vala:243
+#: ../src/Package.vala:254
 msgid "Checking libraries in use"
-msgstr "Controleren op te gebruiken bibliotheken."
+msgstr "Bezig met controleren op gebruikte bibliotheken"
 
-#: ../src/Package.vala:245
+#: ../src/Package.vala:256
 msgid "Copying files"
-msgstr "Bestanden kopieren"
+msgstr "Bezig met kopiëren van bestanden"
 
-#: ../src/Package.vala:445
+#: ../src/Package.vala:259
+msgid "Installing"
+msgstr "Bezig met installeren"
+
+#: ../src/Package.vala:457
 msgid "Cancelled"
 msgstr "Geannuleerd"
 
-#: ../src/Package.vala:448
+#: ../src/Package.vala:460
 msgid "Failed"
 msgstr "Mislukt"
 
-#: ../src/Package.vala:451 ../src/DetailedView.vala:32
+#: ../src/Package.vala:463 ../src/DetailedView.vala:32
 #: ../src/DetailedView.vala:34 ../src/DetailedView.vala:37
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: ../src/MainWindow.vala:94
+#: ../src/MainWindow.vala:95
 msgid "Open…"
-msgstr "Open…"
+msgstr "Openen…"
 
-#: ../src/MainWindow.vala:102
+#: ../src/MainWindow.vala:103
 msgid "Go back"
 msgstr "Ga terug"
 
-#: ../src/MainWindow.vala:119
+#: ../src/MainWindow.vala:120
 msgid "Install some apps"
 msgstr "Installeer apps"
 
-#: ../src/MainWindow.vala:119
+#: ../src/MainWindow.vala:120
 msgid "Drag and drop .%s files or open them to begin installation."
-msgstr "Sleep en zet .%s bestanden neer of open ze om het installeren te starten"
+msgstr "Sleep .%s-bestanden hierheen of open ze om het installeren te starten."
 
-#: ../src/MainWindow.vala:121 ../src/MainWindow.vala:438
+#: ../src/MainWindow.vala:122 ../src/MainWindow.vala:454
 msgid "Open"
-msgstr "Open"
+msgstr "Openen"
 
-#: ../src/MainWindow.vala:121
+#: ../src/MainWindow.vala:122
 msgid "Browse to open a single file"
-msgstr "Bladeren om een enkel bestand te openen"
+msgstr "Blader om een los bestand te openen"
 
-#: ../src/MainWindow.vala:175
+#: ../src/MainWindow.vala:191
 msgid "There is %u operation unfinished"
-msgstr "Er is %u bewerking onafgerond"
+msgstr "%u bewerking is niet afgerond"
 
-#: ../src/MainWindow.vala:175
+#: ../src/MainWindow.vala:191
 msgid "There are %u operations unfinished"
-msgstr "Er zijn %u bewerkingen onafgerond"
+msgstr "%u bewerkingen zijn niet afgerond"
 
-#: ../src/MainWindow.vala:176
+#: ../src/MainWindow.vala:192
 msgid "There Are Ongoing Operations"
 msgstr "Er zijn lopende activiteiten"
 
-#: ../src/MainWindow.vala:176
-msgid "%s. Quitting will cancel all remaining transcations"
-msgstr "%s. Stoppen annuleert alle overgebleven transacties"
+#: ../src/MainWindow.vala:192
+msgid "%s. Quitting will cancel all remaining transactions."
+msgstr "%s. Door af te sluiten annuleer je alle resterende overdrachten."
 
-#: ../src/MainWindow.vala:177 ../src/MainWindow.vala:274
-#: ../src/MainWindow.vala:415
-msgid "Close"
-msgstr "Sluiten"
+#: ../src/MainWindow.vala:193
+msgid "Do Not Quit"
+msgstr "Niet afsluiten"
 
-#: ../src/MainWindow.vala:179
+#: ../src/MainWindow.vala:195
 msgid "Quit Anyway"
-msgstr "Sluit toch"
+msgstr "Tóch afsluiten"
 
-#: ../src/MainWindow.vala:268
+#: ../src/MainWindow.vala:284
 msgid "Installation Failed"
 msgstr "Installatie mislukt"
 
-#: ../src/MainWindow.vala:270
+#: ../src/MainWindow.vala:286
 msgid "Uninstallation Failed"
 msgstr "Deïnstallatie mislukt"
 
-#: ../src/MainWindow.vala:293 ../src/MainWindow.vala:300
+#: ../src/MainWindow.vala:290 ../src/MainWindow.vala:431
+msgid "Close"
+msgstr "Sluiten"
+
+#: ../src/MainWindow.vala:309 ../src/MainWindow.vala:316
 msgid "Installation succeeded"
-msgstr "installatie gelukt"
+msgstr "Installatie voltooid"
 
-#: ../src/MainWindow.vala:294
+#: ../src/MainWindow.vala:310
 msgid "%s has been successfully installed"
-msgstr "%s is succesvol geïnstalleerd"
+msgstr "%s is geïnstalleerd"
 
-#: ../src/MainWindow.vala:296 ../src/MainWindow.vala:303
+#: ../src/MainWindow.vala:312 ../src/MainWindow.vala:319
 msgid "Uninstallation succeeded"
-msgstr "Deïnstallatie gelukt"
+msgstr "Deïnstallatie voltooid"
 
-#: ../src/MainWindow.vala:297
+#: ../src/MainWindow.vala:313
 msgid "%s has been successfully uninstalled"
-msgstr "%s is succesvol gedeïnstalleerd"
+msgstr "%s is gedeïnstalleerd"
 
-#: ../src/MainWindow.vala:301
+#: ../src/MainWindow.vala:317
 msgid "All packages have been successfully installed"
-msgstr "Alle pakketten zijn succesvol geïnstalleerd"
+msgstr "Alle pakketten zijn geïnstalleerd"
 
-#: ../src/MainWindow.vala:304
+#: ../src/MainWindow.vala:320
 msgid "All packages have been successfully uninstalled"
-msgstr "Alle pakketten zijn succesvol gedeïnstalleerd"
+msgstr "Alle pakketten zijn gedeïnstalleerd"
 
-#: ../src/MainWindow.vala:315
+#: ../src/MainWindow.vala:331
 msgid "Load from Downloads"
-msgstr "Laad uit Downloads"
+msgstr "Laden uit Downloads"
 
-#: ../src/MainWindow.vala:315
+#: ../src/MainWindow.vala:331
 msgid "Load .%s files from your Downloads folder"
-msgstr "Laad .%s bestanden uit uw Download map"
+msgstr ".%s-bestanden laden uit de map Downloads"
 
-#: ../src/MainWindow.vala:349
+#: ../src/MainWindow.vala:365
 msgid "<b>%s</b> is not a package"
 msgstr "<b>%s</b> is geen pakket"
 
-#: ../src/MainWindow.vala:388
+#: ../src/MainWindow.vala:404
 msgid "<b>%s</b> is not a valid package"
 msgstr "<b>%s</b> is geen geldig pakket"
 
-#: ../src/MainWindow.vala:414
+#: ../src/MainWindow.vala:430
 msgid "Some Packages Could Not Be Added"
-msgstr "Sommige pakketten konden niet worden toegevoegd"
+msgstr "Sommige pakketten kunnen niet worden toegevoegd"
 
-#: ../src/MainWindow.vala:424
+#: ../src/MainWindow.vala:440
 msgid "Packages"
 msgstr "Pakketten"
 
-#: ../src/MainWindow.vala:430
+#: ../src/MainWindow.vala:446
 msgid "All Files"
 msgstr "Alle bestanden"
 
-#: ../src/MainWindow.vala:436
+#: ../src/MainWindow.vala:452
 msgid "Cancel"
 msgstr "Annuleren"
 
 #: ../src/DetailedView.vala:44
 msgid "Homepage"
-msgstr "Homepagina"
+msgstr "Website"
 
-#: ../src/DetailedView.vala:60
+#: ../src/DetailedView.vala:63
 msgid "version %s • %s"
 msgstr "versie %s • %s"
 
-#: ../src/PackageRow.vala:93
+#: ../src/PackageRow.vala:94
 msgid "Remove from list"
-msgstr "Verwijder uit lijst"
+msgstr "Verwijderen uit lijst"
 
-#: ../src/PackageRow.vala:157
+#: ../src/PackageRow.vala:162
 msgid "Uninstall"
 msgstr "Deïnstalleren"
 
-#: ../src/PackageRow.vala:165
+#: ../src/PackageRow.vala:170
 msgid "Update"
 msgstr "Bijwerken"
 
-#: ../src/PackageRow.vala:170
+#: ../src/PackageRow.vala:175
 msgid "Downgrade"
-msgstr "Downgraden"
+msgstr "Afwaarderen"
