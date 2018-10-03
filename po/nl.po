@@ -24,7 +24,7 @@ msgstr "Installeren"
 
 #: ../src/PackageListView.vala:153
 msgid "Total installed size: %s"
-msgstr ""
+msgstr "Totaal geïnstalleerde grootte: %s"
 
 #: ../src/Application.vala:42
 msgid "translator-credits"
@@ -76,7 +76,7 @@ msgstr "Pakketten opschonen"
 
 #: ../src/Package.vala:199
 msgid "Obsoleting packages"
-msgstr ""
+msgstr "Pakketten markeren als niet langer nodig"
 
 #: ../src/Package.vala:201
 msgid "Resolving dependencies"
@@ -228,7 +228,11 @@ msgstr "%s. Stoppen annuleert alle overgebleven transacties"
 msgid "Close"
 msgstr "Sluiten"
 
-#: ../src/MainWindow.vala:179
+#: ../src/MainWindow.vala:197
+msgid "Do Not Quit"
+msgstr "Niet afsluiten"
+
+#: ../src/MainWindow.vala:199
 msgid "Quit Anyway"
 msgstr "Sluit toch"
 
@@ -242,7 +246,7 @@ msgstr "Deïnstallatie mislukt"
 
 #: ../src/MainWindow.vala:293 ../src/MainWindow.vala:300
 msgid "Installation succeeded"
-msgstr "installatie gelukt"
+msgstr "Installatie gelukt"
 
 #: ../src/MainWindow.vala:294
 msgid "%s has been successfully installed"
