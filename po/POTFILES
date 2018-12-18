@@ -1,0 +1,5 @@
+src/DetailedView.vala
+src/MainWindow.vala
+src/Package.vala
+src/PackageListView.vala
+src/PackageRow.vala
