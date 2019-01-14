@@ -24,11 +24,11 @@ msgstr "Installer"
 
 #: ../src/PackageListView.vala:153
 msgid "Total installed size: %s"
-msgstr "Taille totale installation : %s"
+msgstr "Taille totale de l'installation : %s"
 
 #: ../src/Application.vala:42
 msgid "translator-credits"
-msgstr "Crédits traduction"
+msgstr "Crédits traducteurs"
 
 #: ../src/Package.vala:190
 msgid "Starting"
@@ -193,7 +193,7 @@ msgstr "Retour"
 
 #: ../src/MainWindow.vala:120
 msgid "Install some apps"
-msgstr "Installation d'applications"
+msgstr "Installer des applications"
 
 #: ../src/MainWindow.vala:120
 msgid "Drag and drop .%s files or open them to begin installation."
@@ -269,11 +269,11 @@ msgstr "Tous les paquets ont été correctement désinstallés"
 
 #: ../src/MainWindow.vala:331
 msgid "Load from Downloads"
-msgstr "Charger depuis téléchargements"
+msgstr "Charger depuis les Téléchargements"
 
 #: ../src/MainWindow.vala:331
 msgid "Load .%s files from your Downloads folder"
-msgstr "Charger .%s fichiers depuis votre dossier téléchargements"
+msgstr "Charger .%s fichiers depuis votre dossier Téléchargements"
 
 #: ../src/MainWindow.vala:365
 msgid "<b>%s</b> is not a package"
