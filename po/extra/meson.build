@@ -1,7 +1,6 @@
 i18n.gettext(
-    meson.project_name(),
+    'extra',
     args: '--directory=' + meson.source_root(),
-    preset: 'glib'
+    preset: 'glib',
+    install: false
 )
-
-subdir('extra')
