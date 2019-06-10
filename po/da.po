@@ -1,4 +1,324 @@
+# DANISH TRANSLATION.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# siigdev, 2019.
+#
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-06-10 23:06+0100\n"
+"PO-Revision-Date: 2019-10-10 23:29+0100\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"Last-Translator: siigdev\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: da\n"
+
+#: ../src/PackageListView.vala:49 ../src/PackageRow.vala:165
+msgid "Install"
+msgstr "Installer"
+
+#: ../src/PackageListView.vala:153
+msgid "Total installed size: %s"
+msgstr "Total installeret: %s"
+
+#: ../src/Application.vala:42
+msgid "translator-credits"
+msgstr "oversætter-credit"
+
+#: ../src/Package.vala:190
+msgid "Starting"
+msgstr "Starter"
+
+#: ../src/Package.vala:192
+msgid "Waiting"
+msgstr "Venter"
+
+#: ../src/Package.vala:194
+msgid "Running"
+msgstr "Kører"
+
+#: ../src/Package.vala:196
+msgid "Querying"
+msgstr "I kø"
+
+#: ../src/Package.vala:198
+msgid "Getting information"
+msgstr "Samler information"
+
+#: ../src/Package.vala:200
+msgid "Removing packages"
+msgstr "Fjerner pakker"
+
+#: ../src/Package.vala:202
+msgid "Downloading"
+msgstr "Henter"
+
+#: ../src/Package.vala:204
+msgid "Refreshing software list"
+msgstr "Opdatere software listen"
+
+#: ../src/Package.vala:206
+msgid "Installing updates"
+msgstr "Installerer opdateringer"
+
+#: ../src/Package.vala:208
+msgid "Cleaning up packages"
+msgstr "Renser pakker"
+
+#: ../src/Package.vala:210
+msgid "Obsoleting packages"
+msgstr "Forældede pakker"
+
+#: ../src/Package.vala:212
+msgid "Resolving dependencies"
+msgstr "Ordner pakke-afhængigheder"
+
+#: ../src/Package.vala:214
+msgid "Checking signatures"
+msgstr "Checker signature"
+
+#: ../src/Package.vala:216
+msgid "Testing changes"
+msgstr "Tester forandringer"
+
+#: ../src/Package.vala:218
+msgid "Committing changes"
+msgstr "Beholder forandringer"
+
+#: ../src/Package.vala:220
+msgid "Requesting data"
+msgstr "Anmoder om data"
+
+#: ../src/Package.vala:222 ../src/Package.vala:455
+msgid "Finished"
+msgstr "Færdig"
+
+#: ../src/Package.vala:224
+msgid "Cancelling"
+msgstr "Annullerer"
+
+#: ../src/Package.vala:226
+msgid "Downloading repository information"
+msgstr "Henter repository information"
+
+#: ../src/Package.vala:228
+msgid "Downloading list of packages"
+msgstr "Henter liste af pakker"
+
+#: ../src/Package.vala:230
+msgid "Downloading file lists"
+msgstr "Henter fil listen"
+
+#: ../src/Package.vala:232
+msgid "Downloading lists of changes"
+msgstr "Henter liste med forandringer"
+
+#: ../src/Package.vala:234
+msgid "Downloading groups"
+msgstr "Henter grupper"
+
+#: ../src/Package.vala:236
+msgid "Downloading update information"
+msgstr "Henter opdateringsinformation"
+
+#: ../src/Package.vala:238
+msgid "Repackaging files"
+msgstr "Genpakker filer"
+
+#: ../src/Package.vala:240
+msgid "Loading cache"
+msgstr "Henter cache"
+
+#: ../src/Package.vala:242
+msgid "Scanning applications"
+msgstr "Skanner applikationer"
+
+#: ../src/Package.vala:244
+msgid "Generating package lists"
+msgstr "Genererer pakkelister"
+
+#: ../src/Package.vala:246
+msgid "Waiting for package manager lock"
+msgstr "Venter på package manager låsen"
+
+#: ../src/Package.vala:248
+msgid "Waiting for authentication"
+msgstr "Venter på autentificering"
+
+#: ../src/Package.vala:250
+msgid "Updating running applications"
+msgstr "Opdaterer åbne applikationer"
+
+#: ../src/Package.vala:252
+msgid "Checking applications in use"
+msgstr "Tjekker applikationer i brug"
+
+#: ../src/Package.vala:254
+msgid "Checking libraries in use"
+msgstr "Tjekker biblioteker i brug"
+
+#: ../src/Package.vala:256
+msgid "Copying files"
+msgstr "Kopierer filer"
+
+#: ../src/Package.vala:259
+msgid "Installing"
+msgstr "Installerer"
+
+#: ../src/Package.vala:457
+msgid "Cancelled"
+msgstr "Annulleret"
+
+#: ../src/Package.vala:460
+msgid "Failed"
+msgstr "Fejl"
+
+#: ../src/Package.vala:463 ../src/DetailedView.vala:32
+#: ../src/DetailedView.vala:34 ../src/DetailedView.vala:37
+msgid "Unknown"
+msgstr "Ukendt"
+
+#: ../src/MainWindow.vala:95
+msgid "Open…"
+msgstr "Åben..."
+
+#: ../src/MainWindow.vala:103
+msgid "Go back"
+msgstr "Gå tilbage"
+
+#: ../src/MainWindow.vala:120
+msgid "Install some apps"
+msgstr "Installer applikationer"
+
+#: ../src/MainWindow.vala:120
+msgid "Drag and drop .%s files or open them to begin installation."
+msgstr "Træk og slip .%s filerne eller åben dem for at starte installation."
+
+#: ../src/MainWindow.vala:122 ../src/MainWindow.vala:454
+msgid "Open"
+msgstr "Åben"
+
+#: ../src/MainWindow.vala:122
+msgid "Browse to open a single file"
+msgstr "Gennemse for at åbne en fil"
+
+#: ../src/MainWindow.vala:191
+msgid "There is %u operation unfinished"
+msgstr "Der er %u ikke færdig operation"
+
+#: ../src/MainWindow.vala:191
+msgid "There are %u operations unfinished"
+msgstr "Der er %u ikke færdige operationer"
+
+#: ../src/MainWindow.vala:192
+msgid "There Are Ongoing Operations"
+msgstr "Der er igangværende operationer"
+
+#: ../src/MainWindow.vala:192
+msgid "%s. Quitting will cancel all remaining transactions."
+msgstr "%s. Lukning vil stoppe alle nuværende transaktioner."
+
+#: ../src/MainWindow.vala:193
+msgid "Do Not Quit"
+msgstr "Luk ikke"
+
+#: ../src/MainWindow.vala:195
+msgid "Quit Anyway"
+msgstr "Luk alligevel"
+
+#: ../src/MainWindow.vala:284
+msgid "Installation Failed"
+msgstr "Installation fejlede"
+
+#: ../src/MainWindow.vala:286
+msgid "Uninstallation Failed"
+msgstr "Afinstallation fejlede"
+
+#: ../src/MainWindow.vala:290 ../src/MainWindow.vala:431
+msgid "Close"
+msgstr "Luk"
+
+#: ../src/MainWindow.vala:309 ../src/MainWindow.vala:316
+msgid "Installation succeeded"
+msgstr "Installation gennemført"
+
+#: ../src/MainWindow.vala:310
+msgid "%s has been successfully installed"
+msgstr "%s er succesfuldt installeret"
+
+#: ../src/MainWindow.vala:312 ../src/MainWindow.vala:319
+msgid "Uninstallation succeeded"
+msgstr "Afinstallation succesfuldt"
+
+#: ../src/MainWindow.vala:313
+msgid "%s has been successfully uninstalled"
+msgstr "%s er succesfuldt afinstalleret"
+
+#: ../src/MainWindow.vala:317
+msgid "All packages have been successfully installed"
+msgstr "Alle pakker er succesfuldt installeret"
+
+#: ../src/MainWindow.vala:320
+msgid "All packages have been successfully uninstalled"
+msgstr "Alle pakker er succesfuldt afinstalleret"
+
+#: ../src/MainWindow.vala:331
+msgid "Load from Downloads"
+msgstr "Hent fra Downloads"
+
+#: ../src/MainWindow.vala:331
+msgid "Load .%s files from your Downloads folder"
+msgstr "Hent .%s filer fra din Download mappe"
+
+#: ../src/MainWindow.vala:365
+msgid "<b>%s</b> is not a package"
+msgstr "<b>%s</b> er ikke en pakke"
+
+#: ../src/MainWindow.vala:404
+msgid "<b>%s</b> is not a valid package"
+msgstr "<b>%s</b> er ikke en gyldig pakke"
+
+#: ../src/MainWindow.vala:430
+msgid "Some Packages Could Not Be Added"
+msgstr "Nogle pakker kunne ikke tilføjes"
+
+#: ../src/MainWindow.vala:440
+msgid "Packages"
+msgstr "Pakker"
+
+#: ../src/MainWindow.vala:446
+msgid "All Files"
+msgstr "Alle filer"
+
+#: ../src/MainWindow.vala:452
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ../src/DetailedView.vala:44
+msgid "Homepage"
+msgstr "Hjemmeside"
+
+#: ../src/DetailedView.vala:63
+msgid "version %s • %s"
+msgstr "version %s • %s"
+
+#: ../src/PackageRow.vala:94
+msgid "Remove from list"
+msgstr "Fjern fra liste"
+
+#: ../src/PackageRow.vala:162
+msgid "Uninstall"
+msgstr "Afinstaller"
+
+#: ../src/PackageRow.vala:170
+msgid "Update"
+msgstr "Opdater"
+
+#: ../src/PackageRow.vala:175
+msgid "Downgrade"
+msgstr "Nedjuster"
