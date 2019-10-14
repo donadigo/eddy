@@ -300,7 +300,7 @@ msgstr "Cancelar"
 
 #: ../src/DetailedView.vala:44
 msgid "Homepage"
-msgstr "Página Principal"
+msgstr "Sitio web"
 
 #: ../src/DetailedView.vala:63
 msgid "version %s • %s"
