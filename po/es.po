@@ -39,7 +39,7 @@ msgstr "Esperando"
 
 #: ../src/Package.vala:194
 msgid "Running"
-msgstr "Corriendo"
+msgstr "Ejecutando"
 
 #: ../src/Package.vala:196
 msgid "Querying"
