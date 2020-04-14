@@ -283,7 +283,7 @@ public class Eddy.Package : Object {
         int length = int.max (aparts.length, bparts.length);
         for (int i = 0; i < length; i++) {
             int rc = strcmp (aparts[i], bparts[i]);
-            if(i == length -1 ){              
+            if (i == length - 1) {              
                 if(bparts[i] > aparts[i]){
                     return 1;
                 }      
