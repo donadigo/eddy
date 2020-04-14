@@ -287,7 +287,7 @@ public class Eddy.Package : Object {
                 if (bparts[i] > aparts[i]) {
                     return 1;
                 }      
-                else if(bparts[i] < aparts[i]){
+                else if (bparts[i] < aparts[i]) {
                     return -1;
                 }                             
             }
