@@ -20,6 +20,24 @@
     <binary>com.github.donadigo.eddy</binary>
   </provides>
   <releases>
+      <release version="1.2.2" date="2020-04-17">
+        <description>
+          <p>This release fixes comparing some package versions and includes new translations:</p>
+          <ul>
+            <li>Dutch translation (Stan Janssen)</li>
+            <li>Czech translation (Jan Marek)</li>
+            <li>French translation (Nathan Bonnemains)</li>
+            <li>Japanese translation (Ryo Nakano)</li>
+            <li>Danish translation (siigdev)</li>
+            <li>Portuguese translation (Hugo Carvalho)</li>
+            <li>Spanish translation (Antonio Luis Román, Cristian Molina)</li>
+          </ul>
+          <p>Fixed:</p>
+          <ul>
+            <li>Some newer packages wrongly showed a button to downgrade</li>
+          </ul>
+        </description>
+      </release>
       <release version="1.2.1" date="2018-07-04" urgency="high">
         <description>
           <p>
@@ -223,5 +241,6 @@
   <custom>
     <value key="x-appcenter-color-primary">#b30033</value>
     <value key="x-appcenter-color-primary-text">#f2f2f2</value>
+    <value key="x-appcenter-suggested-price">5</value>
   </custom>
 </component>
