@@ -28,7 +28,11 @@ public class Eddy.MainWindow : Gtk.Window {
     private const string DETAILED_VIEW_ID = "detailed-view";
     private const string SPINNER_VIEW_ID = "spinner-view";
     private const string BRAND_STYLESHEET = """
-        @define-color colorPrimary #e6334d;
+        @define-color color_primary #e6334d;
+        @define-color accent_color @color_primary;
+
+        // elementary OS 5 backwards compatibility
+        @define-color colorPrimary @color_primary;
         @define-color textColorPrimary #f2f2f2;
         @define-color textColorPrimaryShadow #7b1b29;
 
