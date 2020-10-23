@@ -31,7 +31,7 @@ public class Eddy.MainWindow : Gtk.Window {
         @define-color color_primary #e6334d;
         @define-color accent_color @color_primary;
 
-        // elementary OS 5 backwards compatibility
+        /* elementary OS 5 backwards compatibility */
         @define-color colorPrimary @color_primary;
         @define-color textColorPrimary #f2f2f2;
         @define-color textColorPrimaryShadow #7b1b29;
@@ -64,7 +64,7 @@ public class Eddy.MainWindow : Gtk.Window {
 
     private Cancellable? install_cancellable;
 
-    // TODO: since Unity is no longer developed, this API will probably go away and 
+    // TODO: since Unity is no longer developed, this API will probably go away and
     // be ported into something more abstract like GLib.Application
 #if HAVE_UNITY
     static construct {
@@ -76,7 +76,7 @@ public class Eddy.MainWindow : Gtk.Window {
         stack = new Gtk.Stack ();
         stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
         stack.get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
-        
+
         list_view = new PackageListView ();
         list_view.install_all.connect ((packages) => on_install_all.begin ());
         list_view.perform_default_action.connect ((package) => on_perform_default_action.begin (package));
@@ -163,7 +163,7 @@ public class Eddy.MainWindow : Gtk.Window {
         set_keep_above (settings.always_on_top);
 
         drag_data_received.connect (on_drag_data_received);
-        
+
         Unix.signal_add (Posix.Signal.INT, signal_source_func, Priority.HIGH);
         Unix.signal_add (Posix.Signal.TERM, signal_source_func, Priority.HIGH);
     }
@@ -507,7 +507,7 @@ public class Eddy.MainWindow : Gtk.Window {
         list_view.working = true;
         var result = yield package.install (null, operation_progress_callback);
         list_view.working = false;
-        
+
         process_result (result);
     }
 
@@ -515,7 +515,7 @@ public class Eddy.MainWindow : Gtk.Window {
         list_view.working = true;
         var result = yield package.perform_default_action (null, operation_progress_callback);
         list_view.working = false;
-        
+
         process_result (result);
     }
 
