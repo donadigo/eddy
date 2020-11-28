@@ -59,6 +59,7 @@ public class Eddy.MainWindow : Gtk.Window {
     private DetailedView detailed_view;
 
     private Gtk.HeaderBar header_bar;
+    private Gtk.Image warn_image;
 
     private int open_index = -1;
     private int open_dowloads_index = -1;
@@ -88,6 +89,7 @@ public class Eddy.MainWindow : Gtk.Window {
         list_view.show_package_details.connect (on_show_package_details);
         list_view.added.connect (on_package_added);
         list_view.removed.connect (on_package_removed);
+        list_view.update_lock_status.connect (on_update_lock_status);
 
         detailed_view = new DetailedView ();
 
@@ -112,6 +114,10 @@ public class Eddy.MainWindow : Gtk.Window {
         back_button.clicked.connect (on_back_button_clicked);
         set_widget_visible (back_button, false);
 
+        warn_image = new Gtk.Image.from_icon_name ("dialog-warning", Gtk.IconSize.LARGE_TOOLBAR);
+        warn_image.tooltip_text = _("Other applications may interrupt tasks currently performed by Eddy");
+        set_widget_visible (warn_image, false);
+
         set_size_request (700, 600);
 
         header_bar = new Gtk.HeaderBar ();
@@ -120,6 +126,7 @@ public class Eddy.MainWindow : Gtk.Window {
         header_bar.has_subtitle = false;
         header_bar.pack_start (back_button);
         header_bar.pack_start (open_button_revealer);
+        header_bar.pack_end (warn_image);
         set_titlebar (header_bar);
 
         debug ("Resolving extension for supported mime types");
@@ -521,6 +528,12 @@ public class Eddy.MainWindow : Gtk.Window {
         list_view.working = false;
 
         process_result (result);
+    }
+
+    private void on_update_lock_status (bool locked) {
+        if (warn_image.visible != locked) {
+            set_widget_visible (warn_image, locked);
+        }
     }
 
     private void on_package_added (Package package) {

@@ -21,6 +21,7 @@ public class Eddy.PackageListView : Gtk.Box {
     public signal void install_all ();
     public signal void perform_default_action (Package package);
     public signal void reinstall (Package package);
+    public signal void update_lock_status (bool locked);
 
     public signal void added (Package package);
     public signal void show_package_details (Package package);
@@ -88,13 +89,15 @@ public class Eddy.PackageListView : Gtk.Box {
         //  row.update_same_packages.connect (on_update_same_packages);
         list_box.insert (row, 1);
 
+        package.notify["status"].connect (signal_lock_status);
+
         update ();
         added (package);
         show_all ();
     }
 
     public bool has_filename (string filename) {
-        foreach (PackageRow row in get_package_rows ()) {
+        foreach (unowned PackageRow row in get_package_rows ()) {
             if (row.package.filename == filename) {
                 return true;
             }
@@ -103,8 +106,8 @@ public class Eddy.PackageListView : Gtk.Box {
         return false;
     }
 
-    public Gee.ArrayList<PackageRow> get_package_rows () {
-        var rows = new Gee.ArrayList<PackageRow> ();
+    public Gee.ArrayList<unowned PackageRow> get_package_rows () {
+        var rows = new Gee.ArrayList<unowned PackageRow> ();
         foreach (var child in list_box.get_children ()) {
             if (child is PackageRow) {
                 rows.add ((PackageRow)child);
@@ -152,6 +155,18 @@ public class Eddy.PackageListView : Gtk.Box {
 
         installed_size_label.label = _("Total installed size: %s").printf (format_size (total_package_installed_size));
         install_button.sensitive = !working && rows.size > 0;
+    }
+
+    private void signal_lock_status () {
+        bool locked = false;
+        foreach (unowned PackageRow row in get_package_rows ()) {
+            if (row.package.status == Pk.Status.WAITING_FOR_LOCK) {
+                locked = true;
+                break;
+            }
+        }
+
+        update_lock_status (locked);
     }
 
     private int sort_func (Gtk.ListBoxRow row1, Gtk.ListBoxRow row2) {
