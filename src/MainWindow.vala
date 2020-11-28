@@ -31,6 +31,10 @@ public class Eddy.MainWindow : Gtk.Window {
         @define-color color_primary #e6334d;
         @define-color accent_color @color_primary;
 
+        .title, .titlebutton  {
+            color: #f2f2f2;
+        }
+
         /* elementary OS 5 backwards compatibility */
         @define-color colorPrimary @color_primary;
         @define-color textColorPrimary #f2f2f2;
