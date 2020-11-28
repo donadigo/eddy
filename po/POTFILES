@@ -4,3 +4,4 @@ src/Package.vala
 src/PackageListView.vala
 src/PackageRow.vala
 data/com.github.donadigo.eddy.appdata.xml.in
+data/data/com.github.donadigo.eddy.desktop.in
