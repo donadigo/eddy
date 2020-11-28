@@ -1,5 +1,324 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-04-30 13:03+0530\n"
+"PO-Revision-Date: 2020-04-30 13:17+0200\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"Last-Translator: Mirko Brombin <send@mirko.pm>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: it\n"
+
+#: ../src/PackageListView.vala:49 ../src/PackageRow.vala:165
+msgid "Install"
+msgstr "Installatore"
+
+#: ../src/PackageListView.vala:153
+msgid "Total installed size: %s"
+msgstr "Dimensione totale installazione : %s"
+
+#: ../src/Application.vala:42
+msgid "translator-credits"
+msgstr "crediti-traduttore"
+
+#: ../src/Package.vala:190
+msgid "Starting"
+msgstr "Avviando"
+
+#: ../src/Package.vala:192
+msgid "Waiting"
+msgstr "In attesa"
+
+#: ../src/Package.vala:194
+msgid "Running"
+msgstr "Avviando"
+
+#: ../src/Package.vala:196
+msgid "Querying"
+msgstr "Richiesta in corso"
+
+#: ../src/Package.vala:198
+msgid "Getting information"
+msgstr "Ricezione informazioni"
+
+#: ../src/Package.vala:200
+msgid "Removing packages"
+msgstr "Rimozione pacchetti"
+
+#: ../src/Package.vala:202
+msgid "Downloading"
+msgstr "Scaricando"
+
+#: ../src/Package.vala:204
+msgid "Refreshing software list"
+msgstr "Ricaricando la lista software"
+
+#: ../src/Package.vala:206
+msgid "Installing updates"
+msgstr "Installazione aggiornamenti"
+
+#: ../src/Package.vala:208
+msgid "Cleaning up packages"
+msgstr "Pulizia dei pacchetti"
+
+#: ../src/Package.vala:210
+msgid "Obsoleting packages"
+msgstr "Pacchetti obsoleti"
+
+#: ../src/Package.vala:212
+msgid "Resolving dependencies"
+msgstr "Risoluzione dipendenze"
+
+#: ../src/Package.vala:214
+msgid "Checking signatures"
+msgstr "Controllo firme"
+
+#: ../src/Package.vala:216
+msgid "Testing changes"
+msgstr "Test dei cambiamenti"
+
+#: ../src/Package.vala:218
+msgid "Committing changes"
+msgstr "Applico i cambiamenti"
+
+#: ../src/Package.vala:220
+msgid "Requesting data"
+msgstr "Richiesta dei dati"
+
+#: ../src/Package.vala:222 ../src/Package.vala:455
+msgid "Finished"
+msgstr "Ultimando"
+
+#: ../src/Package.vala:224
+msgid "Cancelling"
+msgstr "Eliminando"
+
+#: ../src/Package.vala:226
+msgid "Downloading repository information"
+msgstr "Scaricando le informazioni repository"
+
+#: ../src/Package.vala:228
+msgid "Downloading list of packages"
+msgstr "Scaricando la lista dei pacchetti"
+
+#: ../src/Package.vala:230
+msgid "Downloading file lists"
+msgstr "Scaricando la lista dei file"
+
+#: ../src/Package.vala:232
+msgid "Downloading lists of changes"
+msgstr "Scaricando la lista dei cambiamenti"
+
+#: ../src/Package.vala:234
+msgid "Downloading groups"
+msgstr "Scaricando i gruppi"
+
+#: ../src/Package.vala:236
+msgid "Downloading update information"
+msgstr "Scaricando informazioni aggiornate"
+
+#: ../src/Package.vala:238
+msgid "Repackaging files"
+msgstr "Riconfezionamento dei file"
+
+#: ../src/Package.vala:240
+msgid "Loading cache"
+msgstr "Caricamento della cache"
+
+#: ../src/Package.vala:242
+msgid "Scanning applications"
+msgstr "Scansione applicazioni"
+
+#: ../src/Package.vala:244
+msgid "Generating package lists"
+msgstr "Generazione lista pacchetti"
+
+#: ../src/Package.vala:246
+msgid "Waiting for package manager lock"
+msgstr "In attesa blocco del gestore del pacchetto"
+
+#: ../src/Package.vala:248
+msgid "Waiting for authentication"
+msgstr "In attesa di autenticazione"
+
+#: ../src/Package.vala:250
+msgid "Updating running applications"
+msgstr "Aggiornamento delle applicazioni in esecuzione"
+
+#: ../src/Package.vala:252
+msgid "Checking applications in use"
+msgstr "Controllo applicazioni in uso"
+
+#: ../src/Package.vala:254
+msgid "Checking libraries in use"
+msgstr "Controllo librerie in uso"
+
+#: ../src/Package.vala:256
+msgid "Copying files"
+msgstr "Copia dei file"
+
+#: ../src/Package.vala:259
+msgid "Installing"
+msgstr "Installazione"
+
+#: ../src/Package.vala:457
+msgid "Cancelled"
+msgstr "Annullato"
+
+#: ../src/Package.vala:460
+msgid "Failed"
+msgstr "Fallito"
+
+#: ../src/Package.vala:463 ../src/DetailedView.vala:32
+#: ../src/DetailedView.vala:34 ../src/DetailedView.vala:37
+msgid "Unknown"
+msgstr "Sconosciuto"
+
+#: ../src/MainWindow.vala:95
+msgid "Open…"
+msgstr "Apri…"
+
+#: ../src/MainWindow.vala:103
+msgid "Go back"
+msgstr "Indietro"
+
+#: ../src/MainWindow.vala:120
+msgid "Install some apps"
+msgstr "Installa alcune app"
+
+#: ../src/MainWindow.vala:120
+msgid "Drag and drop .%s files or open them to begin installation."
+msgstr "Trascinare e rilascia i file .%s o aprirli per iniziare l'installazione."
+
+#: ../src/MainWindow.vala:122 ../src/MainWindow.vala:454
+msgid "Open"
+msgstr "Apri"
+
+#: ../src/MainWindow.vala:122
+msgid "Browse to open a single file"
+msgstr "Sfoglia per aprire un singolo file"
+
+#: ../src/MainWindow.vala:191
+msgid "There is %u operation unfinished"
+msgstr "Ci sono %u operazioni incomplete"
+
+#: ../src/MainWindow.vala:191
+msgid "There are %u operations unfinished"
+msgstr "Ci sono %u operazioni completate"
+
+#: ../src/MainWindow.vala:192
+msgid "There Are Ongoing Operations"
+msgstr "Ci sono operazioni in corso"
+
+#: ../src/MainWindow.vala:192
+msgid "%s. Quitting will cancel all remaining transactions."
+msgstr "%s. Annullerà tutte le transazioni rimanenti."
+
+#: ../src/MainWindow.vala:193
+msgid "Do Not Quit"
+msgstr "Non Uscire"
+
+#: ../src/MainWindow.vala:195
+msgid "Quit Anyway"
+msgstr "Esci Comunque"
+
+#: ../src/MainWindow.vala:284
+msgid "Installation Failed"
+msgstr "Installazione finita"
+
+#: ../src/MainWindow.vala:286
+msgid "Uninstallation Failed"
+msgstr "Disinstallazione fallita"
+
+#: ../src/MainWindow.vala:290 ../src/MainWindow.vala:431
+msgid "Close"
+msgstr "Chiudi"
+
+#: ../src/MainWindow.vala:309 ../src/MainWindow.vala:316
+msgid "Installation succeeded"
+msgstr "Installazione completa"
+
+#: ../src/MainWindow.vala:310
+msgid "%s has been successfully installed"
+msgstr "%s è stato installato con successo"
+
+#: ../src/MainWindow.vala:312 ../src/MainWindow.vala:319
+msgid "Uninstallation succeeded"
+msgstr "La disinstallazione è riuscita"
+
+#: ../src/MainWindow.vala:313
+msgid "%s has been successfully uninstalled"
+msgstr "%s è stato disinstallato con successo"
+
+#: ../src/MainWindow.vala:317
+msgid "All packages have been successfully installed"
+msgstr "Tutti i pacchetti sono stati installati con successo"
+
+#: ../src/MainWindow.vala:320
+msgid "All packages have been successfully uninstalled"
+msgstr "Tutti i pacchetti sono stati disinstallati con successo"
+
+#: ../src/MainWindow.vala:331
+msgid "Load from Downloads"
+msgstr "Carica dai Scaricati"
+
+#: ../src/MainWindow.vala:331
+msgid "Load .%s files from your Downloads folder"
+msgstr "Caricare i file .%s dalla cartella Downloads"
+
+#: ../src/MainWindow.vala:365
+msgid "<b>%s</b> is not a package"
+msgstr "<b>%s</b> non è un pacchetto"
+
+#: ../src/MainWindow.vala:404
+msgid "<b>%s</b> is not a valid package"
+msgstr "<b>%s</b> non è un pacchetto valido"
+
+#: ../src/MainWindow.vala:430
+msgid "Some Packages Could Not Be Added"
+msgstr "Alcuni Pacchetti Non Possono Essere Agggiunti"
+
+#: ../src/MainWindow.vala:440
+msgid "Packages"
+msgstr "Pacchetti"
+
+#: ../src/MainWindow.vala:446
+msgid "All Files"
+msgstr "Tutti i File"
+
+#: ../src/MainWindow.vala:452
+msgid "Cancel"
+msgstr "Annulla"
+
+#: ../src/DetailedView.vala:44
+msgid "Homepage"
+msgstr "Inizio"
+
+#: ../src/DetailedView.vala:63
+msgid "version %s • %s"
+msgstr "versione %s • %s"
+
+#: ../src/PackageRow.vala:94
+msgid "Remove from list"
+msgstr "Rimuovi dalla lista"
+
+#: ../src/PackageRow.vala:162
+msgid "Uninstall"
+msgstr "Disinstalla"
+
+#: ../src/PackageRow.vala:170
+msgid "Update"
+msgstr "Aggiorna"
+
+#: ../src/PackageRow.vala:175
+msgid "Downgrade"
+msgstr "Aggiornamento a versione precedente"
