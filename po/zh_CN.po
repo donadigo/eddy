@@ -1,4 +1,242 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2020-10-23 10:04+0800\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.1\n"
+"Last-Translator: Jordan Deng <colindemian@outlook.com>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: zh_CN\n"
+"POT-Creation-Date: \n"
+
+msgid "%s has been successfully installed"
+msgstr "%s 已成功安装"
+
+msgid "%s has been successfully uninstalled"
+msgstr "%s 已成功卸载"
+
+msgid "%s. Quitting will cancel all remaining transactions."
+msgstr "%s。 退出会取消所有剩余的任务。"
+
+msgid "<b>%s</b> is not a package"
+msgstr "<b>%s</b> 不是安装包文件"
+
+msgid "<b>%s</b> is not a valid package"
+msgstr "<b>%s</b> 不是有效的安装包"
+
+msgid "All Files"
+msgstr "所有文件"
+
+msgid "All packages have been successfully installed"
+msgstr "所有应用均已成功安装"
+
+msgid "All packages have been successfully uninstalled"
+msgstr "所有应用均已成功卸载"
+
+msgid "Browse to open a single file"
+msgstr "浏览文件"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Cancelled"
+msgstr "已取消"
+
+msgid "Cancelling"
+msgstr "正在取消"
+
+msgid "Checking applications in use"
+msgstr "检正在查使用中的应用"
+
+msgid "Checking libraries in use"
+msgstr "正在检查使用中的库"
+
+msgid "Checking signatures"
+msgstr "正在检查签名"
+
+msgid "Cleaning up packages"
+msgstr "正在清理安装包"
+
+msgid "Close"
+msgstr "关闭"
+
+msgid "Committing changes"
+msgstr "正在实施变更"
+
+msgid "Copying files"
+msgstr "正在复制文件"
+
+msgid "Do Not Quit"
+msgstr "不要退出"
+
+msgid "Downgrade"
+msgstr "降级"
+
+msgid "Downloading"
+msgstr "正在下载"
+
+msgid "Downloading file lists"
+msgstr "正在下载文件列表"
+
+msgid "Downloading groups"
+msgstr "正在下载分组"
+
+msgid "Downloading list of packages"
+msgstr "正在下载包列表"
+
+msgid "Downloading lists of changes"
+msgstr "正在下载变更列表"
+
+msgid "Downloading repository information"
+msgstr "正在下载源信息"
+
+msgid "Downloading update information"
+msgstr "正在下载更新信息"
+
+msgid "Drag and drop .%s files or open them to begin installation."
+msgstr "拖放 .%s 文件到此处或手动打开来开始安装。"
+
+msgid "Failed"
+msgstr "已失败"
+
+msgid "Finished"
+msgstr "已完成"
+
+msgid "Generating package lists"
+msgstr "正在生成包列表"
+
+msgid "Getting information"
+msgstr "正在获取信息"
+
+msgid "Go back"
+msgstr "返回"
+
+msgid "Homepage"
+msgstr "主页"
+
+msgid "Install"
+msgstr "安装"
+
+msgid "Install some apps"
+msgstr "选择您要安装的应用"
+
+msgid "Installation Failed"
+msgstr "安装失败"
+
+msgid "Installation succeeded"
+msgstr "安装成功"
+
+msgid "Installing"
+msgstr "正在安装"
+
+msgid "Installing updates"
+msgstr "正在安装更新"
+
+msgid "Load .%s files from your Downloads folder"
+msgstr "从下载文件夹载入 .%s 个文件"
+
+msgid "Load from Downloads"
+msgstr "从下载文件夹载入"
+
+msgid "Loading cache"
+msgstr "正在载入缓存"
+
+msgid "Obsoleting packages"
+msgstr "正在废弃安装包"
+
+msgid "Open"
+msgstr "打开"
+
+msgid "Open…"
+msgstr "打开…"
+
+msgid "Packages"
+msgstr "安装包文件"
+
+msgid "Querying"
+msgstr "正在查询"
+
+msgid "Quit Anyway"
+msgstr "仍然退出"
+
+msgid "Refreshing software list"
+msgstr "正在更新软件列表"
+
+msgid "Remove from list"
+msgstr "从列表移除"
+
+msgid "Removing packages"
+msgstr "正在移除安装包"
+
+msgid "Repackaging files"
+msgstr "正在重新打包文件"
+
+msgid "Requesting data"
+msgstr "正在请求数据"
+
+msgid "Resolving dependencies"
+msgstr "正在解决依赖关系"
+
+msgid "Running"
+msgstr "正在运行"
+
+msgid "Scanning applications"
+msgstr "正在扫描应用程序"
+
+msgid "Some Packages Could Not Be Added"
+msgstr "部分文件无法添加"
+
+msgid "Starting"
+msgstr "正在开始"
+
+msgid "Testing changes"
+msgstr "正在测试变更"
+
+msgid "There Are Ongoing Operations"
+msgstr "有正在进行中的操作"
+
+msgid "There are %u operations unfinished"
+msgstr "%u 个操作未完成"
+
+msgid "There is %u operation unfinished"
+msgstr "%u 个操作未完成"
+
+msgid "Total installed size: %s"
+msgstr "安装大小：%s"
+
+msgid "Uninstall"
+msgstr "卸载"
+
+msgid "Uninstallation Failed"
+msgstr "卸载失败"
+
+msgid "Uninstallation succeeded"
+msgstr "卸载成功"
+
+msgid "Unknown"
+msgstr "未知"
+
+msgid "Update"
+msgstr "更新"
+
+msgid "Updating running applications"
+msgstr "正在更新运行中的应用"
+
+msgid "Waiting"
+msgstr "等待中"
+
+msgid "Waiting for authentication"
+msgstr "正在等待认证"
+
+msgid "Waiting for package manager lock"
+msgstr "正在等待包管理器锁"
+
+msgid "translator-credits"
+msgstr "翻译者"
+
+msgid "version %s • %s"
+msgstr "版本 %s • %s"
