@@ -1,0 +1,329 @@
+# Lithuanian translations for extra package.
+# Copyright (C) 2020 THE extra'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the extra package.
+# Automatically generated, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: extra\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-04 13:13+0900\n"
+"PO-Revision-Date: 2020-12-04 13:13+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
+"%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:7
+#: data/com.github.donadigo.eddy.desktop.in:4
+msgid "Eddy"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:8
+msgid "Install and Manage .deb Files"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:10
+msgid "Install, uninstall and view information about debian packages."
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:11
+msgid "Features include:"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:13
+msgid "Install multiple packages at once"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:14
+msgid "Upgrade and downgrade existing packages"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:15
+msgid "Load all packages automatically from your Downloads folder"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:16
+msgid ""
+"Complete system integration including notifications and progress bar in the "
+"dock"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:25
+msgid ""
+"This release fixes comparing some package versions and includes new "
+"translations:"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:27
+msgid "Dutch translation (Stan Janssen)"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:28
+msgid "Czech translation (Jan Marek)"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:29
+msgid "French translation (Nathan Bonnemains)"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:30
+#: data/com.github.donadigo.eddy.appdata.xml.in:54
+msgid "Japanese translation (Ryo Nakano)"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:31
+msgid "Danish translation (siigdev)"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:32
+msgid "Portuguese translation (Hugo Carvalho)"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:33
+msgid "Spanish translation (Antonio Luis Román, Cristian Molina)"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:35
+#: data/com.github.donadigo.eddy.appdata.xml.in:69
+#: data/com.github.donadigo.eddy.appdata.xml.in:92
+msgid "Fixed:"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:37
+msgid "Some newer packages wrongly showed a button to downgrade"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:43
+msgid ""
+"This release fixes a critical error where the app would not launch due to "
+"missing files in installation."
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:51
+msgid "This release makes a Eddy work on Juno and includes new translations:"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:53
+msgid "Russian translation (camellan)"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:56
+msgid "Special thanks to eudaldgr for porting Eddy to the Meson build system."
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:62
+msgid ""
+"This release fixes small annoyances with the UI and includes new "
+"translations:"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:64
+msgid "Brazilian Portuguese translation (Paulo Galardi)"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:65
+msgid "Lithuanian translation (welaq)"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:66
+msgid "Spanish translation (Juan Carlos)"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:67
+msgid "French translation (nvivant)"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:71
+msgid ""
+"Fast switching to the detailed view while loading packages caused "
+"unintentional auto-switching to list view"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:72
+msgid "Error dialog now has a proper title"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:78
+msgid ""
+"This release adds small improvements to the user interface and adds initial "
+"support for translations."
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:79
+#: data/com.github.donadigo.eddy.appdata.xml.in:96
+msgid "Miscellaneous:"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:81
+msgid "Show operation percentage alongside the status label"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:82
+msgid "Properly handle terminating the application by external processes"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:83
+msgid "Fix punctuation in the quit dialog"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:84
+msgid "Replace confusing quit dialog actions with more explicit ones"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:85
+#: data/com.github.donadigo.eddy.appdata.xml.in:98
+msgid "Update application metadata"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:86
+msgid "Update Dutch and German translations"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:94
+msgid "\"About Eddy\" now opens this AppCenter page"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:105
+msgid "Fix about dialog not showing correctly"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:106
+msgid ""
+"Fix the description label being already selected when entering details view"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:107
+#: data/com.github.donadigo.eddy.appdata.xml.in:117
+msgid "Minor code cleanups"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:108
+msgid "New design of the details view"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:109
+msgid "Better visibility in the window's titlebar"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:116
+msgid ""
+"Fix choosing \"Load from Downloads\" option only showing a spinner if there "
+"are no packages in the folder"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:118
+msgid "More debug information in the app output if ran in a shell"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:119
+msgid "Rename executable to match RDNN naming convention"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:126
+msgid "Add a button to update / downgrade already installed package"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:127
+msgid "Fix window growing in size when summary or package name is really long"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:128
+msgid "The application can be now found under \"System\" category"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:129
+msgid "Ctrl-Q now exists the app"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:136
+msgid "Do not display error dialog when operation cancelled"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:137
+msgid "Display the progress of current operation in the dock"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:138
+msgid "Sort packages by their state and name in the list view"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:145
+msgid "Save window state between sessions"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:146
+msgid "Improved performance of launching the app second time"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:153
+msgid "Support other package formats such as .rpm for other package managers"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:154
+msgid "Minor fixes"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:161
+msgid "Added an ability to open packages with Eddy in the file manager"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:162
+msgid "Show a spinner when loading packages"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:163
+msgid "Fixed adding a file already in the list duplicated it"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:170
+msgid "Completely port to PackageKit and remove aptdaemon dependency"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:171
+msgid "Fix wrong icon displayed in the notifications"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:178
+msgid "Fix Desktop file being invalid"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:179
+msgid "Bump granite dependency version"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:180
+msgid "Update debian packaging"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:186
+msgid "Initial release"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.appdata.xml.in:236
+msgid "Adam Bieńkowski"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.desktop.in:5
+msgid "Package Installer"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.desktop.in:9
+msgid "Install Debian packages"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.desktop.in:14
+msgid "com.github.donadigo.eddy"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.desktop.in:21
+msgid "package;apt;dpkg;install;"
+msgstr ""
+
+#: data/com.github.donadigo.eddy.desktop.in:25
+msgid "About Eddy"
+msgstr ""
