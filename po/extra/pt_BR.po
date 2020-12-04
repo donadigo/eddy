@@ -309,11 +309,11 @@ msgstr ""
 
 #: data/com.github.donadigo.eddy.desktop.in:5
 msgid "Package Installer"
-msgstr ""
+msgstr "Instalador de Pacotes"
 
 #: data/com.github.donadigo.eddy.desktop.in:9
 msgid "Install Debian packages"
-msgstr ""
+msgstr "Um instalador de pacotes Debian simples"
 
 #: data/com.github.donadigo.eddy.desktop.in:14
 msgid "com.github.donadigo.eddy"
@@ -325,4 +325,4 @@ msgstr ""
 
 #: data/com.github.donadigo.eddy.desktop.in:25
 msgid "About Eddy"
-msgstr ""
+msgstr "Sobre o Eddy"
