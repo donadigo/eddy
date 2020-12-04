@@ -110,6 +110,8 @@ public class Eddy.Package : Object {
         }
     }
 
+    public int64 installed_timestamp { get; set; default = -1; }
+
     private Cancellable? cancellable = null;
 
     private Pk.Package? target = null;

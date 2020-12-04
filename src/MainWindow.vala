@@ -62,10 +62,11 @@ public class Eddy.MainWindow : Gtk.Window {
     private Gtk.Image warn_image;
 
     private int open_index = -1;
+    private int log_index = -1;
     private int open_dowloads_index = -1;
 
     private string main_extension;
-    private string[] download_uris;
+    private PackageUri[] download_uris;
 
     private Cancellable? install_cancellable;
 
@@ -136,9 +137,10 @@ public class Eddy.MainWindow : Gtk.Window {
         welcome_view = new Granite.Widgets.Welcome (_("Install some apps"), _("Drag and drop .%s files or open them to begin installation.").printf (main_extension));
         welcome_view.margin_start = welcome_view.margin_end = 6;
         open_index = welcome_view.append ("document-open", _("Open"), _("Browse to open a single file"));
+
         welcome_view.activated.connect (on_welcome_view_activated);
 
-        populate_download_folder_uris ();
+        populate_installed_apps.begin ();
 
         stack.add_named (welcome_view, WELCOME_VIEW_ID);
         stack.add_named (spinner_grid, SPINNER_VIEW_ID);
@@ -315,6 +317,15 @@ public class Eddy.MainWindow : Gtk.Window {
                 return;
             }
 
+            int64 timestamp = -1;
+            if (install) {
+                timestamp = LogManager.get_default ().log_events (result);
+            }
+
+            foreach (Package package in result.packages) {
+                package.installed_timestamp = timestamp;
+            }
+
             var win = get_window ();
             if (win != null && (win.get_state () & Gdk.WindowState.FOCUSED) != 0) {
                 return;
@@ -350,6 +361,15 @@ public class Eddy.MainWindow : Gtk.Window {
         welcome_view.show_all ();
     }
 
+    private async void populate_installed_apps () {
+        int size = yield LogManager.get_default ().fetch ();
+        if (size > 0) {
+            log_index = welcome_view.append ("text-x-changelog", _("View Previously Installed Apps"), _("Browse history of installed applications"));
+        }
+
+        populate_download_folder_uris ();
+    }
+
     private void populate_download_folder_uris () {
         string downloads_path = Environment.get_user_special_dir (UserDirectory.DOWNLOAD);
         var loader = new FolderLoader (downloads_path);
@@ -367,15 +387,15 @@ public class Eddy.MainWindow : Gtk.Window {
         });
     }
 
-    public async void open_uris (string[] uris, bool validate = true) {
+    public async void open_uris (PackageUri[] uris, bool validate = true) {
         if (stack.visible_child_name != LIST_VIEW_ID) {
             stack.visible_child_name = SPINNER_VIEW_ID;
         }
 
         string[] errors = {};
         int done = 0;
-        foreach (string uri in uris) {
-            var file = File.new_for_uri (uri);
+        foreach (unowned PackageUri puri in uris) {
+            var file = File.new_for_uri (puri.uri);
             if (validate) {
                 try {
                     var info = file.query_info (FileAttribute.STANDARD_CONTENT_TYPE, FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
@@ -413,6 +433,7 @@ public class Eddy.MainWindow : Gtk.Window {
             }
 
             var package = new Package (filename);
+            package.installed_timestamp = puri.installed_timestamp;
             package.populate.begin ((obj, res) => {
                 try {
                     bool success = package.populate.end (res);
@@ -474,21 +495,25 @@ public class Eddy.MainWindow : Gtk.Window {
         chooser.add_filter (filter);
         chooser.add_filter (all_filter);
 
-        chooser.response.connect ((response) => {
-            if (response == Gtk.ResponseType.ACCEPT) {
-                string[] uris = {};
-                foreach (unowned string uri in chooser.get_uris ()) {
-                    uris += uri;
-                }
-
-                chooser.destroy ();
-                open_uris.begin (uris);
-            } else {
-                chooser.destroy ();
-            }
-        });
-
+        chooser.response.connect (on_chooser_response);
         chooser.run ();
+    }
+
+    private void on_chooser_response (Gtk.Dialog chooser, int response) {
+        var log_manager = LogManager.get_default ();
+        if (response == Gtk.ResponseType.ACCEPT) {
+            PackageUri[] puris = {};
+            foreach (unowned string uri in ((Gtk.FileChooserDialog)chooser).get_uris ()) {
+                var puri = new PackageUri (uri, -1);
+                log_manager.fill_out_external_uri (puri);
+                puris += puri;
+            }
+
+            chooser.destroy ();
+            open_uris.begin (puris);
+        } else {
+            chooser.destroy ();
+        }
     }
 
     private async void on_install_all () {
@@ -573,15 +598,29 @@ public class Eddy.MainWindow : Gtk.Window {
 
     private void on_welcome_view_activated (int index) {
         if (index == open_index) {
+            list_view.set_mode (PackageViewMode.NORMAL);
             show_open_dialog ();
+        } else if (index == log_index) {
+            list_view.set_mode (PackageViewMode.HISTORY);
+            var log_manager = LogManager.get_default ();
+            open_uris.begin (log_manager.get_installed_uris ().to_array (), false);
         } else if (index == open_dowloads_index) {
+            list_view.set_mode (PackageViewMode.NORMAL);
             open_uris.begin (download_uris, false);
         }
     }
 
     private void on_drag_data_received (Gdk.DragContext drag_context, int x, int y,
                                         Gtk.SelectionData data, uint info, uint time) {
-        open_uris.begin (data.get_uris ());
+        var log_manager = LogManager.get_default ();
+        PackageUri[] puris = {};
+        foreach (string uri in data.get_uris ()) {
+            var puri = new PackageUri (uri, -1);
+            log_manager.fill_out_external_uri (puri);
+            puris += puri;
+        }
+
+        open_uris.begin (puris);
         Gtk.drag_finish (drag_context, true, false, time);
     }
 }

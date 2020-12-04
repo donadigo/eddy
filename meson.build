@@ -30,11 +30,14 @@ executable(
     'src/PackageListView.vala',
     'src/PackageRow.vala',
     'src/TransactionResult.vala',
+    'src/LogManager.vala',
+    'src/PackageUri.vala',
     dependencies: [
         dependency('glib-2.0'),
         dependency('granite'),
         dependency('gtk+-3.0'),
         dependency('packagekit-glib2'),
+        dependency('zeitgeist-2.0'),
         posix_dep,
         meson.get_compiler('c').find_library('m', required : false)
     ],

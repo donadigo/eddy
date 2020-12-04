@@ -108,14 +108,37 @@ public class Eddy.Application : Gtk.Application {
     }
 
     public override void open (File[] files, string hint) {
-        string[] uris = {};
+        activate ();
+
+        // Keep a reference to the File array when LogManager fetches the data
+        var local_files = files;
+
+        var log_manager = LogManager.get_default ();
+        if (!log_manager.fetched) {
+            ulong connect_id = 0U;
+            connect_id = log_manager.notify["fetched"].connect (() => {
+                if (log_manager.fetched) {
+                    log_manager.disconnect (connect_id);
+                    process_files (local_files);
+                }
+            });
+        } else {
+            process_files (local_files);
+        }
+    }
+
+    private void process_files (File[] files) {
+        var log_manager = LogManager.get_default ();
+
+        PackageUri[] puris = {};
         foreach (var file in files) {
-            uris += file.get_uri ();
+            var puri = new PackageUri (file.get_uri (), -1);
+            log_manager.fill_out_external_uri (puri);
+            puris += puri;
         }
 
-        activate ();
         if (window != null) {
-            window.open_uris.begin (uris);
+            window.open_uris.begin (puris);
         }
     }
 

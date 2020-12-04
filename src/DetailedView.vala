@@ -23,6 +23,7 @@ public class Eddy.DetailedView : Gtk.Box {
     private Gtk.Label name_label;
     private Gtk.Label version_label;
     private Gtk.Label description_label;
+    private Gtk.Label date_installed_label;
     private Gtk.LinkButton homepage_button;
 
     construct {
@@ -41,6 +42,10 @@ public class Eddy.DetailedView : Gtk.Box {
         description_label.halign = Gtk.Align.START;
         description_label.margin_top = 16;
 
+        date_installed_label = new Gtk.Label (_("Unknown"));
+        date_installed_label.halign = Gtk.Align.START;
+        set_widget_visible (date_installed_label, false);
+
         homepage_button = new Gtk.LinkButton.with_label ("", _("Homepage"));
         homepage_button.no_show_all = true;
 
@@ -50,6 +55,7 @@ public class Eddy.DetailedView : Gtk.Box {
 
         add (header_box);
         add (version_label);
+        add (date_installed_label);
         add (description_label);
     }
 
@@ -61,6 +67,19 @@ public class Eddy.DetailedView : Gtk.Box {
         //  TRANSLATORS:
         //  this string is formatted as: "version: `package-version` • `package-installed-size`"
         version_label.set_markup ("<span size='x-large'>" + _("version %s • %s").printf (package.version, format_size (package.installed_size)) + "</span>");
+
+        if (package.installed_timestamp != -1) {
+            var date = new DateTime.from_unix_local (package.installed_timestamp);
+            if (date != null) {
+                string formatted = date.format ("%F");
+                date_installed_label.set_markup (_("<b>Previously installed on %s</b>").printf (formatted));
+                set_widget_visible (date_installed_label, true);
+            } else {
+                set_widget_visible (date_installed_label, false);
+            }
+        } else {
+            set_widget_visible (date_installed_label, false);
+        }
 
         homepage_button.uri = package.homepage;
         description_label.label = package.description.strip ();

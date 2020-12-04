@@ -17,6 +17,11 @@
  * Authored by: Adam Bieńkowski <donadigos159@gmail.com>
  */
 
+public enum Eddy.PackageViewMode {
+    NORMAL = 0,
+    HISTORY = 1
+}
+
 public class Eddy.PackageListView : Gtk.Box {
     public signal void install_all ();
     public signal void perform_default_action (Package package);
@@ -35,11 +40,15 @@ public class Eddy.PackageListView : Gtk.Box {
         }
     }
 
+    private PackageViewMode mode = PackageViewMode.NORMAL;
+
     private Gtk.ListBox list_box;
     private Gtk.Label installed_size_label;
 
     private Gtk.Label status_label;
     private Gtk.Button install_button;
+
+    private Gtk.Box history_box;
 
     construct {
         orientation = Gtk.Orientation.VERTICAL;
@@ -70,6 +79,19 @@ public class Eddy.PackageListView : Gtk.Box {
         list_box.row_activated.connect (on_row_activated);
         list_box.add (button_row);
 
+        var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
+
+        history_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        history_box.valign = Gtk.Align.END;
+        history_box.hexpand = true;
+
+        var manage_privacy_button = new Gtk.Button.with_label (_("Manage Privacy Settings…"));
+        manage_privacy_button.clicked.connect (on_manage_privacy_clicked);
+        manage_privacy_button.margin = 6;
+        manage_privacy_button.halign = Gtk.Align.END;
+        history_box.pack_end (manage_privacy_button);
+        history_box.pack_end (separator);
+
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         main_box.add (list_box);
 
@@ -79,6 +101,14 @@ public class Eddy.PackageListView : Gtk.Box {
 
         notify["working"].connect (update);
         add (scrolled);
+        pack_end (history_box);
+
+        set_mode (mode);
+    }
+
+    public void set_mode (PackageViewMode mode) {
+        this.mode = mode;
+        set_widget_visible (history_box, mode == PackageViewMode.HISTORY);
     }
 
     public void add_package (Package package) {
@@ -233,5 +263,18 @@ public class Eddy.PackageListView : Gtk.Box {
 
     private void on_row_activated (Gtk.ListBoxRow row) {
         show_package_details (((PackageRow)row).package);
+    }
+
+    private void on_manage_privacy_clicked () {
+        try {
+            Gtk.show_uri_on_window ((Gtk.Window?)get_toplevel (), "settings://privacy", Gdk.CURRENT_TIME);
+        } catch (Error e) {
+            var dialog = new Granite.MessageDialog.with_image_from_icon_name (_("Failed To Launch Privacy Settings"),
+                e.message,
+                "dialog-error",
+                Gtk.ButtonsType.CLOSE);
+            dialog.run ();
+            dialog.destroy ();
+        }
     }
 }
