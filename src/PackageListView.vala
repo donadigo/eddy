@@ -101,7 +101,7 @@ public class Eddy.PackageListView : Gtk.Box {
 
         notify["working"].connect (update);
         add (scrolled);
-        pack_end (history_box);
+        add (history_box);
 
         set_mode (mode);
     }

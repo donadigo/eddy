@@ -13,6 +13,7 @@
         <li>Install multiple packages at once</li>
         <li>Upgrade and downgrade existing packages</li>
         <li>Load all packages automatically from your Downloads folder</li>
+        <li>View history of previosly installed apps</li>
         <li>Complete system integration including notifications and progress bar in the dock</li>
     </ul>
   </description>
@@ -20,6 +21,31 @@
     <binary>com.github.donadigo.eddy</binary>
   </provides>
   <releases>
+      <release version="1.3.0" date="2020-12-04">
+        <description>
+          <p>This release adds new features and translations to Eddy and prepares the transition to elementary OS 6.0.</p>
+          <p>You can now view previously installed apps.</p>
+          <ul>
+            <li>The option will appear in the welcome screen if you've previously installed any apps.</li>
+            <li>You can also view the installed date in the details view of a package if it has one.</li>
+            <li>This history can be managed through the builtin Security &amp; Privacy settings in elementary OS.</li>
+          </ul>
+
+          <p>Other additions:</p>
+          <ul>
+            <li>Eddy will now show a warning icon if something is blocking currently ongoing operations in the app.</li>
+            <li>Preparation for elementary OS 6.0 styling changes (Cassidy James)</li>
+            <li>It is now possible to translate metadata of Eddy (Ryo Nakano)</li>
+          </ul>
+
+          <p>New translations:</p>
+          <ul>
+            <li>Simplified Chinese (colindemian)</li>
+            <li>Italian (Mirko Brombin)</li>
+            <li>Polish (tosziro)</li>
+          </ul>
+        </description>
+      </release>
       <release version="1.2.2" date="2020-04-17">
         <description>
           <p>This release fixes comparing some package versions and includes new translations:</p>
