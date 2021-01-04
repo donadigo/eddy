@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-04 13:13+0900\n"
-"PO-Revision-Date: 2021-01-02 18:02+0000\n"
+"PO-Revision-Date: 2021-01-04 11:59+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese (pt)\n"
 "Language: pt\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:7
 #: data/com.github.donadigo.eddy.desktop.in:4
@@ -46,7 +46,7 @@ msgstr "Atualiza e desatualiza de pacotes existentes"
 #: data/com.github.donadigo.eddy.appdata.xml.in:15
 msgid "Load all packages automatically from your Downloads folder"
 msgstr ""
-"Carregue todos os pacotes automaticamente a partir da sua pasta de "
+"Carrega todos os pacotes automaticamente a partir da sua pasta de "
 "Transferências"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:16
@@ -54,8 +54,7 @@ msgid ""
 "Complete system integration including notifications and progress bar in the "
 "dock"
 msgstr ""
-"Integração completa do sistema incluindo notificações e barra de progresso "
-"na doca"
+"Integração com o sistema incluindo notificações e barra de progresso na doca"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:25
 msgid ""
@@ -304,7 +303,7 @@ msgstr ""
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:162
 msgid "Show a spinner when loading packages"
-msgstr "Mostrar um botão giratório ao carregar pacotes"
+msgstr "Mostra um botão giratório ao carregar pacotes"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:163
 msgid "Fixed adding a file already in the list duplicated it"
@@ -325,7 +324,7 @@ msgstr "Corrige o ficheiro do ambiente de trabalho de ser inválido"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:179
 msgid "Bump granite dependency version"
-msgstr "Impacto da versão de dependência do granite"
+msgstr "Atualização da versão de dependências do granite"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:180
 msgid "Update debian packaging"
