@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-04 13:13+0900\n"
-"PO-Revision-Date: 2021-01-04 12:30+0000\n"
+"PO-Revision-Date: 2021-01-04 17:14+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese (pt)\n"
 "Language: pt\n"
@@ -211,7 +211,7 @@ msgstr "\"Sobre o Eddy\" abre agora esta página da Loja de Aplicações"
 #: data/com.github.donadigo.eddy.appdata.xml.in:105
 msgid "Fix about dialog not showing correctly"
 msgstr ""
-"Correção da caixa de diálogo \"Sobre o Eddy\" de não ser apresentada "
+"Correção da caixa de diálogo \"Sobre o Eddy\" não ser apresentada "
 "corretamente"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:106
