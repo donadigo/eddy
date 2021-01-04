@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-04 13:13+0900\n"
-"PO-Revision-Date: 2021-01-04 11:59+0000\n"
+"PO-Revision-Date: 2021-01-04 12:30+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese (pt)\n"
 "Language: pt\n"
@@ -29,7 +29,7 @@ msgstr "Instalar e gerir ficheiros .deb"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:10
 msgid "Install, uninstall and view information about debian packages."
-msgstr "Instalar, desinstalar e ver informação sobre pacotes debian."
+msgstr "Instalar, desinstalar e ver informação sobre pacotes Debian."
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:11
 msgid "Features include:"
@@ -41,7 +41,7 @@ msgstr "Instala vários pacotes ao mesmo tempo"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:14
 msgid "Upgrade and downgrade existing packages"
-msgstr "Atualiza e desatualiza de pacotes existentes"
+msgstr "Atualiza e desatualiza pacotes existentes"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:15
 msgid "Load all packages automatically from your Downloads folder"
@@ -138,7 +138,7 @@ msgstr ""
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:64
 msgid "Brazilian Portuguese translation (Paulo Galardi)"
-msgstr "Tradução do Português do Brasil (Paulo Galardi)"
+msgstr "Tradução para Português do Brasil (Paulo Galardi)"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:65
 msgid "Lithuanian translation (welaq)"
@@ -158,7 +158,7 @@ msgid ""
 "unintentional auto-switching to list view"
 msgstr ""
 "Mudança rápida para a vista detalhada durante o carregamento de pacotes "
-"causou a comutação automática não intencional para a vista de lista"
+"causou inadvertidamente a alteração automática para a vista de lista"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:72
 msgid "Error dialog now has a proper title"
@@ -179,7 +179,7 @@ msgstr "Diversos:"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:81
 msgid "Show operation percentage alongside the status label"
-msgstr "Mostrar a percentagem de operação ao lado da descrição do estado"
+msgstr "Mostra a percentagem de operação ao lado da descrição do estado"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:82
 msgid "Properly handle terminating the application by external processes"
@@ -198,7 +198,7 @@ msgstr ""
 #: data/com.github.donadigo.eddy.appdata.xml.in:85
 #: data/com.github.donadigo.eddy.appdata.xml.in:98
 msgid "Update application metadata"
-msgstr "Atualizar os metadados da aplicação"
+msgstr "Atualização dos metadados da aplicação"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:86
 msgid "Update Dutch and German translations"
@@ -210,7 +210,9 @@ msgstr "\"Sobre o Eddy\" abre agora esta página da Loja de Aplicações"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:105
 msgid "Fix about dialog not showing correctly"
-msgstr "Correção sobre a caixa de diálogo não ser apresentada corretamente"
+msgstr ""
+"Correção da caixa de diálogo \"Sobre o Eddy\" de não ser apresentada "
+"corretamente"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:106
 msgid ""
@@ -273,7 +275,7 @@ msgstr "Não mostra a caixa de diálogo de erro quando a operação é cancelada
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:137
 msgid "Display the progress of current operation in the dock"
-msgstr "Mostrar o progresso da operação atual na Doca"
+msgstr "Mostra o progresso da operação atual na Doca"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:138
 msgid "Sort packages by their state and name in the list view"
@@ -281,7 +283,7 @@ msgstr "Ordena os pacotes por estado e nome na visualização de lista"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:145
 msgid "Save window state between sessions"
-msgstr "Guardar o estado da janela entre as sessões"
+msgstr "Guarda o estado da janela entre as sessões"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:146
 msgid "Improved performance of launching the app second time"
@@ -328,7 +330,7 @@ msgstr "Atualização da versão de dependências do granite"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:180
 msgid "Update debian packaging"
-msgstr "Atualiza a empacotagem debian"
+msgstr "Atualiza a empacotagem Debian"
 
 #: data/com.github.donadigo.eddy.appdata.xml.in:186
 msgid "Initial release"
