@@ -51,6 +51,7 @@ public class Eddy.LogManager : Object {
     }
 
     public int64 log_events (TransactionResult result) {
+#if USE_ZEITGEIST
         var event = new Zeitgeist.Event ();
         event.interpretation = "package-install";
         event.manifestation = "user-action";
@@ -78,9 +79,13 @@ public class Eddy.LogManager : Object {
         }
 
         return event.timestamp;
+#else
+        return 0;
+#endif
     }
 
     public async int fetch () {
+#if USE_ZEITGEIST
         var event = new Zeitgeist.Event ();
         event.interpretation = "package-install";
         event.manifestation = "user-action";
@@ -127,5 +132,8 @@ public class Eddy.LogManager : Object {
 
         fetched = true;
         return installed_uris.size;
+#else
+        return 0;
+#endif
     }
 }

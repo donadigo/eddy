@@ -1,0 +1,38 @@
+app-id: com.github.donadigo.eddy
+runtime: io.elementary.Platform
+runtime-version: '6'
+sdk: io.elementary.Sdk
+command: com.github.donadigo.eddy
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --socket=system-bus
+  - --share=network
+  - --talk-name=org.freedesktop.PackageKit
+  - --filesystem=home:ro
+  - --filesystem=/etc:ro
+cleanup:
+  - '*.a'
+  - '*.la'
+  - '/include'
+modules:
+  - name: libpackagekit-glib2
+    buildsystem: meson
+    sources:
+      - type: archive
+        url: https://github.com/PackageKit/PackageKit/archive/refs/tags/PACKAGEKIT_1_2_4.tar.gz
+        sha256: 4a7b0a41ffa56ad8af67156c46ecb9d4eb439b31a4cb581d959bd5480444954b
+      - type: patch
+        path: patches/packagekit.patch
+    config-opts:
+      --buildtype=release
+
+  - name: eddy
+    buildsystem: meson
+    builddir: true
+    sources:
+      - type: dir
+        path: .
+    config-opts:
+      - -Duse_zeitgeist=false

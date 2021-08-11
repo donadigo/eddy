@@ -33,6 +33,7 @@ public class Eddy.MimeTypeHelper : Object {
             FileUtils.get_contents (MIME_TYPES_DB_FILE, out db_contents);
         } catch (Error e) {
             warning (e.message);
+            db_contents = "";
         }
     }
 

@@ -1,0 +1,82 @@
+diff --git a/meson-orig.build b/meson.build
+index 111f374..6f1243e 100644
+--- a/meson-orig.build
++++ b/meson.build
+@@ -14,61 +14,6 @@ gobject_dep = dependency('gobject-2.0')
+ gio_dep = dependency('gio-2.0')
+ gio_unix_dep = dependency('gio-unix-2.0', version: '>=2.16.1')
+ gmodule_dep = dependency('gmodule-2.0', version: '>=2.16.1')
+-sqlite3_dep = dependency('sqlite3')
+-polkit_dep = dependency('polkit-gobject-1', version: '>=0.98')
+-if polkit_dep.version().version_compare('>=0.114')
+-  add_project_arguments ('-DHAVE_POLKIT_0_114=1', language: 'c')
+-endif
+-
+-libsystemd = []
+-if get_option('systemd')
+-  libsystemd = dependency('libsystemd', version: '>=213')
+-  systemd_system_unit_dir = get_option('systemdsystemunitdir')
+-  systemd_user_unit_dir = get_option('systemduserunitdir')
+-  if systemd_system_unit_dir == '' or systemd_user_unit_dir == ''
+-    systemd = dependency('systemd')
+-  endif
+-  if systemd_system_unit_dir == ''
+-    systemd_system_unit_dir = systemd.get_pkgconfig_variable('systemdsystemunitdir')
+-  endif
+-  if systemd_user_unit_dir == ''
+-    systemd_user_unit_dir = systemd.get_pkgconfig_variable('systemduserunitdir')
+-  endif
+-
+-  add_project_arguments ('-DHAVE_SYSTEMD_SD_DAEMON_H=1', language: 'c')
+-  add_project_arguments ('-DHAVE_SYSTEMD_SD_LOGIN_H=1', language: 'c')
+-else
+-  if get_option('offline_update')
+-    error('Offline updates requires Systemd, use -Dsystemd=true to enable it or -Doffline_update=false to disable offline updates')
+-  endif
+-endif
+-
+-elogind = []
+-if get_option('elogind')
+-  elogind = dependency('elogind', version: '>=229.4')
+-  add_project_arguments ('-DHAVE_SYSTEMD_SD_LOGIN_H=1', language: 'c')
+-endif
+-
+-if get_option('local_checkout')
+-  add_project_arguments ('-DPK_BUILD_LOCAL=1', language: 'c')
+-endif
+-
+-if get_option('daemon_tests')
+-  add_project_arguments ('-DPK_ENABLE_DAEMON_TESTS=1', language: 'c')
+-endif
+-
+-if dependency('ply-boot-client', version: '>=0.9.5', required: false).found()
+-  add_project_arguments ('-DPLYMOUTH_0_9_5=1', language: 'c')
+-endif
+-
+-# Ensure functions like realpath(3) and other "default" functions are available
+-add_project_arguments ('-D_DEFAULT_SOURCE', language: 'c')
+-
+-# Avoid g_simple_async_result deprecation warnings in glib 2.46+
+-add_project_arguments ('-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_44', language: 'c')
+-
+-# allow the daemon to include library files directly
+-add_project_arguments ('-DPK_COMPILATION', language: 'c')
+ 
+ conf = configuration_data()
+ conf.set_quoted('DATADIR', join_paths(get_option('prefix'), get_option('datadir')))
+@@ -143,13 +88,5 @@ add_project_arguments(
+   language: 'c'
+ )
+ 
+-subdir('po')
+-subdir('policy')
+-subdir('etc')
+-subdir('data')
+-subdir('lib')
+-subdir('src')
+-subdir('client')
+-subdir('backends')
+-subdir('contrib')
+-subdir('docs')
++subdir('lib/packagekit-glib2')
++

@@ -17,6 +17,20 @@ add_project_arguments('-DI_KNOW_THE_PACKAGEKIT_GLIB2_API_IS_SUBJECT_TO_CHANGE', 
 
 posix_dep = meson.get_compiler('vala').find_library('posix')
 
+deps = [
+  dependency('glib-2.0'),
+  dependency('granite'),
+  dependency('gtk+-3.0'),
+  dependency('packagekit-glib2'),
+  posix_dep,
+  meson.get_compiler('c').find_library('m', required : false)
+]
+
+if get_option('use_zeitgeist')
+  deps += dependency('zeitgeist-2.0')
+  add_project_arguments('--define=USE_ZEITGEIST', language: 'vala')
+endif
+
 executable(
     meson.project_name(),
     'src/Application.vala',
@@ -32,15 +46,7 @@ executable(
     'src/TransactionResult.vala',
     'src/LogManager.vala',
     'src/PackageUri.vala',
-    dependencies: [
-        dependency('glib-2.0'),
-        dependency('granite'),
-        dependency('gtk+-3.0'),
-        dependency('packagekit-glib2'),
-        dependency('zeitgeist-2.0'),
-        posix_dep,
-        meson.get_compiler('c').find_library('m', required : false)
-    ],
+    dependencies: deps,
     install: true
 )
 

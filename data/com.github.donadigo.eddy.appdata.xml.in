@@ -265,6 +265,7 @@
   <url type="help">https://github.com/donadigo/eddy</url>
   <update_contact>donadigos159@gmail.com</update_contact>
   <custom>
+    <value key="x-appcenter-stripe">pk_live_a5CWlfLgKcxATZoB4vRa50UP006vX7CjBc</value>
     <value key="x-appcenter-color-primary">#b30033</value>
     <value key="x-appcenter-color-primary-text">#f2f2f2</value>
     <value key="x-appcenter-suggested-price">5</value>
