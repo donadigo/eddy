@@ -29,7 +29,7 @@ public class Eddy.MainWindow : Gtk.Window {
         @define-color color_primary #e6334d;
         @define-color accent_color @color_primary;
 
-        .title, .titlebutton .image-button {
+        .title, .titlebutton, .image-button {
             color: #f2f2f2;
             text-shadow: 0 1px #b52136;
         }
