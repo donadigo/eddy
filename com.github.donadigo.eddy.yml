@@ -10,6 +10,7 @@ finish-args:
   - --socket=system-bus
   - --share=network
   - --talk-name=org.freedesktop.PackageKit
+  - --system-talk-name=org.freedesktop.Accounts
   - --filesystem=home:ro
   - --filesystem=/etc:ro
 cleanup:
@@ -26,7 +27,7 @@ modules:
       - type: patch
         path: patches/packagekit.patch
     config-opts:
-      --buildtype=release
+      - --buildtype=release
 
   - name: eddy
     buildsystem: meson
