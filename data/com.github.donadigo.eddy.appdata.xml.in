@@ -21,6 +21,15 @@
     <binary>com.github.donadigo.eddy</binary>
   </provides>
   <releases>
+      <release version="1.3.1" date="2021-08-12">
+        <description>
+          <p>This release makes Eddy available on elementary OS 6.0.</p>
+          <p>New translations:</p>
+          <ul>
+            <li>Portuguese (Hugo Carvalho)</li>
+          </ul>
+        </description>
+      </release>
       <release version="1.3.0" date="2020-12-04">
         <description>
           <p>This release adds new features and translations to Eddy and prepares the transition to elementary OS 6.0.</p>
