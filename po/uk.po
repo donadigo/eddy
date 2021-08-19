@@ -1,5 +1,324 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-10 15:31+0200\n"
+"PO-Revision-Date: 2021-08-19 19:30+0300\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Language: uk\n"
+
+#: ../src/PackageListView.vala:49 ../src/PackageRow.vala:165
+msgid "Install"
+msgstr "Встановити"
+
+#: ../src/PackageListView.vala:153
+msgid "Total installed size: %s"
+msgstr "Загальний розмір встановлення: %s"
+
+#: ../src/Application.vala:42
+msgid "translator-credits"
+msgstr ""
+
+#: ../src/Package.vala:190
+msgid "Starting"
+msgstr "Початок"
+
+#: ../src/Package.vala:192
+msgid "Waiting"
+msgstr "Очікування"
+
+#: ../src/Package.vala:194
+msgid "Running"
+msgstr "Виконання"
+
+#: ../src/Package.vala:196
+msgid "Querying"
+msgstr "Запит"
+
+#: ../src/Package.vala:198
+msgid "Getting information"
+msgstr "Отримання інформації"
+
+#: ../src/Package.vala:200
+msgid "Removing packages"
+msgstr "Вилучення пакунків"
+
+#: ../src/Package.vala:202
+msgid "Downloading"
+msgstr "Завантаження"
+
+#: ../src/Package.vala:204
+msgid "Refreshing software list"
+msgstr "Оновлюється перелік програм"
+
+#: ../src/Package.vala:206
+msgid "Installing updates"
+msgstr "Встановлення оновлень"
+
+#: ../src/Package.vala:208
+msgid "Cleaning up packages"
+msgstr "Очищення пакунків"
+
+#: ../src/Package.vala:210
+msgid "Obsoleting packages"
+msgstr "Застарілі пакунки"
+
+#: ../src/Package.vala:212
+msgid "Resolving dependencies"
+msgstr "Вирішення залежностей"
+
+#: ../src/Package.vala:214
+msgid "Checking signatures"
+msgstr "Перевірка підписів"
+
+#: ../src/Package.vala:216
+msgid "Testing changes"
+msgstr "Тестування змін"
+
+#: ../src/Package.vala:218
+msgid "Committing changes"
+msgstr "Внесення змін"
+
+#: ../src/Package.vala:220
+msgid "Requesting data"
+msgstr "Запит даних"
+
+#: ../src/Package.vala:222 ../src/Package.vala:455
+msgid "Finished"
+msgstr "Завершено"
+
+#: ../src/Package.vala:224
+msgid "Cancelling"
+msgstr "Скасування"
+
+#: ../src/Package.vala:226
+msgid "Downloading repository information"
+msgstr "Завантаження інформації про репозиторій"
+
+#: ../src/Package.vala:228
+msgid "Downloading list of packages"
+msgstr "Завантаження переліку пакунків"
+
+#: ../src/Package.vala:230
+msgid "Downloading file lists"
+msgstr "Завантаження переліку файлів"
+
+#: ../src/Package.vala:232
+msgid "Downloading lists of changes"
+msgstr "Завантаження переліку змін"
+
+#: ../src/Package.vala:234
+msgid "Downloading groups"
+msgstr "Завантаження груп"
+
+#: ../src/Package.vala:236
+msgid "Downloading update information"
+msgstr "Завантаження інформації про оновлення"
+
+#: ../src/Package.vala:238
+msgid "Repackaging files"
+msgstr "Перепакування файлів"
+
+#: ../src/Package.vala:240
+msgid "Loading cache"
+msgstr "Завантаження кешу"
+
+#: ../src/Package.vala:242
+msgid "Scanning applications"
+msgstr "Сканування програм"
+
+#: ../src/Package.vala:244
+msgid "Generating package lists"
+msgstr "Створення переліку пакунків"
+
+#: ../src/Package.vala:246
+msgid "Waiting for package manager lock"
+msgstr "Очікування блокування менеджера пакунків"
+
+#: ../src/Package.vala:248
+msgid "Waiting for authentication"
+msgstr "Очікування автентифікації"
+
+#: ../src/Package.vala:250
+msgid "Updating running applications"
+msgstr "Оновлення запущених програм"
+
+#: ../src/Package.vala:252
+msgid "Checking applications in use"
+msgstr "Перевірка програм, що використовуються"
+
+#: ../src/Package.vala:254
+msgid "Checking libraries in use"
+msgstr "Перевірка бібліотек, що використовуються"
+
+#: ../src/Package.vala:256
+msgid "Copying files"
+msgstr "Копіювання файлів"
+
+#: ../src/Package.vala:259
+msgid "Installing"
+msgstr "Встановлення"
+
+#: ../src/Package.vala:457
+msgid "Cancelled"
+msgstr "Скасовано"
+
+#: ../src/Package.vala:460
+msgid "Failed"
+msgstr "Помилка"
+
+#: ../src/Package.vala:463 ../src/DetailedView.vala:32
+#: ../src/DetailedView.vala:34 ../src/DetailedView.vala:37
+msgid "Unknown"
+msgstr "Невідомо"
+
+#: ../src/MainWindow.vala:95
+msgid "Open…"
+msgstr "Відкрити…"
+
+#: ../src/MainWindow.vala:103
+msgid "Go back"
+msgstr "Назад"
+
+#: ../src/MainWindow.vala:120
+msgid "Install some apps"
+msgstr "Встановлюйте будь-які програми"
+
+#: ../src/MainWindow.vala:120
+msgid "Drag and drop .%s files or open them to begin installation."
+msgstr "Перетягніть .%s файли або відкрийте їх, щоб розпочати встановлення."
+
+#: ../src/MainWindow.vala:122 ../src/MainWindow.vala:454
+msgid "Open"
+msgstr "Відкрити"
+
+#: ../src/MainWindow.vala:122
+msgid "Browse to open a single file"
+msgstr "Огляд тек для відкриття одного файлу"
+
+#: ../src/MainWindow.vala:191
+msgid "There is %u operation unfinished"
+msgstr "Операція %u незавершена"
+
+#: ../src/MainWindow.vala:191
+msgid "There are %u operations unfinished"
+msgstr "Операції %u незавершені"
+
+#: ../src/MainWindow.vala:192
+msgid "There Are Ongoing Operations"
+msgstr "Тривають операції"
+
+#: ../src/MainWindow.vala:192
+msgid "%s. Quitting will cancel all remaining transactions."
+msgstr "%s. Вихід скасує всіх інші операцій."
+
+#: ../src/MainWindow.vala:193
+msgid "Do Not Quit"
+msgstr "Не виходити"
+
+#: ../src/MainWindow.vala:195
+msgid "Quit Anyway"
+msgstr "Завжди виходити"
+
+#: ../src/MainWindow.vala:284
+msgid "Installation Failed"
+msgstr "Помилка встановлення"
+
+#: ../src/MainWindow.vala:286
+msgid "Uninstallation Failed"
+msgstr "Помилка видалення"
+
+#: ../src/MainWindow.vala:290 ../src/MainWindow.vala:431
+msgid "Close"
+msgstr "Закрити"
+
+#: ../src/MainWindow.vala:309 ../src/MainWindow.vala:316
+msgid "Installation succeeded"
+msgstr "Встановлення завершено успішно"
+
+#: ../src/MainWindow.vala:310
+msgid "%s has been successfully installed"
+msgstr "%s успішно встановлений"
+
+#: ../src/MainWindow.vala:312 ../src/MainWindow.vala:319
+msgid "Uninstallation succeeded"
+msgstr "Видалення завершено успішно"
+
+#: ../src/MainWindow.vala:313
+msgid "%s has been successfully uninstalled"
+msgstr "%s успішно видалений"
+
+#: ../src/MainWindow.vala:317
+msgid "All packages have been successfully installed"
+msgstr "Всі пакунки успішно встановлено"
+
+#: ../src/MainWindow.vala:320
+msgid "All packages have been successfully uninstalled"
+msgstr "Всі пакунки успішно видалено"
+
+#: ../src/MainWindow.vala:331
+msgid "Load from Downloads"
+msgstr "Отримати із Завантажень"
+
+#: ../src/MainWindow.vala:331
+msgid "Load .%s files from your Downloads folder"
+msgstr "Отримати .%s файли із теки \"Завантаження\""
+
+#: ../src/MainWindow.vala:365
+msgid "<b>%s</b> is not a package"
+msgstr "<b>%s</b> не є пакунком"
+
+#: ../src/MainWindow.vala:404
+msgid "<b>%s</b> is not a valid package"
+msgstr "Пакунок <b>%s</b> містить помилки"
+
+#: ../src/MainWindow.vala:430
+msgid "Some Packages Could Not Be Added"
+msgstr "Деякі пакунки не були додані"
+
+#: ../src/MainWindow.vala:440
+msgid "Packages"
+msgstr "Пакунки"
+
+#: ../src/MainWindow.vala:446
+msgid "All Files"
+msgstr "Всі файли"
+
+#: ../src/MainWindow.vala:452
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: ../src/DetailedView.vala:44
+msgid "Homepage"
+msgstr "Домівка"
+
+#: ../src/DetailedView.vala:63
+msgid "version %s • %s"
+msgstr "версія %s • %s"
+
+#: ../src/PackageRow.vala:94
+msgid "Remove from list"
+msgstr "Вилучити із переліку"
+
+#: ../src/PackageRow.vala:162
+msgid "Uninstall"
+msgstr "Видалити"
+
+#: ../src/PackageRow.vala:170
+msgid "Update"
+msgstr "Оновити"
+
+#: ../src/PackageRow.vala:175
+msgid "Downgrade"
+msgstr "Знизити версію"
