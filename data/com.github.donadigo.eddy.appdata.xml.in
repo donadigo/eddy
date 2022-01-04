@@ -19,6 +19,8 @@
   </description>
   <provides>
     <binary>com.github.donadigo.eddy</binary>
+    <mediatype>application/x-debian-package</mediatype>
+    <mediatype>application/vnd.debian.binary-package</mediatype>
   </provides>
   <releases>
       <release version="1.3.2" date="2022-01-03">
@@ -238,10 +240,6 @@
       <image>https://raw.githubusercontent.com/donadigo/eddy/master/Screenshot_3.png</image>
     </screenshot>
   </screenshots>
-  ​<mimetypes>
-    <mimetype>application/x-debian-package</mimetype>
-    <mimetype>application/vnd.debian.binary-package</mimetype>
-  </mimetypes>
 
   <content_rating type="oars-1.1">
     <content_attribute id="violence-cartoon">none</content_attribute>
