@@ -484,35 +484,28 @@ public class Eddy.MainWindow : Gtk.Window {
         all_filter.set_filter_name (_("All Files"));
         all_filter.add_pattern ("*");
 
-        var chooser = new Gtk.FileChooserDialog ("Select packages to install",
+        var chooser = new Gtk.FileChooserNative (_("Select packages to install"),
                         this,
                         Gtk.FileChooserAction.OPEN,
-                        _("Cancel"),
-                        Gtk.ResponseType.CANCEL,
                         _("Open"),
-                        Gtk.ResponseType.ACCEPT);
+                        _("Cancel"));
         chooser.add_filter (filter);
         chooser.add_filter (all_filter);
 
-        chooser.response.connect (on_chooser_response);
-        chooser.run ();
-    }
-
-    private void on_chooser_response (Gtk.Dialog chooser, int response) {
-        var log_manager = LogManager.get_default ();
-        if (response == Gtk.ResponseType.ACCEPT) {
-            PackageUri[] puris = {};
-            foreach (unowned string uri in ((Gtk.FileChooserDialog)chooser).get_uris ()) {
-                var puri = new PackageUri (uri, -1);
-                log_manager.fill_out_external_uri (puri);
-                puris += puri;
-            }
-
-            chooser.destroy ();
-            open_uris.begin (puris);
-        } else {
-            chooser.destroy ();
-        }
+        chooser.response.connect ((response) => {
+            if (response == Gtk.ResponseType.ACCEPT) {
+                var log_manager = LogManager.get_default ();
+                PackageUri[] puris = {};
+                foreach (unowned string uri in ((Gtk.FileChooserNative)chooser).get_uris ()) {
+                    var puri = new PackageUri (uri, -1);
+                    log_manager.fill_out_external_uri (puri);
+                    puris += puri;
+                }
+    
+                open_uris.begin (puris);
+            }    
+        });
+        chooser.show ();
     }
 
     private async void on_install_all () {
