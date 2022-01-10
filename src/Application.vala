@@ -108,6 +108,7 @@ public class Eddy.Application : Gtk.Application {
     public override void open (File[] files, string hint) {
         activate ();
 
+#if USE_ZEITGEIST
         // Keep a reference to the File array when LogManager fetches the data
         var local_files = files;
 
@@ -120,9 +121,10 @@ public class Eddy.Application : Gtk.Application {
                     process_files (local_files);
                 }
             });
-        } else {
-            process_files (local_files);
         }
+#else
+        process_files (files);
+#endif
     }
 
     private void process_files (File[] files) {
