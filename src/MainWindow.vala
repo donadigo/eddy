@@ -492,20 +492,24 @@ public class Eddy.MainWindow : Gtk.Window {
         chooser.add_filter (filter);
         chooser.add_filter (all_filter);
 
-        chooser.response.connect ((response) => {
-            if (response == Gtk.ResponseType.ACCEPT) {
-                var log_manager = LogManager.get_default ();
-                PackageUri[] puris = {};
-                foreach (unowned string uri in ((Gtk.FileChooserNative)chooser).get_uris ()) {
-                    var puri = new PackageUri (uri, -1);
-                    log_manager.fill_out_external_uri (puri);
-                    puris += puri;
-                }
-    
-                open_uris.begin (puris);
-            }    
-        });
+        chooser.response.connect (on_chooser_response);
         chooser.show ();
+    }
+
+    private void on_chooser_response (Gtk.NativeDialog chooser, int response) {
+        if (response == Gtk.ResponseType.ACCEPT) {
+            var log_manager = LogManager.get_default ();
+            PackageUri[] puris = {};
+            foreach (unowned string uri in ((Gtk.FileChooserNative)chooser).get_uris ()) {
+                var puri = new PackageUri (uri, -1);
+                log_manager.fill_out_external_uri (puri);
+                puris += puri;
+            }
+
+            open_uris.begin (puris);
+        }
+
+        chooser.destroy ();
     }
 
     private async void on_install_all () {
