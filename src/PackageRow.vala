@@ -52,7 +52,7 @@ public class Eddy.PackageRow : Gtk.ListBoxRow {
         var package_image = new Gtk.Image.from_icon_name ("package", Gtk.IconSize.DND);
         package_image.valign = Gtk.Align.START;
 
-        var summary_label = new Gtk.Label ("<b>%s</b>".printf (package.summary));
+        var summary_label = new Gtk.Label ("<b>%s</b>".printf (Markup.escape_text (package.summary)));
         summary_label.wrap = true;
         summary_label.wrap_mode = Pango.WrapMode.WORD_CHAR;
         summary_label.use_markup = true;
