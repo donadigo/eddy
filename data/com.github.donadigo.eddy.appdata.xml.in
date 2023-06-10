@@ -166,7 +166,7 @@
             <li>Add a button to update / downgrade already installed package</li>
             <li>Fix window growing in size when summary or package name is really long</li>
             <li>The application can be now found under "System" category</li>
-            <li>Ctrl-Q now exists the app</li>
+            <li>Ctrl-Q now exits the app</li>
           </ul>
         </description>
       </release>
