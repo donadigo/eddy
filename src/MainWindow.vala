@@ -205,7 +205,7 @@ public class Eddy.MainWindow : Gtk.Window {
 
         uint size = packges.size;
         if (size > 0) {
-            string operations_str = ngettext (_("There is %u operation unfinished").printf (size), _("There are %u operations unfinished").printf (size), size);
+            string operations_str = ngettext ("There is %u operation unfinished", "There are %u operations unfinished", size).printf (size);
             var dialog = new Granite.MessageDialog.with_image_from_icon_name (_("There Are Ongoing Operations"),
                 _("%s. Quitting will cancel all remaining transactions.").printf (operations_str),
                 "dialog-warning",
