@@ -4,13 +4,13 @@ gnome = import('gnome')
 i18n = import('i18n')
 
 conf = configuration_data()
+conf.set_quoted('LOCALEDIR', get_option('prefix') / get_option('localedir'))
 conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
-configure_file(output: 'config.h', configuration: conf)
-config_h_dir = include_directories('.')
-
-c_args = [
-  '-include', 'config.h'
-]
+config_file = configure_file(
+  input: 'src' / 'Config.vala.in',
+  output: '@BASENAME@',
+  configuration: conf
+)
 
 add_global_arguments('-DGETTEXT_PACKAGE="@0@"'.format (meson.project_name()), language:'c')
 add_project_arguments('-DI_KNOW_THE_PACKAGEKIT_GLIB2_API_IS_SUBJECT_TO_CHANGE', language : 'c')
@@ -33,6 +33,7 @@ endif
 
 executable(
     meson.project_name(),
+    config_file,
     'src/Application.vala',
     'src/AppSettings.vala',
     'src/Constants.vala',

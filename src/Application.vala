@@ -26,6 +26,11 @@ public class Eddy.Application : Gtk.Application {
 
         application_id = "com.github.donadigo.eddy";
 
+        Intl.setlocale (LocaleCategory.ALL, "");
+        Intl.bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+        Intl.bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+        Intl.textdomain (GETTEXT_PACKAGE);
+
         control = new Pk.Control ();
 
         var settings = AppSettings.get_default ();
