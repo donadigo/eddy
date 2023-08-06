@@ -116,7 +116,7 @@ public class Eddy.Package : Object {
 
     static construct {
         client = new Pk.Task ();
-        client.interactive = false;
+        client.interactive = true;
         client.allow_reinstall = true;
     }
 
