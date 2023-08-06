@@ -23,6 +23,20 @@
     <mediatype>application/vnd.debian.binary-package</mediatype>
   </provides>
   <releases>
+      <release version="1.3.3" date="2023-08-06">
+        <description>
+          <p>This release makes Eddy available on elementary OS 7. Many thanks to Ryo Nakano for his contributions to this release.</p>
+          <ul>
+            <li>Fixed some app names improperly showing HTML tags (Ryo Nakano)</li>
+            <li>Fix open action not working in certain conditions (Ryo Nakano)</li>
+            <li>Fix translations not loading in the Flatpak version (Ryo Nakano)</li>
+          </ul>
+          <p>New translations:</p>
+          <ul>
+            <li>Ukrainian (yalvex)</li>
+          </ul>
+        </description>
+      </release>
       <release version="1.3.2" date="2022-01-03">
         <description>
           <p>This release fixes payments not working in the AppCenter.</p>

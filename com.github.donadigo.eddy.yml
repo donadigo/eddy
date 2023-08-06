@@ -1,6 +1,6 @@
 app-id: com.github.donadigo.eddy
 runtime: io.elementary.Platform
-runtime-version: '6'
+runtime-version: '7.2'
 sdk: io.elementary.Sdk
 command: com.github.donadigo.eddy
 finish-args:
