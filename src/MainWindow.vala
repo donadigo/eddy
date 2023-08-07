@@ -158,21 +158,21 @@ public class Eddy.MainWindow : Gtk.Window {
 
         Gtk.drag_dest_set (this, Gtk.DestDefaults.MOTION | Gtk.DestDefaults.DROP, Constants.DRAG_TARGETS, Gdk.DragAction.COPY);
 
-        var settings = AppSettings.get_default ();
-
-        int x = settings.window_x;
-        int y = settings.window_y;
+        int x = Application.settings.get_int ("window-x");
+        int y = Application.settings.get_int ("window-y");
 
         if (x != -1 && y != -1) {
             move (x, y);
         }
 
-        resize (settings.window_width, settings.window_height);
-        if (settings.window_maximized) {
+        int w = Application.settings.get_int ("window-width");
+        int h = Application.settings.get_int ("window-height");
+        resize (w, h);
+        if (Application.settings.get_boolean ("window-maximized")) {
             maximize ();
         }
 
-        set_keep_above (settings.always_on_top);
+        set_keep_above (Application.settings.get_boolean ("always-on-top"));
 
         drag_data_received.connect (on_drag_data_received);
 
@@ -240,16 +240,15 @@ public class Eddy.MainWindow : Gtk.Window {
         get_position (out x, out y);
         get_size (out width, out height);
 
-        var settings = AppSettings.get_default ();
-        settings.window_x = x;
-        settings.window_y = y;
-        settings.window_width = width;
-        settings.window_height = height;
-        settings.window_maximized = is_maximized;
+        Application.settings.set_int ("window-x", x);
+        Application.settings.set_int ("window-y", y);
+        Application.settings.set_int ("window-width", width);
+        Application.settings.set_int ("window-height", height);
+        Application.settings.set_boolean ("window-maximized", is_maximized);
 
         var window = get_window ();
         if (window != null) {
-            settings.always_on_top = Gdk.WindowState.ABOVE in window.get_state ();
+            Application.settings.set_boolean ("always-on-top", Gdk.WindowState.ABOVE in window.get_state ());
         }
 
         return false;
