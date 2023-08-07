@@ -21,6 +21,12 @@ public class Eddy.Application : Gtk.Application {
     private Pk.Control control;
     private MainWindow? window = null;
 
+    public static Settings settings;
+
+    static construct {
+        settings = new Settings (Constants.SCHEMA_NAME);
+    }
+
     construct {
         flags |= ApplicationFlags.HANDLES_OPEN;
 
@@ -33,8 +39,7 @@ public class Eddy.Application : Gtk.Application {
 
         control = new Pk.Control ();
 
-        var settings = AppSettings.get_default ();
-        string[] available_mimetypes = settings.mime_types;
+        string[] available_mimetypes = settings.get_strv ("mime-types");
 
         if (available_mimetypes.length > 0) {
             debug ("Using cached mime types from %s schema: %s", Constants.SCHEMA_NAME, string.joinv ("; ", available_mimetypes));
@@ -59,7 +64,7 @@ public class Eddy.Application : Gtk.Application {
                 supported_mimetypes = Constants.DEFAULT_SUPPORTED_MIMETYPES;
             }
 
-            settings.mime_types = supported_mimetypes;
+            settings.set_strv ("mime-types", supported_mimetypes);
 
             // Register Eddy as the default app if there's no handler for a supported mimetype
             register_default_handler ();

@@ -35,7 +35,6 @@ executable(
     meson.project_name(),
     config_file,
     'src/Application.vala',
-    'src/AppSettings.vala',
     'src/Constants.vala',
     'src/DetailedView.vala',
     'src/FolderLoader.vala',
