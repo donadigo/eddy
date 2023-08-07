@@ -2,6 +2,7 @@
 <!-- Copyright (c) 2017 Adam Bieńkowski (https://github.com/donadigo/eddy) -->
 <component type="desktop">
   <id>com.github.donadigo.eddy</id>
+  <translation type="gettext">com.github.donadigo.eddy</translation>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
   <name>Eddy</name>
